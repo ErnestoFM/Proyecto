@@ -1,0 +1,28 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js (Si el proyecto usa JS/TS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validar estructura del proyecto
+        run: |
+          echo "Verificando estructura del repositorio..."
+          test -d docs || exit 1
+          test -d requirements || exit 1
+          test -d obsidian || exit 1
+          echo "Estructura base verificada correctamente."
