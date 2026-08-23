@@ -1,0 +1,26 @@
+{
+  "name": "monchis-cafe-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plataforma Web Segura para Cafetería Orgánica y Comercial Monchis Café",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:unit": "turbo run test:unit",
+    "test:e2e": "playwright test",
+    "lint": "turbo run lint",
+    "prisma:generate": "pnpm --filter @monchis/database generate",
+    "prisma:migrate": "pnpm --filter @monchis/database migrate"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.5",
+    "prettier": "^3.2.5",
+    "eslint": "^8.57.0"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

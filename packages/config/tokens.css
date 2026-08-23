@@ -1,0 +1,42 @@
+:root {
+  /* --- Paleta de Colores Pastel: Monchis Café --- */
+  --color-primary: #F3C9C9;         /* Rosa suave */
+  --color-primary-dark: #D98C7F;    /* Rosa terracota (hover / acentos) */
+  --color-secondary: #C9A88B;       /* Café con leche */
+  --color-secondary-dark: #8C6B52;  /* Café tostado */
+  --color-bg-base: #FAF3ED;         /* Crema cálido de fondo */
+  --color-bg-surface: #FFFDFB;      /* Blanco cálido (tarjetas y secciones) */
+  --color-text-main: #4A3B32;       /* Café oscuro cálido (legibilidad alta) */
+  --color-text-muted: #8A7A6D;      /* Café grisáceo (subtítulos) */
+  --color-border: #E8D8CD;          /* Borde sutil */
+  --color-success: #B7D9B1;         /* Verde pastel (confirmaciones) */
+  --color-error: #E39A9A;           /* Rosa-rojo suave (alertas) */
+  --color-warning: #F5D59E;         /* Amarillo pastel (stock bajo) */
+
+  /* --- Tipografía --- */
+  --font-heading: 'Poppins', 'Fraunces', Georgia, serif;
+  --font-body: 'Nunito', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* --- Sombras y Radios --- */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 2px 8px rgba(74, 59, 50, 0.05);
+  --shadow-md: 0 6px 18px rgba(74, 59, 50, 0.08);
+  --shadow-lg: 0 12px 32px rgba(74, 59, 50, 0.12);
+
+  /* --- Transiciones --- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 500ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

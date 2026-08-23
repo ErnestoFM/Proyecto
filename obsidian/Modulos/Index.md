@@ -1,5 +1,7 @@
-# Módulos del Sistema (`obsidian/Modulos/`)
+# Índice de Módulos — Monchis Café
 
-Documentación detallada de cada módulo, servicio y componente de software a medida que se programe.
+#modulo #indice
 
-- **Volver al índice:** [[Index]]
+Notas de módulos del sistema:
+- [[Modulos/Autenticacion_Stateless_reCAPTCHA]] — *Autenticación stateless con JWT y Google reCAPTCHA.*
+- [[Modulos/Sistema_Diseno_Pastel_SEO]] — *Tokens de diseño CSS pastel y estrategia SEO con vite-ssg.*

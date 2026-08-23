@@ -1,7 +1,7 @@
-# Índice de Bitácora
+# Índice de Bitácoras — Monchis Café
 
-Bitácora diaria de cambios y actividades realizadas por el agente de IA en este proyecto.
+#bitacora #indice
 
-## 📅 Entradas por Día
-
-- [[Bitacora/2026-08-22|2026-08-22 - Inicialización de Estructura de Proyecto]]
+Historial cronológico de cambios realizados por el Agente de IA:
+- [[Bitacora/2026-08-23]] — *Fase 1: Setup de Arquitectura Monorepo, RabbitMQ Saga, JWT, reCAPTCHA, Prisma e Infraestructura.*
+- [[Bitacora/2026-08-22]] — *Registro inicial del repositorio.*

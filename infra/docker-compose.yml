@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  # Base de Datos Relacional Única (PostgreSQL 15)
+  postgres:
+    image: postgres:15-alpine
+    container_name: monchis_postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-cafeteria_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - monchis_network
+
+  # Servidor de Mensajería RabbitMQ con Management UI y DLQ
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: docker/rabbitmq/Dockerfile
+    container_name: monchis_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"     # Protocolo AMQP
+      - "15672:15672"   # Panel de Administración Web
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+    networks:
+      - monchis_network
+
+  # Cache en Memoria y Rate Limiting (Redis 7)
+  redis:
+    image: redis:7-alpine
+    container_name: monchis_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - monchis_network
+
+  # Backend: Next.js API Routes (Stateless JWT + reCAPTCHA + Saga Coordinator)
+  api:
+    build:
+      context: ..
+      dockerfile: infra/docker/api/Dockerfile
+    container_name: monchis_api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-cafeteria_db}?schema=public
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASS:-guest}@rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+    networks:
+      - monchis_network
+
+  # Frontend: Vue 3 SPA + vite-ssg (Monchis Café UI Pastel)
+  web:
+    build:
+      context: ..
+      dockerfile: infra/docker/web/Dockerfile
+    container_name: monchis_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8080
+      - VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
+    depends_on:
+      - api
+    networks:
+      - monchis_network
+
+  # Gateway Inverso Nginx
+  nginx-gateway:
+    image: nginx:alpine
+    container_name: monchis_gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web
+      - api
+    networks:
+      - monchis_network
+
+networks:
+  monchis_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  redis_data:

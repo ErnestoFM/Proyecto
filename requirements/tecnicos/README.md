@@ -1,98 +1,133 @@
-# Requerimientos Técnicos del Sistema
+# Monchis Café — Requerimientos Técnicos y de Infraestructura
 
-Este documento especifica los requerimientos técnicos y de infraestructura identificados a partir del análisis del documento de requerimientos funcionales, la rúbrica de evaluación y las pautas del proyecto integrador.
+Este documento especifica la arquitectura técnica, la estrategia de desarrollo TDD por fases, los estándares de testing multicapa, el sistema de diseño y la infraestructura del sistema **Monchis Café**.
 
 ---
 
 ## 1. Arquitectura y Stack Tecnológico
 
-### 1.1 Backend
-- **Framework:** Node.js (con Express.js) o Python (con Django).
-- **Arquitectura:** Patrón en capas (Controladores, Servicios, Repositorios/Modelos) o RESTful API.
-- **Manejo de Peticiones:** Endpoints estructurados en formato JSON con middleware para tratamiento centralizado de errores y validación de esquemas (ej. Joi / Zod).
+### 1.1 Estructura Monorepo (`pnpm workspaces` + `Turborepo`)
+```
+/proyecto-raiz
+├── apps/
+│   ├── web/                 # Frontend: Vue 3 + Vite + vite-ssg + Pinia + Vue Router
+│   └── api/                 # Backend: Next.js (API Routes / Route Handlers)
+├── packages/
+│   ├── database/            # Prisma ORM, migraciones y seeders
+│   ├── shared-types/        # DTOs y tipos TypeScript compartidos
+│   ├── config/              # Tokens de diseño CSS pastel, ESLint y TSConfig
+│   └── messaging/           # Cliente RabbitMQ, Saga Orchestrator y DLQ
+├── infra/
+│   ├── docker/              # Dockerfiles para web, api, rabbitmq y nginx
+│   ├── terraform/           # IaC para provisión en GCP
+│   └── docker-compose.yml   # Orquestador local completo
+├── tests/
+│   ├── e2e/                 # Playwright (Multi-viewport, regresión visual)
+│   ├── security/            # Scripts de pruebas de seguridad automatizadas (OWASP)
+│   └── accessibility/       # Lighthouse CI + axe-core
+├── docs/                    # Documentación técnica, mockups y diagramas
+├── obsidian/                # Vault de conocimiento y bitácora del agente
+└── requirements/            # Requerimientos funcionales y técnicos
+```
 
-### 1.2 Frontend
-- **Tecnología:** React, Vue.js o HTML5/CSS3/JavaScript modular responsivo.
-- **Diseño Responsivo:** Compatibilidad con pantallas de escritorio (Administrador) y tabletas/móviles (Punto de Venta/Caja en entorno rural).
-- **Consumo de APIs:** Cliente HTTP (Axios o Fetch API) con interceptores para inyección de tokens de autenticación y manejo de sesiones expiradas.
+### 1.2 Frontend (`apps/web`)
+- **Framework & Build:** Vue 3 con Vite y `vite-ssg` para prerenderizado estático de rutas públicas (`/`, `/nosotros`, `/menu`, `/contacto`).
+- **Gestión de Estado:** Pinia (manejo de access token en memoria, carrito de venta y monedero de lealtad).
+- **SEO & Head Management:** `@vueuse/head` / `unhead` para meta tags OpenGraph, Twitter Cards y Schema.org `LocalBusiness` / `CoffeeShop`.
+- **Diseño & Animación:** Tokens CSS en `packages/config`, `@vueuse/motion` para micro-animaciones declarativas y `GSAP + ScrollTrigger` para transiciones de imágenes al scroll respetando `prefers-reduced-motion`.
+- **Consumo de API:** Cliente HTTP (Axios / Fetch) con interceptores para inyección de token `Bearer` y renovación automática por cookie `httpOnly`.
 
-### 1.3 Base de Datos
-- **Motor:** PostgreSQL o MySQL (Versión 8.0+).
-- **Transacciones ACID:** Garantía de atomicidad e integridad en operaciones críticas (registro de ventas, movimientos de inventario y cierres de caja).
-- **Modelado:** Diseño relacional normalizado hasta la Tercera Forma Normal (3FN), con relaciones explícitas entre Productos, Proveedores, Lotes, Ventas y Usuarios.
+### 1.3 Backend (`apps/api`)
+- **Framework:** Next.js (utilizado estrictamente como backend API / Route Handlers, sin renderizado de vistas de negocio).
+- **Validación de Datos:** Zod para esquema estricto de inputs y sanitización en cada endpoint.
+- **Manejo de Errores:** Middleware centralizado para captura de excepciones y formatos JSON estandarizados.
 
----
+### 1.4 Base de Datos y ORM (`packages/database`)
+- **Motor:** PostgreSQL (Versión 15+).
+- **ORM:** Prisma para consultas tipadas, migraciones versionadas y protección nativa contra inyección SQL.
+- **Transacciones ACID:** Bloques transaccionales (`prisma.$transaction`) para operaciones críticas locales.
 
-## 2. Manejo de Transacciones y Gestión de Inventario
-
-### 2.1 Transacciones de Ventas y Caja
-- **Atomicidad en Ventas:** Cada registro de venta debe descontar en tiempo real el stock en la base de datos dentro de una misma transacción (`BEGIN...COMMIT / ROLLBACK`).
-- **Control de Caja:** Tablas específicas para apertura, ingresos diarios, egresos y cierre de caja con validación de saldos esperados vs. reales.
-
-### 2.2 Trazabilidad de Productos Orgánicos
-- **Entidad de Lote:** Registro obligatorio de origen (finca/proveedor regional), número de lote, fecha de compra y fecha de caducidad para café orgánico.
-- **Índices de Búsqueda:** Creación de índices en la base de datos por `lote`, `fecha_caducidad` y `proveedor_id` para optimizar consultas de trazabilidad.
-
----
-
-## 3. Seguridad de la Información y Control de Acceso
-
-### 3.1 Autenticación y Autorización
-- **Autenticación:** Tokens JWT (JSON Web Tokens) firmados con algoritmos seguros (`HS256` / `RS256`) o manejo de sesiones seguras (`httpOnly`, `Secure`, `SameSite=Strict`).
-- **Doble Factor (2FA):** Implementación de autenticación de dos factores (TOTP / Google Authenticator o envío de código por correo) requerida obligatoriamente para el rol **Administrador**.
-- **Control de Acceso basado en Roles (RBAC):** Middleware de seguridad para restringir rutas según el rol (Administrador vs. Cajero/Empleado).
-
-### 3.2 Cifrado y Protección de Datos
-- **Cifrado de Contraseñas:** Algoritmos de hashing robustos con sal (ej. `bcrypt` con costo 10+ o `argon2`).
-- **Cifrado en Transito:** Conexiones cifradas mediante protocolo **HTTPS / TLS 1.3**.
-- **Cifrado en Reposo:** Cifrado SSL/TLS activo en la conexión con la base de datos y protección de campos sensibles (datos de clientes y tokens).
-
-### 3.3 Mitigación de Vulnerabilidades Web
-- **Inyección SQL:** Uso obligatorio de ORM/Query Builders (Prisma, TypeORM, Sequelize, SQLAlchemy) o consultas preparadas (`parameterized queries`).
-- **Cross-Site Scripting (XSS):** Sanitización estricta de datos de entrada y escape automático en las vistas.
-- **Seguridad en Encabezados HTTP:** Integración de bibliotecas de seguridad HTTP (ej. `Helmet` en Express) para Content Security Policy (CSP), HSTS y Anti-Clickjacking.
-- **Auditoría y Audit Logs:** Registro en base de datos o archivos de log de eventos clave (inicios de sesión, cambios de permisos, borrado de datos, transacciones de alto valor).
-
----
-
-## 4. Mantenimiento y Respaldo de Base de Datos
-
-- **Copias de Seguridad (Backups):** Script automatizado de respaldo (mediante `pg_dump` o `mysqldump`) ejecutable por tareas cron o utilidades del sistema.
-- **Integridad Referencial:** Configuración estricta de claves foráneas (`FOREIGN KEY`) con reglas de restricción (`ON DELETE RESTRICT`) para prevenir pérdidas involuntarias de historial de ventas o lotes.
+### 1.5 Mensajería y Eventos Asíncronos (`packages/messaging`)
+- **Broker:** RabbitMQ (AMQP 5672, Management UI 15672).
+- **Exchanges & Queues:** Topic Exchange `cafeteria.events`, colas de eventos por servicio.
+- **Reintentos Progresivos con Retraso (Delayed Queues):** Estrategia de reintentos progresivos (10s, 60s, 300s).
+- **Dead Letter Queue (DLQ):** Captura de eventos no procesables tras agotar reintentos, con alerta SMTP al administrador.
+- **Patrón Saga (Compensación / Reversas):** Transacciones compensatorias automáticas para cancelar ventas y reembolsar cobros ante falta de insumos orgánicos.
 
 ---
 
-## 5. Integraciones y Servicios Externos
+## 2. Seguridad de la Información y Autenticación Stateless
 
-- **Notificaciones por Correo Electrónico:** Integración con servicio SMTP o API externa (SendGrid, Nodemailer o Resend) para alertas de caducidad, anomalías sanitarias y comprobantes digitales.
-- **Exportación de Reportes:**
-  - **PDF:** Utilidad backend/frontend (ej. `PDFKit`, `Puppeteer` o `jsPDF`) para la generación de reportes semanales y tickets de venta.
-  - **Excel:** Generación de hojas de cálculo dinámicas (mediante `xlsx` / `exceljs`) para inventarios y reportes financieros.
-- **Soporte de Lectores de Código:** Compatibilidad en el frontend para captura de entradas desde lectores USB/HID de código de barras o cámara web.
+### 2.1 Autenticación Stateless
+- **Access Token:** JWT de vida corta (10–15 minutos) almacenado en memoria en el frontend Vue.
+- **Refresh Token:** Token rotativo de larga duración (7 días) almacenado en cookie `httpOnly + Secure + SameSite=Strict`.
+- **Claims en Token:** `sub`, `email`, `role` (`admin`, `cajero`, `cliente`) para autorización inmediata en backend sin consultar la base de datos en cada petición.
+- **Revocación:** Mecanismo de blacklist en Redis / base de datos para cierre de sesión global.
 
----
+### 2.2 Integración de Google reCAPTCHA
+- Verificación obligatoria de token `g-recaptcha-response` en los endpoints de Login, Registro y Transacciones de alto impacto.
+- Validación del token en backend contra el endpoint oficial `https://www.google.com/recaptcha/api/siteverify`.
 
-## 6. Entregables Académicos y de Evaluación (ExpoDIT)
-
-De acuerdo con las indicaciones institucionales y la rúbrica del proyecto integrador, se requieren los siguientes productos técnicos y comunicativos:
-
-1. **Documento Técnico del Proyecto:**
-   - Análisis de requerimientos y estudio de factibilidad.
-   - Modelo Entidad-Relación (MER) y Diagrama de Casos de Uso.
-   - Especificación de arquitectura de software y diagramas de componentes.
-   - Plan de pruebas (funcionales y de seguridad) y plan de mejora continua.
-2. **Video Pitch (Registro EXPODIT):**
-   - Video explicativo (siguiendo las directrices del enlace provisto) que exponga: Problemática rural, Genialidades de la solución, Justificación técnica, Demostración y Relación directa con los **ODS 8, 9, 12 y 16**.
-3. **Presentación Ejecutiva (ExpoDIT):**
-   - Diapositivas diseñadas en herramienta moderna para la exposición presencial, cubriendo: Problema, Solución, Objetivos, Ventajas, Justificación ODS, Diagrama de Software, Herramientas, Conclusiones y Demostración.
-4. **Manuales del Sistema:**
-   - **Manual Técnico:** Guía de instalación, configuración de variables de entorno `.env`, despliegue y endpoints de API.
-   - **Manual de Usuario:** Guía ilustrada de operación del sistema para administrador y cajero.
+### 2.3 Medidas contra Vulnerabilidades Web (OWASP Top 10)
+- **SQL Injection (SQLi):** Consultas parametrizadas obligatorias vía Prisma.
+- **Cross-Site Scripting (XSS):** Sanitización estricta en backend y escape automático en Vue 3 (prohibido el uso inseguro de `v-html`).
+- **Insecure Direct Object References (IDOR):** Comprobación en cada servicio de que el recurso pertenece al usuario solicitante.
+- **Cabeceras HTTP de Seguridad:** `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Strict-Transport-Security`.
+- **Rate Limiting:** Control de tasa de peticiones con Redis en rutas de login y refresh para mitigar fuerza bruta.
 
 ---
 
-## 7. Despliegue y Control de Versiones
+## 3. Estrategia de Testing Multicapa y Metodología TDD
 
-- **Control de Versiones:** Repositorio en GitHub con estructura modular e historial de commits limpio.
-- **Variables de Entorno (`.env`):** Cero credenciales harcodeadas en código fuente.
-- **Despliegue (Hosting / Cloud):** Servidor local o PaaS (ej. Render, Vercel, Railway) con base de datos administrada en la nube.
+| Nivel de Prueba | Herramienta | Objetivo y Alcance | Ejecución |
+|---|---|---|---|
+| **Unitarias** | Vitest | Lógica de negocio, utilidades, stores de Pinia, servicios aislados | Pre-commit / CI |
+| **API e Integración** | Supertest + Prisma (Test DB) | Endpoints REST, validaciones Zod, autenticación JWT, reCAPTCHA | Cada PR |
+| **Base de Datos** | Vitest + Docker PostgreSQL | Constraints de BD, transacciones ACID, integridad referencial | Cada PR |
+| **Viewport / Multi-resolución** | Playwright | Detección de overflow, texto cortado, botones ocultos y scroll horizontal en 360px, 768px, 1024px, 1440px+ | Cada PR a `main` |
+| **Regresión Visual** | Playwright Screenshot Diff | Comparación visual pixel por pixel contra capturas baseline por breakpoint | Cada PR a `main` |
+| **Validación de CSS / Breakpoints** | Playwright / Vitest DOM | Verificación programática de activación de media queries y estilos esperados | Cada PR a `main` |
+| **Accesibilidad y Performance** | Lighthouse CI + axe-core | Puntuación >90 en accesibilidad (tamaño táctil, ARIA, contraste) y >85 en rendimiento | Cada PR a `main` |
+| **Seguridad SAST** | eslint-plugin-security, npm audit | Detección estática de dependencias vulnerables y patrones inseguros | En cada commit |
+| **Seguridad DAST** | OWASP ZAP / Custom Security Scripts | Simulación activa de ataques XSS, SQLi, CSRF y auditoría de cabeceras HTTP | Pre-release / Staging |
+
+---
+
+## 4. Sistema de Diseño (UI/UX) y Tokens CSS
+
+```css
+:root {
+  --color-primary: #F3C9C9;         /* Rosa suave */
+  --color-primary-dark: #D98C7F;    /* Rosa terracota */
+  --color-secondary: #C9A88B;       /* Café con leche */
+  --color-secondary-dark: #8C6B52;  /* Café tostado */
+  --color-bg-base: #FAF3ED;         /* Crema cálido */
+  --color-bg-surface: #FFFDFB;      /* Blanco cálido */
+  --color-text-main: #4A3B32;       /* Café oscuro cálido */
+  --color-text-muted: #8A7A6D;      /* Café grisáceo */
+  --color-success: #B7D9B1;         /* Verde pastel */
+  --color-error: #E39A9A;           /* Rosa-rojo suave */
+  
+  --font-heading: 'Poppins', 'Fraunces', serif;
+  --font-body: 'Nunito', 'Inter', sans-serif;
+}
+```
+
+---
+
+## 5. Infraestructura y Despliegue (`infra/`)
+
+- **Docker Compose Local:**
+  - `web` (Vue 3 en puerto 3000)
+  - `api` (Next.js en puerto 8080)
+  - `postgres` (PostgreSQL 15 en puerto 5432)
+  - `rabbitmq` (RabbitMQ 3 con management en 5672 / 15672)
+  - `redis` (Redis 7 en puerto 6379)
+  - `nginx-gateway` (Proxy inverso en puerto 80)
+- **Infraestructura Cloud (GCP):**
+  - Cloud Run para backend API y frontend web.
+  - Cloud SQL (PostgreSQL administrado).
+  - Cloud Memorystore (Redis administrado).
+  - Cloud AMQP / RabbitMQ administrado.
+  - Google Secret Manager para gestión segura de variables de entorno.
+- **Variables de Entorno:** Cero credenciales en código fuente (`.env.example` versionado, `.env` ignorado por Git).

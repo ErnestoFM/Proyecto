@@ -1,0 +1,187 @@
+// ==============================================================================
+// Monchis Café — Esquema de Base de Datos (Prisma ORM - PostgreSQL)
+// ==============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  CAJERO
+  CLIENTE
+}
+
+enum ProductType {
+  ORGANICO
+  COMERCIAL
+}
+
+enum PaymentMethod {
+  EFECTIVO
+  TARJETA
+  TRANSFERENCIA
+  PUNTOS
+  MIXTO
+}
+
+enum OrderStatus {
+  PENDIENTE
+  PROCESANDO
+  COMPLETADA
+  CANCELADA_REEMBOLSADA
+}
+
+model User {
+  id                 String        @id @default(uuid())
+  email              String        @unique
+  passwordHash       String
+  nombre             String
+  rol                Role          @default(CLIENTE)
+  dosFactoresActivo  Boolean       @default(false)
+  dosFactoresSecret  String?
+  puntosFidelidad    Int           @default(0)
+  sellosAcumulados   Int           @default(0)
+  
+  ordersComoCliente  Order[]       @relation("ClienteOrders")
+  ordersComoCajero   Order[]       @relation("CajeroOrders")
+  attributions       Attribution[]
+
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  @@index([email])
+  @@index([rol])
+}
+
+model RevokedToken {
+  id        String   @id @default(uuid())
+  tokenJti  String   @unique
+  expiraEn  DateTime
+  motivo    String?
+  createdAt DateTime @default(now())
+
+  @@index([tokenJti])
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  nombre      String
+  descripcion String?
+  tipo        ProductType @default(ORGANICO)
+  precio      Decimal     @db.Decimal(10, 2)
+  stockActual Int         @default(0)
+  stockMinimo Int         @default(5)
+  imagenUrl   String?
+  activo      Boolean     @default(true)
+
+  batches     Batch[]
+  orderItems  OrderItem[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([tipo])
+  @@index([activo])
+}
+
+model Batch {
+  id                  String   @id @default(uuid())
+  productoId          String
+  producto            Product  @relation(fields: [productoId], references: [id], onDelete: Restrict)
+  numeroLote          String   @unique
+  proveedorRegional   String
+  fincaOrigen         String?
+  fechaCosechaTostado DateTime
+  fechaCaducidad      DateTime
+  cantidadKilos       Decimal  @db.Decimal(10, 2)
+  alertasSanitarias   String?
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([productoId])
+  @@index([numeroLote])
+  @@index([fechaCaducidad])
+}
+
+model Order {
+  id            String        @id @default(uuid())
+  total         Decimal       @db.Decimal(10, 2)
+  descuento     Decimal       @default(0) @db.Decimal(10, 2)
+  metodoPago    PaymentMethod @default(EFECTIVO)
+  referenciaPago String?      // Para rastreo de transferencias / SPEI
+  estado        OrderStatus   @default(PROCESANDO)
+
+  clienteId     String?
+  cliente       User?         @relation("ClienteOrders", fields: [clienteId], references: [id], onDelete: SetNull)
+  cajeroId      String
+  cajero        User          @relation("CajeroOrders", fields: [cajeroId], references: [id], onDelete: Restrict)
+
+  items         OrderItem[]
+  attributions  Attribution[]
+  sagaLogs      SagaStateLog[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([estado])
+  @@index([clienteId])
+  @@index([cajeroId])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id             String   @id @default(uuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productoId     String
+  producto       Product  @relation(fields: [productoId], references: [id], onDelete: Restrict)
+  cantidad       Int
+  precioUnitario Decimal  @db.Decimal(10, 2)
+  subtotal       Decimal  @db.Decimal(10, 2)
+
+  @@index([orderId])
+  @@index([productoId])
+}
+
+model Attribution {
+  id          String   @id @default(uuid())
+  orderId     String?
+  order       Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  utmSource   String   // 'google_maps', 'instagram', 'direct'
+  utmMedium   String?
+  utmCampaign String?
+  ipAddress   String?
+  userAgent   String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([utmSource])
+  @@index([createdAt])
+}
+
+model SagaStateLog {
+  id                        String      @id @default(uuid())
+  sagaId                    String      @unique
+  orderId                   String
+  order                     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  estadoActual              OrderStatus
+  eventosEjecutados         Json        @default("[]")
+  compensacionesEjecutadas  Json        @default("[]")
+  motivoFalla               String?
+
+  createdAt                 DateTime    @default(now())
+  updatedAt                 DateTime    @updatedAt
+
+  @@index([sagaId])
+  @@index([orderId])
+}

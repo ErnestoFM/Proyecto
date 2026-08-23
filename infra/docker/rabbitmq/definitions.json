@@ -1,0 +1,121 @@
+{
+  "rabbit_version": "3.12.0",
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "k2Ff8PqG20y5T3cM18r+L2Kz4b8=",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": [
+        "administrator"
+      ],
+      "limits": {}
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "cafeteria.events",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "cafeteria.dlx",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "dead_letter_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "pos.ventas.iniciadas",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "cafeteria.dlx",
+        "x-dead-letter-routing-key": "dlq.ventas"
+      }
+    },
+    {
+      "name": "inventario.reservas",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "cafeteria.dlx",
+        "x-dead-letter-routing-key": "dlq.inventario"
+      }
+    },
+    {
+      "name": "saga.compensaciones",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "cafeteria.dlx",
+        "x-dead-letter-routing-key": "dlq.saga"
+      }
+    }
+  ],
+  "bindings": [
+    {
+      "source": "cafeteria.events",
+      "vhost": "/",
+      "destination": "pos.ventas.iniciadas",
+      "destination_type": "queue",
+      "routing_key": "pos.venta.*",
+      "arguments": {}
+    },
+    {
+      "source": "cafeteria.events",
+      "vhost": "/",
+      "destination": "inventario.reservas",
+      "destination_type": "queue",
+      "routing_key": "inventario.reserva.*",
+      "arguments": {}
+    },
+    {
+      "source": "cafeteria.events",
+      "vhost": "/",
+      "destination": "saga.compensaciones",
+      "destination_type": "queue",
+      "routing_key": "saga.compensar.*",
+      "arguments": {}
+    },
+    {
+      "source": "cafeteria.dlx",
+      "vhost": "/",
+      "destination": "dead_letter_queue",
+      "destination_type": "queue",
+      "routing_key": "dlq.#",
+      "arguments": {}
+    }
+  ]
+}
