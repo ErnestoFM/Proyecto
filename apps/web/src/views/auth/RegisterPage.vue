@@ -10,6 +10,7 @@ const route = useRoute();
 const nombre = ref('');
 const email = ref('');
 const password = ref('');
+const aceptaTerminos = ref(false);
 const recaptchaToken = ref('test-valid-recaptcha-token'); // TODO: Integrar widget reCAPTCHA real
 
 // Capturar parámetros UTM de la URL
@@ -57,13 +58,22 @@ async function handleRegister() {
             <input id="reg-password" v-model="password" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" autocomplete="new-password" />
           </div>
 
+          <div class="form-group legal-consent">
+            <label class="consent-label">
+              <input v-model="aceptaTerminos" type="checkbox" required />
+              <span>
+                He leído y acepto los <RouterLink to="/legal?tab=terminos" target="_blank">Términos y Condiciones</RouterLink> y el <RouterLink to="/legal?tab=privacidad" target="_blank">Aviso de Privacidad</RouterLink> de Monchis Café.
+              </span>
+            </label>
+          </div>
+
           <div class="recaptcha-placeholder">
             <small>🛡️ Protegido por Google reCAPTCHA</small>
           </div>
 
           <p v-if="auth.error" class="error-message">{{ auth.error }}</p>
 
-          <button type="submit" class="btn btn--primary auth-card__submit" :disabled="auth.isLoading">
+          <button type="submit" class="btn btn--primary auth-card__submit" :disabled="auth.isLoading || !aceptaTerminos">
             {{ auth.isLoading ? 'Creando cuenta...' : 'Registrarme' }}
           </button>
         </form>

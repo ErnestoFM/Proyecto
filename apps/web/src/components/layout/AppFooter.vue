@@ -18,6 +18,13 @@
         <RouterLink to="/contacto">Contacto</RouterLink>
       </nav>
 
+      <nav class="footer__links">
+        <h4>Legal & Privacidad</h4>
+        <RouterLink to="/legal?tab=terminos">Términos y Condiciones</RouterLink>
+        <RouterLink to="/legal?tab=privacidad">Aviso de Privacidad</RouterLink>
+        <RouterLink to="/legal?tab=cookies">Ajustes de Cookies</RouterLink>
+      </nav>
+
       <div class="footer__contact">
         <h4>Encuéntranos</h4>
         <p>📍 Zona rural/suburbana, México</p>

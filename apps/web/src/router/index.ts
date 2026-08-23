@@ -26,6 +26,12 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('@/views/public/ContactPage.vue'),
     meta: { public: true, title: 'Contacto — Monchis Café' },
   },
+  {
+    path: '/legal',
+    name: 'Legal',
+    component: () => import('@/views/legal/LegalPage.vue'),
+    meta: { public: true, title: 'Centro Legal, Privacidad y Cookies — Monchis Café' },
+  },
 
   // === Rutas de Autenticación ===
   {

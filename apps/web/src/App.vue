@@ -4,6 +4,7 @@ import { useHead } from '@vueuse/head';
 import { computed } from 'vue';
 import AppNavbar from '@/components/layout/AppNavbar.vue';
 import AppFooter from '@/components/layout/AppFooter.vue';
+import CookieBanner from '@/components/common/CookieBanner.vue';
 
 const route = useRoute();
 
@@ -38,6 +39,7 @@ useHead({
       </RouterView>
     </main>
     <AppFooter />
+    <CookieBanner />
   </div>
 </template>
 
