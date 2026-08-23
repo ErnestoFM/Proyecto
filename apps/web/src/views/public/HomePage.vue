@@ -35,6 +35,50 @@ import PhotoCarousel from '@/components/common/PhotoCarousel.vue';
       </div>
     </section>
 
+    <!-- Bloques Split Estilo Editorial / Rewards Showcase (Inspiración Visual) -->
+    <section class="section">
+      <div class="container feature-splits">
+        <!-- Bloque 1: Juntémonos más -->
+        <div class="split-row card" v-motion-slide-visible-bottom>
+          <div class="split-img">
+            <img src="/feature1.jpg" alt="Amigos compartiendo café en Monchis Café" />
+          </div>
+          <div class="split-info block-coffee">
+            <span class="split-badge">COMUNIDAD & AMISTAD</span>
+            <h2>Juntémonos Más</h2>
+            <p>Los mejores momentos también se improvisan con una buena taza de café y pan recién horneado.</p>
+            <RouterLink to="/menu" class="split-btn">Explora nuestras bebidas →</RouterLink>
+          </div>
+        </div>
+
+        <!-- Bloque 2: Trae tu termo (Invertido) -->
+        <div class="split-row card reverse" v-motion-slide-visible-bottom>
+          <div class="split-info block-sage">
+            <span class="split-badge">🌿 CONSUMO RESPONSABLE</span>
+            <h2>Trae Tu Termo, Gana Doble</h2>
+            <p>Un pequeño gesto diario que cuida la sierra. Recibe <strong>+1 sello ecológico de regalo</strong> en cada café para completar tu tarjeta más rápido.</p>
+            <RouterLink to="/rewards" class="split-btn">Conoce Monchis Rewards →</RouterLink>
+          </div>
+          <div class="split-img">
+            <img src="/feature2.jpg" alt="Termo reutilizable para café de especialidad" />
+          </div>
+        </div>
+
+        <!-- Bloque 3: Pide, Acumula y Disfruta -->
+        <div class="split-row card" v-motion-slide-visible-bottom>
+          <div class="split-img">
+            <img src="/feature3.jpg" alt="Recompensas y cashback en Monchis Café" />
+          </div>
+          <div class="split-info block-terracotta">
+            <span class="split-badge">PUNTOS & MONEDERO</span>
+            <h2>Pide, Acumula y Disfruta</h2>
+            <p>Únete a nuestro programa gratuito. Disfruta tu 8vo café de regalo y 5% de cashback en monedero digital en cada visita.</p>
+            <RouterLink to="/registro" class="split-btn">¡Regístrate y empieza hoy! →</RouterLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Valores Section -->
     <section class="section section--alt">
       <div class="container">
@@ -205,6 +249,105 @@ import PhotoCarousel from '@/components/common/PhotoCarousel.vue';
   .cta-actions {
     flex-direction: column;
     align-items: center;
+  }
+}
+/* Bloques Split Estilo Editorial */
+.feature-splits {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.split-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.split-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 360px;
+  display: block;
+}
+
+.split-info {
+  padding: 3.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+  color: #fff;
+}
+
+.split-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.split-info h2 {
+  font-size: 2.2rem;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.split-info p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.split-btn {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  color: #FAF3ED;
+  text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
+  transition: transform var(--transition-fast);
+}
+
+.split-btn:hover {
+  transform: translateX(4px);
+}
+
+.block-coffee {
+  background: #C9A88B; /* Café con leche */
+}
+
+.block-sage {
+  background: #8C6B52; /* Café tostado cálido */
+}
+.block-sage .split-badge {
+  color: #F3C9C9;
+}
+
+.block-terracotta {
+  background: #D98C7F; /* Rosa terracota */
+}
+
+@media (max-width: 900px) {
+  .split-row {
+    grid-template-columns: 1fr;
+  }
+  .split-row.reverse {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .split-info {
+    padding: 2.5rem 1.8rem;
+  }
+  .split-info h2 {
+    font-size: 1.8rem;
   }
 }
 </style>

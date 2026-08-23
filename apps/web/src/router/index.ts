@@ -15,6 +15,12 @@ export const routes: RouteRecordRaw[] = [
     meta: { public: true, title: 'Sobre Nosotros — Monchis Café' },
   },
   {
+    path: '/rewards',
+    name: 'Rewards',
+    component: () => import('@/views/public/RewardsPage.vue'),
+    meta: { public: true, title: 'Monchis Rewards — Programa de Lealtad' },
+  },
+  {
     path: '/menu',
     name: 'Menu',
     component: () => import('@/views/public/MenuPage.vue'),
