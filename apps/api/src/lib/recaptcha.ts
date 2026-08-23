@@ -12,9 +12,14 @@ export interface RecaptchaVerifyResponse {
 }
 
 export async function verifyGoogleRecaptcha(token: string): Promise<boolean> {
+  // Tokens vacíos o ausentes siempre deben ser rechazados
+  if (!token || token.trim() === '') {
+    return false;
+  }
+
   const secretKey = process.env.RECAPTCHA_SECRET_KEY;
 
-  // En ambiente de desarrollo o testing si no está configurada la llave o se usa un token de prueba
+  // En ambiente de desarrollo o testing con token de prueba explícito
   if (process.env.NODE_ENV === 'test' || token === 'test-valid-recaptcha-token') {
     return true;
   }
