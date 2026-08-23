@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Página Principal / Landing -->
+  <url>
+    <loc>https://monchiscafe.com/</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Menú y Catálogo Demostrativo -->
+  <url>
+    <loc>https://monchiscafe.com/menu</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Historia, Productores y Comercio Justo -->
+  <url>
+    <loc>https://monchiscafe.com/nosotros</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Contacto, Ubicación y Horarios -->
+  <url>
+    <loc>https://monchiscafe.com/contacto</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Centro Legal, Términos, Privacidad y Cookies -->
+  <url>
+    <loc>https://monchiscafe.com/legal</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>

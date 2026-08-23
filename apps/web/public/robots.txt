@@ -1,0 +1,25 @@
+# ==============================================================================
+# Monchis Café — Directivas de Rastreo Robots.txt
+# ==============================================================================
+
+User-agent: *
+# Permitir indexación de páginas públicas
+Allow: /
+Allow: /menu
+Allow: /nosotros
+Allow: /contacto
+Allow: /legal
+
+# Bloquear indexación de áreas privadas, administrativas, POS y endpoints API
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /pos
+Disallow: /pos/*
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /login
+Disallow: /registro
+Disallow: /api/*
+
+# Mapa del Sitio Oficial
+Sitemap: https://monchiscafe.com/sitemap.xml
