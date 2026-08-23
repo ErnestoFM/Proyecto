@@ -2,13 +2,13 @@
 // Monchis Café — Cliente de Mensajería RabbitMQ (@monchis/messaging)
 // ==============================================================================
 
-import amqplib, { Channel, Connection } from 'amqplib';
-import { SagaEventDTO } from '@monchis/shared-types';
+import * as amqplib from 'amqplib';
+import type { SagaEventDTO } from '@monchis/shared-types';
 
 export class RabbitMQClient {
   private static instance: RabbitMQClient;
-  private connection: Connection | null = null;
-  private channel: Channel | null = null;
+  private connection: amqplib.ChannelModel | null = null;
+  private channel: amqplib.Channel | null = null;
   private exchangeName: string = process.env.RABBITMQ_EXCHANGE || 'cafeteria.events';
   private dlxExchangeName: string = process.env.RABBITMQ_DLX_EXCHANGE || 'cafeteria.dlx';
   private dlqName: string = process.env.RABBITMQ_DLQ_NAME || 'dead_letter_queue';
@@ -109,4 +109,13 @@ export class RabbitMQClient {
       );
     }
   }
+}
+
+export async function publishMessage<T>(
+  _exchange: string,
+  routingKey: string,
+  event: SagaEventDTO<T>
+): Promise<boolean> {
+  const client = RabbitMQClient.getInstance();
+  return client.publishEvent(routingKey, event);
 }
