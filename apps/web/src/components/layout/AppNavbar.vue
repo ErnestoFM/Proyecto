@@ -71,6 +71,13 @@ function toggleMenu() {
   font-size: 1.8rem;
 }
 
+.navbar__logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(74, 59, 50, 0.1));
+}
+
 .navbar__name {
   font-family: var(--font-heading);
   font-size: 1.4rem;

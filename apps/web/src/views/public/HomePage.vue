@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import PhotoCarousel from '@/components/common/PhotoCarousel.vue';
 </script>
 
 <template>
   <div>
-    <!-- Hero Section -->
+    <!-- Hero Section con la estructura original limpia -->
     <section class="hero">
       <div class="container hero__inner">
         <div class="hero__text" v-motion-slide-left :delay="200">
@@ -18,11 +19,19 @@
             <RouterLink to="/nosotros" class="btn btn--secondary">Conócenos</RouterLink>
           </div>
         </div>
+
         <div class="hero__visual" v-motion-slide-right :delay="400">
           <div class="hero__coffee-circle">
             <span class="hero__emoji">☕</span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Carrusel Visual de Comercio Justo y Producto -->
+    <section class="section" style="padding-top: 2rem; padding-bottom: 2rem;">
+      <div class="container">
+        <PhotoCarousel />
       </div>
     </section>
 
@@ -81,7 +90,11 @@
   gap: 3rem;
 }
 
-.hero__text { display: flex; flex-direction: column; gap: 1.2rem; }
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
 
 .hero__highlight {
   color: var(--color-primary-dark);
@@ -123,8 +136,12 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-16px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
 }
 
 .section__subtitle {
@@ -176,16 +193,18 @@
   }
 
   .hero__coffee-circle {
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 240px;
+    padding: 1.8rem;
   }
-
-  .hero__emoji { font-size: 5rem; }
 
   .values-grid {
     grid-template-columns: 1fr;
   }
 
-  .cta-actions { flex-direction: column; align-items: center; }
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

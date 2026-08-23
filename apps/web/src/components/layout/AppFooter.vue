@@ -59,6 +59,12 @@
 
 .footer__logo { font-size: 2rem; }
 
+.footer__logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
 .footer__name {
   font-family: var(--font-heading);
   font-size: 1.3rem;

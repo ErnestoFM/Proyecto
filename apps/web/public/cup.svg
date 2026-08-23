@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Plato / Saucer -->
+  <ellipse cx="50" cy="80" rx="42" ry="12" fill="#D98C7F" opacity="0.35"/>
+  <ellipse cx="50" cy="78" rx="38" ry="10" fill="#C9A88B"/>
+  <ellipse cx="50" cy="76" rx="34" ry="8" fill="#FAF3ED"/>
+
+  <!-- Taza Pastel -->
+  <path d="M22 42 C22 72 34 76 50 76 C66 76 78 72 78 42 Z" fill="#F3C9C9"/>
+  <!-- Asa de la taza -->
+  <path d="M74 48 C85 48 88 64 74 66" stroke="#F3C9C9" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M74 48 C85 48 88 64 74 66" stroke="#D98C7F" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+
+  <!-- Borde superior taza -->
+  <ellipse cx="50" cy="42" rx="28" ry="8" fill="#D98C7F" opacity="0.2"/>
+  <ellipse cx="50" cy="42" rx="26" ry="7" fill="#8C6B52"/>
+
+  <!-- Café y Latte Art Corazón -->
+  <ellipse cx="50" cy="42" rx="24" ry="6" fill="#6A4E3A"/>
+  <path d="M46 41 C43 38 48 37 50 40 C52 37 57 38 54 41 C51 44 50 45 50 45 C50 45 49 44 46 41 Z" fill="#FAF3ED" opacity="0.9"/>
+
+  <!-- Vapor cálido ondeante animado -->
+  <path d="M42 30 C39 24 45 20 42 14" stroke="#D98C7F" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M50 28 C47 22 53 18 50 12" stroke="#D98C7F" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.75"/>
+  <path d="M58 30 C55 24 61 20 58 14" stroke="#D98C7F" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+</svg>
