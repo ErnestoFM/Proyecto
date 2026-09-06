@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
     if (body.clienteId) {
       try {
-        cliente = await prisma.usuario.findUnique({ where: { id: body.clienteId } });
+        cliente = await prisma.user.findUnique({ where: { id: body.clienteId } });
         if (cliente) {
           resultadoLoyalty = LoyaltyService.procesarRecompensas({
             sellosActuales: cliente.sellosAcumulados,

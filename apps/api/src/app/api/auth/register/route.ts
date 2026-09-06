@@ -3,7 +3,7 @@ import { RegisterSchema } from '@/lib/zodSchemas';
 import { verifyGoogleRecaptcha } from '@/lib/recaptcha';
 import { hashPassword } from '@/lib/password';
 import { signAccessToken, signRefreshToken } from '@/lib/jwt';
-import { prisma } from '@/lib/prisma';
+import { prisma, Prisma } from '@/lib/prisma';
 import { UserDTO } from '@monchis/shared-types';
 
 export async function POST(request: NextRequest) {
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const passwordHash = await hashPassword(password);
 
     // 4. Creación del usuario y registro de atribución (transacción)
-    const newUser = await prisma.$transaction(async (tx) => {
+    const newUser = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const user = await tx.user.create({
         data: {
           nombre,
