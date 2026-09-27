@@ -1,0 +1,318 @@
+
+
+
+ACTIVIDAD: DEFINICIÓN DE ROLES DEL EQUIPO Y PERFILES DE CONTRATACIÓN
+
+Materia: Desarrollo de Software Integrador
+Docente: Gabriel Navarro Salcedo
+Alumno / Consultor: Ernesto Hatuey Fierro Meléndez
+Proyecto: Monchis Café — Plataforma Web Segura para Cafetería Orgánica y Comercial
+Enfoque: Estructura Organizacional y Criterios de Contratación de Consultoría Tech
+Fecha: 2026-09-01
+
+
+1. Introducción y Enfoque de Consultoría
+
+En el marco del desarrollo de la plataforma web de Monchis Café, como firma de consultoría tecnológica se ha estructurado un equipo multidisciplinario de 5 perfiles clave. La solución requiere una arquitectura moderna en Monorepo (Vue 3 + Next.js API Routes), procesamiento asíncrono con RabbitMQ (Patrón Saga), seguridad robusa (JWT stateless + reCAPTCHA) y un diseño cálido pastel orientado a la conversión y fidelización.
+
+A continuación se presenta el manual de perfiles de contratación, responsabilidades y matriz de actividades específicas para cada uno de los integrantes del proyecto.
+
+
+2. Matriz de Roles, Perfiles y Responsabilidades
+
+
+Rol 1: Project Manager / Scrum Master & Product Owner
+
+ROL EN EL PROYECTO
+
+Project Manager / Scrum Master & Product Owner
+
+ÁREA / DEPARTAMENTO
+
+Dirección de Proyecto / Consultoría Tecnológica
+
+EDUCACIÓN / GRADO
+
+Licenciatura o Ingeniería en Software, Ciencias de la Computación o Tecnologías de la Información. Certificación Scrum Master (PSM I / CSM) o PMP deseable.
+
+EXPERIENCIA REQUERIDA
+
+Mínimo 3 años gestionando proyectos de desarrollo web/móvil, liderazgo de equipos ágiles, presupuestación y seguimiento de entregables.
+
+COMPETENCIAS TÉCNICAS (HARD SKILLS)
+
+• Metodologías ágiles (Scrum, Kanban).
+
+• Herramientas de gestión (Jira, Trello, Confluence, GitHub Projects).
+
+• Gestión de riesgos y métricas de rendimiento (velocity, burndown).
+
+• Conocimiento general de arquitecturas web (Monorepo, REST/GraphQL).
+
+HABILIDADES BLANDAS (SOFT SKILLS)
+
+Liderazgo situacional, comunicación asertiva, resolución de conflictos, negociación con stakeholders, orientación a resultados y empatía con el cliente.
+
+RESPONSABILIDADES PRINCIPALES
+
+• Facilitar la adopción de la metodología Scrum en los 5 sprints de desarrollo.
+
+• Liderar la alineación con los Objetivos de Desarrollo Sostenible (ODS 8, 9, 12 y 16) del proyecto.
+
+• Administrar el presupuesto de $327,360.00 MXN y controlar el margen de imprevistos.
+
+• Coordinar la entrega oportuna de las 7 fases del desarrollo y actuar como enlace entre Monchis Café y el equipo técnico.
+
+ACTIVIDADES ESPECÍFICAS POR FASE (SPRINTS)
+
+• Fase 0/1 (Setup & Mockups): Definir el Product Backlog inicial, redactar historias de usuario (Given/When/Then) y organizar el sprint planning.
+
+
+
+• Fase 2/3 (Backend & Frontend Core): Coordinar diariamente las standups, resolver bloqueos del equipo e inspeccionar el avance de las APIs y diseño.
+
+
+
+• Fase 4/5 (POS, Rewards & Analytics): Dar seguimiento a las pruebas del Punto de Venta (POS) y validar el módulo de atribución de tráfico (Google Maps/Instagram).
+
+
+
+• Fase 6/7 (QA & Despliegue): Liderar la revisión final de sprint (Sprint Review), coordinar la entrega al cliente y cerrar la bitácora del proyecto.
+
+
+Rol 2: Diseñador UI/UX & Especialista en Accesibilidad Web
+
+ROL EN EL PROYECTO
+
+Diseñador UI/UX & Especialista en Accesibilidad (WCAG)
+
+ÁREA / DEPARTAMENTO
+
+Diseño de Producto Digital & Experiencia de Usuario
+
+EDUCACIÓN / GRADO
+
+Licenciatura en Diseño Digital, Diseño Gráfico, Interacción Humano-Computadora o carrera afín.
+
+EXPERIENCIA REQUERIDA
+
+Mínimo 2 años de experiencia en diseño de interfaces web y móviles, creación de Design Systems y pruebas de usabilidad.
+
+COMPETENCIAS TÉCNICAS (HARD SKILLS)
+
+• Figma, Adobe XD, Illustrator.
+
+• HTML5/CSS3 avanzado, TailwindCSS tokens.
+
+• Normativas de accesibilidad WCAG 2.1 AA.
+
+• Prototipado interactivo y arquitectura de información.
+
+HABILIDADES BLANDAS (SOFT SKILLS)
+
+Creatividad visual, sensibilidad estética, atención al detalle, pensamiento sistémico y orientación a la usabilidad centrada en el usuario.
+
+RESPONSABILIDADES PRINCIPALES
+
+• Diseñar el Sistema de Diseño visual de Monchis Café con su paleta cálida pastel (#FAF3ED, #8C6B52, #F3C9C9).
+
+• Garantizar la usabilidad del Punto de Venta (POS) para cajeros bajo entornos de alta concurrencia.
+
+• Asegurar que la web pública cumpla con los estándares de accesibilidad WCAG y puntuación >90% en Lighthouse.
+
+• Crear componentes UI reutilizables y guías de estilos para el equipo Frontend.
+
+ACTIVIDADES ESPECÍFICAS POR FASE (SPRINTS)
+
+• Fase 0/1 (Setup & Mockups): Diseñar el kit de UI pastel en Figma, definir la tipografía (Poppins/Nunito) y maquetar los wireframes del POS y Landing.
+
+
+
+• Fase 2/3 (Backend & Frontend Core): Validar la implementación de los tokens CSS en Vue 3 y supervisar que la iconografía (Phosphor Icons) mantenga coherencia.
+
+
+
+• Fase 4/5 (POS & Rewards): Diseñar la interfaz del tarjetón digital Monchis Rewards (8vo café gratis) y el ecómetro de tazas reutilizables (ODS 12).
+
+
+
+• Fase 6/7 (QA & Despliegue): Realizar la auditoría de accesibilidad con axe-core y corregir posibles contrastes de color o problemas de navegación por teclado.
+
+
+Rol 3: Desarrollador Frontend Lead (Vue 3, vite-ssg & SEO)
+
+ROL EN EL PROYECTO
+
+Desarrollador Frontend Lead (Vue 3 / SSG / SEO)
+
+ÁREA / DEPARTAMENTO
+
+Ingeniería de Software Frontend
+
+EDUCACIÓN / GRADO
+
+Ingeniería en Sistemas Computacionales, Informática o experiencia profesional equivalente comprobable.
+
+EXPERIENCIA REQUERIDA
+
+Mínimo 3 años desarrollando aplicaciones web SPA/SSG con Vue.js o React, TypeScript y estrategias de optimización SEO.
+
+COMPETENCIAS TÉCNICAS (HARD SKILLS)
+
+• Vue 3 (Composition API), Vite, vite-ssg.
+
+• TypeScript, Pinia (State Management).
+
+• TailwindCSS, Vanilla CSS, @vueuse/motion, GSAP.
+
+• Pruebas unitarias con Vitest y E2E con Playwright.
+
+HABILIDADES BLANDAS (SOFT SKILLS)
+
+Capacidad analítica, pasión por el código limpio, trabajo en equipo, capacidad de resolución de problemas complejos y enfoque en rendimiento.
+
+RESPONSABILIDADES PRINCIPALES
+
+• Construir la arquitectura Frontend en el Monorepo del proyecto utilizando Vue 3 y vite-ssg.
+
+• Implementar el prerenderizado estático de páginas públicas para maximizar la indexabilidad SEO en búsquedas de cafeterías locales.
+
+• Desarrollar el módulo de Punto de Venta (POS) con soporte para pagos en efectivo, tarjeta, SPEI y Monchis Rewards.
+
+• Garantizar que el rendimiento de carga supere los 85 puntos en Lighthouse CI.
+
+ACTIVIDADES ESPECÍFICAS POR FASE (SPRINTS)
+
+• Fase 0/1 (Setup & Monorepo): Configurar el workspace de Vue 3 en Turborepo, instalar vite-ssg, Pinia y configurar los linters de código.
+
+
+
+• Fase 2/3 (Core Frontend): Desarrollar la Landing Page (/), el Menú dinámico y la sección de Trazabilidad de lotes orgánicos con prerenderizado.
+
+
+
+• Fase 4/5 (POS & Rewards): Programar la interfaz del POS responsivo para tableta/desktop, integrando la lectura de códigos de barras e impresoras térmicas.
+
+
+
+• Fase 6/7 (QA & Optimization): Ejecutar pruebas E2E en Playwright para múltiples resoluciones (360px a 1440px) y optimizar el bundle final con compresión gzip/brotli.
+
+
+Rol 4: Desarrollador Backend Lead & Arquitecto de Eventos (Next.js & RabbitMQ)
+
+ROL EN EL PROYECTO
+
+Desarrollador Backend Lead & Arquitecto de Eventos
+
+ÁREA / DEPARTAMENTO
+
+Ingeniería de Software Backend & Arquitectura de Datos
+
+EDUCACIÓN / GRADO
+
+Ingeniería en Ciencias de la Computación, Sistemas Computacionales o áreas afines.
+
+EXPERIENCIA REQUERIDA
+
+Mínimo 3.5 años de experiencia en desarrollo backend con Node.js, mensajería asíncrona, bases de datos relacionales y seguridad web.
+
+COMPETENCIAS TÉCNICAS (HARD SKILLS)
+
+• Node.js, Next.js API Routes, TypeScript.
+
+• Prisma ORM, PostgreSQL, Redis.
+
+• Broker de Mensajería RabbitMQ (Patrón Saga, DLQ).
+
+• Autenticación JWT stateless, OAuth, reCAPTCHA, Zod validation.
+
+HABILIDADES BLANDAS (SOFT SKILLS)
+
+Pensamiento lógico riguroso, enfoque en seguridad defensiva, orientación a la arquitectura escalable y capacidad técnica autodidacta.
+
+RESPONSABILIDADES PRINCIPALES
+
+• Diseñar y construir las APIs REST/GraphQL seguras para el funcionamiento de Monchis Café.
+
+• Implementar el orquestador de transacciones RabbitMQ con Patrón Saga para ejecutar reversas automáticas ante agotamiento de inventario.
+
+• Garantizar la seguridad de la plataforma mediante JWT stateless en cookies httpOnly, Google reCAPTCHA v2/v3 y 2FA.
+
+• Modelar y mantener la base de datos PostgreSQL utilizando Prisma ORM con migraciones estrictas.
+
+ACTIVIDADES ESPECÍFICAS POR FASE (SPRINTS)
+
+• Fase 0/1 (Backend Setup): Configurar la base de datos PostgreSQL, definir el esquema MER en Prisma y configurar el contenedor Docker de RabbitMQ.
+
+
+
+• Fase 2/3 (Backend Core): Desarrollar el módulo de autenticación con rotación de Refresh Tokens, middlewares de RBAC y validaciones con Zod.
+
+
+
+• Fase 4/5 (Saga Pattern & POS): Implementar el flujo de venta distribuidas; si el café orgánico se agota, activar la transacción compensatoria (Saga) y enviar cola de retardo a DLQ.
+
+
+
+• Fase 6/7 (QA & Hardening): Realizar pruebas de carga con Supertest, auditar consultas PostgreSQL para prevenir N+1 y asegurar la persistencia transaccional.
+
+
+Rol 5: Ingeniero QA Automation, Seguridad & DevOps
+
+ROL EN EL PROYECTO
+
+Ingeniero QA Automation, Seguridad (DAST/SAST) & DevOps
+
+ÁREA / DEPARTAMENTO
+
+Aseguramiento de Calidad, Ciberseguridad e Infraestructura
+
+EDUCACIÓN / GRADO
+
+Ingeniería en Ciberseguridad, Sistemas Computacionales, DevOps o equivalente.
+
+EXPERIENCIA REQUERIDA
+
+Mínimo 2.5 años en automatización de pruebas de software, integración continua (CI/CD), seguridad web defensiva y contenedorización.
+
+COMPETENCIAS TÉCNICAS (HARD SKILLS)
+
+• Frameworks de automatización (Playwright, Vitest, Supertest).
+
+• Herramientas DAST/SAST (OWASP ZAP, ESLint Security, axe-core).
+
+• Docker, Docker Compose, GitHub Actions CI/CD.
+
+• Linux Administration, Nginx/Caddy, SSL/TLS, Terraform.
+
+HABILIDADES BLANDAS (SOFT SKILLS)
+
+Espíritu crítico y meticuloso, mentalidad defensiva orientada a la seguridad, proactividad en la automatización y trabajo en equipo.
+
+RESPONSABILIDADES PRINCIPALES
+
+• Diseñar e implementar la estrategia de testing multicapa (unitarias, integración, regresión visual y E2E).
+
+• Configurar los pipelines automatizados de CI/CD en GitHub Actions para compilación y pruebas continuas.
+
+• Ejecutar escaneos de seguridad DAST con OWASP ZAP para prevenir vulnerabilidades XSS, SQLi y CSRF.
+
+• Gestionar la infraestructura de servidores Docker Compose y despliegue en la nube.
+
+ACTIVIDADES ESPECÍFICAS POR FASE (SPRINTS)
+
+• Fase 0/1 (DevOps Setup): Crear los workflows de GitHub Actions (.github/workflows/), configurar linters y preparar las variables de entorno (.env).
+
+
+
+• Fase 2/3 (Automation Core): Implementar los trajes de prueba unitaria en Vitest para utilidades y Supertest para endpoints de autenticación.
+
+
+
+• Fase 4/5 (E2E & Security): Crear pruebas E2E en Playwright simulando compras completas en el POS y ejecutar análisis de vulnerabilidades OWASP ZAP.
+
+
+
+• Fase 6/7 (CI/CD & Deploy): Configurar el despliegue automático a producción mediante Docker Compose, verificar certificados SSL y emitir el reporte final de calidad QA.
+
+

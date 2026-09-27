@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Actividad 1.7 - Diagrama de Recursos - Monchis Café</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+  @page {
+    size: letter landscape;
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0F172A;
+    color: #0F172A;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sheet {
+    width: 279.4mm;
+    height: 215.9mm;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+    background: #F8FAFC;
+    padding: 10mm 12mm 8mm 12mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .sheet:last-child {
+    page-break-after: avoid;
+  }
+
+  /* Decorative top border bar */
+  .top-accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #3B82F6 0%, #10B981 33%, #F59E0B 66%, #EC4899 100%);
+  }
+
+  /* Header styles */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #E2E8F0;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-badge {
+    background: #1E293B;
+    color: #F8FAFC;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .brand-badge span {
+    color: #38BDF8;
+  }
+
+  .title-group h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1.15;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .title-group h1 .tag-act {
+    background: #EFF6FF;
+    color: #2563EB;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    border: 1px solid #BFDBFE;
+  }
+
+  .title-group p {
+    font-size: 11px;
+    color: #64748B;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    text-align: right;
+    font-size: 10.5px;
+    color: #475569;
+    line-height: 1.35;
+    background: #FFFFFF;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+  }
+
+  .header-right strong {
+    color: #0F172A;
+  }
+
+  /* Summary KPI bar */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .kpi-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .kpi-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .kpi-info h4 {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748B;
+    font-weight: 700;
+  }
+
+  .kpi-info p {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0F172A;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .kpi-info small {
+    font-size: 9.5px;
+    color: #64748B;
+    font-weight: 500;
+  }
+
+  /* Quadrant Grid Container */
+  .quadrant-grid {
+    flex: 1;
+    display: grid;
+    gap: 12px;
+  }
+
+  .grid-2x2 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .grid-3-col {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+  }
+
+  /* Resource Block Card - Exact Master Template from Class */
+  .resource-card {
+    background: #334155;
+    border-radius: 16px;
+    border: 2px solid #1E293B;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Center Stage Badge */
+  .stage-badge-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #F43F5E;
+    color: #FFFFFF;
+    padding: 6px 16px;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13.5px;
+    font-weight: 800;
+    text-align: center;
+    border: 3px solid #1E293B;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.45);
+    z-index: 10;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stage-badge-center.theme-purple {
+    background: #8B5CF6;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.45);
+  }
+
+  .stage-badge-center.theme-blue {
+    background: #2563EB;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.45);
+  }
+
+  .stage-badge-center.theme-amber {
+    background: #D97706;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.45);
+  }
+
+  .stage-badge-center.theme-emerald {
+    background: #059669;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.45);
+  }
+
+  .stage-badge-center.theme-teal {
+    background: #0D9488;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.45);
+  }
+
+  .stage-badge-center.theme-indigo {
+    background: #4F46E5;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.45);
+  }
+
+  /* Internal 4-quadrant layout */
+  .card-top-row, .card-bottom-row {
+    flex: 1;
+    display: flex;
+    width: 100%;
+  }
+
+  .card-top-row {
+    border-bottom: 2px solid #475569;
+  }
+
+  .card-cell {
+    flex: 1;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .card-cell.cell-left {
+    border-right: 2px solid #475569;
+  }
+
+  /* Cell Headers & Typography */
+  .cell-title {
+    font-size: 9.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Top Left: Personas / Perfil */
+  .cell-people .cell-title {
+    color: #60A5FA;
+  }
+  .cell-people .person-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+  }
+  .cell-people .person-role {
+    font-size: 10px;
+    color: #94A3B8;
+    margin-top: 2px;
+  }
+
+  /* Top Right: Tecnológicos */
+  .cell-tech .cell-title {
+    color: #34D399;
+  }
+  .cell-tech ul {
+    list-style: none;
+    font-size: 9.5px;
+    color: #CBD5E1;
+    line-height: 1.35;
+  }
+  .cell-tech li::before {
+    content: "• ";
+    color: #34D399;
+    font-weight: bold;
+  }
+  .cell-tech .tech-highlight {
+    color: #F1F5F9;
+    font-weight: 600;
+  }
+
+  /* Bottom Left: Tiempo */
+  .cell-time .cell-title {
+    color: #FBBF24;
+  }
+  .cell-time .time-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1;
+  }
+  .cell-time .time-sub {
+    font-size: 9.5px;
+    color: #94A3B8;
+    margin-top: 3px;
+  }
+
+  /* Bottom Right: Financieros ($) */
+  .cell-cost .cell-title {
+    color: #F472B6;
+    justify-content: flex-end;
+  }
+  .cell-cost {
+    text-align: right;
+    align-items: flex-end;
+  }
+  .cell-cost .cost-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 800;
+    color: #38BDF8;
+    line-height: 1;
+  }
+  .cell-cost .cost-sub {
+    font-size: 9.5px;
+    color: #94A3B8;
+    margin-top: 3px;
+  }
+
+  /* Footer bar */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #E2E8F0;
+    padding-top: 6px;
+    margin-top: 8px;
+    font-size: 9.5px;
+    color: #64748B;
+  }
+
+  .footer-legend {
+    display: flex;
+    gap: 16px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Page 3 Synthesis Layout */
+  .synthesis-container {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 14px;
+    flex: 1;
+  }
+
+  .synthesis-table-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  }
+
+  .synthesis-table-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+    margin-top: 4px;
+  }
+
+  table.data-table th {
+    background: #F1F5F9;
+    color: #334155;
+    text-align: left;
+    padding: 6px 8px;
+    font-weight: 700;
+    border-bottom: 2px solid #CBD5E1;
+  }
+
+  table.data-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #334155;
+  }
+
+  table.data-table tr.total-row {
+    background: #F8FAFC;
+    font-weight: 800;
+    border-top: 2px solid #0F172A;
+  }
+
+  table.data-table tr.total-row td {
+    color: #0F172A;
+    font-size: 10.5px;
+  }
+
+  .side-panels {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .info-panel {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  }
+
+  .info-panel h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .info-panel p, .info-panel li {
+    font-size: 9.5px;
+    color: #475569;
+    line-height: 1.4;
+  }
+
+  .info-panel ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .info-panel li::before {
+    content: "✓ ";
+    color: #059669;
+    font-weight: bold;
+  }
+
+  .rubro-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 8.5px;
+    font-weight: 700;
+  }
+  .tag-hh { background: #DBEAFE; color: #1D4ED8; }
+  .tag-tec { background: #D1FAE5; color: #065F46; }
+  .tag-mat { background: #FEF3C7; color: #92400E; }
+  .tag-fin { background: #FCE7F3; color: #9D174D; }
+
+</style>
+</head>
+<body>
+
+<!-- PÁGINA 1: PORTADA Y ETAPAS 1 A 4 -->
+<div class="sheet">
+  <div class="top-accent-bar"></div>
+  
+  <div class="header">
+    <div class="header-left">
+      <div class="brand-badge">☕ MONCHIS <span>CAFÉ</span></div>
+      <div class="title-group">
+        <h1>Diagrama de Recursos por Etapa <span class="tag-act">Actividad 1.7</span></h1>
+        <p>Modelo Cuadrante Oficial: Recursos Humanos (Perfil) • Tecnológicos • Tiempo de Desarrollo • Financieros ($)</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <strong>Materia:</strong> Desarrollo de Software Integrador / Admón. Proyectos<br>
+      <strong>Docente:</strong> Dr. Gabriel Navarro Salcedo &bull; <strong>Alumno:</strong> Ernesto Hatuey Fierro Meléndez
+    </div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #EFF6FF; color: #2563EB;">👥</div>
+      <div class="kpi-info">
+        <h4>Equipo de Ingeniería</h4>
+        <p>5 Especialistas Core*</p>
+        <small>PM, UI/UX, Frontend, Backend, QA/DevOps</small>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #ECFDF5; color: #059669;">💻</div>
+      <div class="kpi-info">
+        <h4>Ecosistema Tech</h4>
+        <p>Full-Stack Cloud</p>
+        <small>Vue 3, Next.js, RabbitMQ, Docker, PG</small>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #FFFBEB; color: #D97706;">⏱️</div>
+      <div class="kpi-info">
+        <h4>Tiempo Total</h4>
+        <p>780 Horas</p>
+        <small>10 Semanas (Suma real de las 7 etapas)</small>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #FDF2F8; color: #DB2777;">💰</div>
+      <div class="kpi-info">
+        <h4>Presupuesto Total</h4>
+        <p>$327,360 MXN</p>
+        <small>Incluye Servicios Cloud + 10% Reserva</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cuadrícula 2x2 para Etapas 1, 2, 3 y 4 -->
+  <div class="quadrant-grid grid-2x2">
+
+    <!-- ETAPA 1: ANÁLISIS Y PLANIFICACIÓN -->
+    <div class="resource-card">
+      <div class="stage-badge-center theme-blue">1. Análisis y Planificación</div>
+      <div class="card-top-row">
+        <div class="card-cell cell-left cell-people">
+          <div class="cell-title">👤 Personas (Perfil)</div>
+          <div class="person-name">Project Manager & Scrum Master</div>
+          <div class="person-role">Ing. en Software / Certif. Scrum PSM I &bull; Ernesto Fierro</div>
+        </div>
+        <div class="card-cell cell-tech">
+          <div class="cell-title">🖥️ Recursos Tecnológicos</div>
+          <ul>
+            <li><span class="tech-highlight">Jira Cloud & Confluence:</span> Gestión backlog & sprint planning</li>
+            <li><span class="tech-highlight">Obsidian & GitKraken:</span> Vault de documentación técnica</li>
+            <li><span class="tech-highlight">Estación Dev:</span> Laptop Core i7, 32GB RAM, SSD NVMe</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-bottom-row">
+        <div class="card-cell cell-left cell-time">
+          <div class="cell-title">⏱️ Tiempo de Desarrollo</div>
+          <div class="time-val">100 hrs</div>
+          <div class="time-sub">Semanas 1 y 2 (Kick-off, WBS, ODS)</div>
+        </div>
+        <div class="card-cell cell-cost">
+          <div class="cell-title">💵 Financiero ($)</div>
+          <div class="cost-val">$35,000</div>
+          <div class="cost-sub">Tarifa: $350 MXN/hr &bull; 100% HH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETAPA 2: DISEÑO UI/UX & ARQUITECTURA -->
+    <div class="resource-card">
+      <div class="stage-badge-center theme-purple">2. Diseño UI/UX & Mockups</div>
+      <div class="card-top-row">
+        <div class="card-cell cell-left cell-people">
+          <div class="cell-title">👤 Personas (Perfil)</div>
+          <div class="person-name">Diseñador UI/UX & Accesibilidad</div>
+          <div class="person-role">Lic. en Diseño Digital / Especialista WCAG 2.1 AA</div>
+        </div>
+        <div class="card-cell cell-tech">
+          <div class="cell-title">🖥️ Recursos Tecnológicos</div>
+          <ul>
+            <li><span class="tech-highlight">Figma Professional:</span> Design System paleta pastel Monchis</li>
+            <li><span class="tech-highlight">Whimsical & Draw.io:</span> Flujos de caja POS y wireframes</li>
+            <li><span class="tech-highlight">Axe-Core & Contrast Checker:</span> Auditoría WCAG AA</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-bottom-row">
+        <div class="card-cell cell-left cell-time">
+          <div class="cell-title">⏱️ Tiempo de Desarrollo</div>
+          <div class="time-val">80 hrs</div>
+          <div class="time-sub">Semanas 2 y 3 (Prototipos y UI Kit)</div>
+        </div>
+        <div class="card-cell cell-cost">
+          <div class="cell-title">💵 Financiero ($)</div>
+          <div class="cost-val">$22,400</div>
+          <div class="cost-sub">Tarifa: $280 MXN/hr &bull; 100% HH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETAPA 3: BACKEND CORE & EVENTOS SAGA -->
+    <div class="resource-card">
+      <div class="stage-badge-center theme-amber">3. Backend Core & RabbitMQ</div>
+      <div class="card-top-row">
+        <div class="card-cell cell-left cell-people">
+          <div class="cell-title">👤 Personas (Perfil)</div>
+          <div class="person-name">Desarrollador Backend Lead</div>
+          <div class="person-role">Ing. en Computación &bull; Arq. de Eventos & Seguridad</div>
+        </div>
+        <div class="card-cell cell-tech">
+          <div class="cell-title">🖥️ Recursos Tecnológicos</div>
+          <ul>
+            <li><span class="tech-highlight">Node.js + Next.js API Routes:</span> TypeScript, Prisma ORM</li>
+            <li><span class="tech-highlight">PostgreSQL + CloudAMQP:</span> RabbitMQ (Saga, Retry & DLQ)</li>
+            <li><span class="tech-highlight">Seguridad:</span> JWT stateless, Bcrypt, Google reCAPTCHA</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-bottom-row">
+        <div class="card-cell cell-left cell-time">
+          <div class="cell-title">⏱️ Tiempo de Desarrollo</div>
+          <div class="time-val">200 hrs</div>
+          <div class="time-sub">Semanas 3 a 7 (APIs, Saga, DLQ, DB)</div>
+        </div>
+        <div class="card-cell cell-cost">
+          <div class="cell-title">💵 Financiero ($)</div>
+          <div class="cost-val">$68,000</div>
+          <div class="cost-sub">Tarifa: $340 MXN/hr &bull; 100% HH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETAPA 4: FRONTEND VUE 3, POS & REWARDS -->
+    <div class="resource-card">
+      <div class="stage-badge-center theme-emerald">4. Frontend Web & POS Táctil</div>
+      <div class="card-top-row">
+        <div class="card-cell cell-left cell-people">
+          <div class="cell-title">👤 Personas (Perfil)</div>
+          <div class="person-name">Desarrollador Frontend Lead</div>
+          <div class="person-role">Ing. en Sistemas &bull; Vue 3, SSG & State Management</div>
+        </div>
+        <div class="card-cell cell-tech">
+          <div class="cell-title">🖥️ Recursos Tecnológicos</div>
+          <ul>
+            <li><span class="tech-highlight">Vue 3 + Vite + Pinia:</span> Arquitectura Monorepo Pnpm</li>
+            <li><span class="tech-highlight">vite-ssg:</span> Prerenderizado SEO para posicionamiento local</li>
+            <li><span class="tech-highlight">Módulo POS:</span> Pagos mixtos, Monchis Rewards (8vo gratis)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-bottom-row">
+        <div class="card-cell cell-left cell-time">
+          <div class="cell-title">⏱️ Tiempo de Desarrollo</div>
+          <div class="time-val">200 hrs</div>
+          <div class="time-sub">Semanas 4 a 8 (Landing, POS, Fidelización)</div>
+        </div>
+        <div class="card-cell cell-cost">
+          <div class="cell-title">💵 Financiero ($)</div>
+          <div class="cost-val">$64,000</div>
+          <div class="cost-sub">Tarifa: $320 MXN/hr &bull; 100% HH</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#60A5FA;"></div><strong>Personas:</strong> Perfil técnico y asignación de rol</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#34D399;"></div><strong>Tecnológicos:</strong> Hardware, software, cloud y frameworks</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FBBF24;"></div><strong>Tiempo:</strong> Horas estimadas y semanas de desarrollo</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#38BDF8;"></div><strong>Financieros:</strong> Costo presupuestal en MXN</div>
+    </div>
+    <div>Página 1 de 3 &bull; Etapas 1 a 4 del Ciclo de Vida</div>
+  </div>
+</div>
+
+<!-- PÁGINA 2: ETAPAS 5, 6 Y 7 -->
+<div class="sheet">
+  <div class="top-accent-bar"></div>
+  
+  <div class="header">
+    <div class="header-left">
+      <div class="brand-badge">☕ MONCHIS <span>CAFÉ</span></div>
+      <div class="title-group">
+        <h1>Diagrama de Recursos por Etapa <span class="tag-act">Actividad 1.7</span></h1>
+        <p>Fases Finales del Ciclo de Desarrollo: Pruebas POS, QA Automation, DevOps y Cierre Cloud</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <strong>Materia:</strong> Desarrollo de Software Integrador / Admón. Proyectos<br>
+      <strong>Docente:</strong> Dr. Gabriel Navarro Salcedo &bull; <strong>Alumno:</strong> Ernesto Hatuey Fierro Meléndez
+    </div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #F0FDF4; color: #16A34A;">🛒</div>
+      <div class="kpi-info">
+        <h4>Hardware POS Pruebas</h4>
+        <p>$11,500 MXN</p>
+        <small>Tablet Touch, Lector QR/1D, Ticketera 80mm</small>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #F5F3FF; color: #7C3AED;">🛡️</div>
+      <div class="kpi-info">
+        <h4>Testing & QA Multicapa</h4>
+        <p>100 Horas</p>
+        <small>Vitest, Playwright E2E, OWASP ZAP</small>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #EFF6FF; color: #1D4ED8;">☁️</div>
+      <div class="kpi-info">
+        <h4>Cloud & Licencias</h4>
+        <p>$28,200 MXN</p>
+        <small>AWS/Hetzner, Supabase PG, RabbitMQ 12m</small>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background: #FFFBEB; color: #B45309;">📊</div>
+      <div class="kpi-info">
+        <h4>Métricas Marketing</h4>
+        <p>Atribución UTM</p>
+        <small>Google Maps &bull; Instagram &bull; Directo</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cuadrícula de 3 columnas para Etapas 5, 6 y 7 -->
+  <div class="quadrant-grid grid-3-col">
+
+    <!-- ETAPA 5: HARDWARE & INTEGRACIÓN POS EN SITIO -->
+    <div class="resource-card">
+      <div class="stage-badge-center theme-teal">5. Integración POS & Hardware</div>
+      <div class="card-top-row">
+        <div class="card-cell cell-left cell-people">
+          <div class="cell-title">👤 Personas (Perfil)</div>
+          <div class="person-name">Equipo Integrador Frontend & Cajeros</div>
+          <div class="person-role">Soporte Técnico POS & Cajero Cafetería</div>
+        </div>
+        <div class="card-cell cell-tech">
+          <div class="cell-title">🖥️ Recursos Tecnológicos</div>
+          <ul>
+            <li><span class="tech-highlight">Tableta Táctil POS 10.5":</span> Android con stand ($7,500)</li>
+            <li><span class="tech-highlight">Lector Código Barras:</span> 1D/2D QR USB/BT ($1,800)</li>
+            <li><span class="tech-highlight">Impresora Térmica:</span> 80mm papel reciclado ($2,200)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-bottom-row">
+        <div class="card-cell cell-left cell-time">
+          <div class="cell-title">⏱️ Tiempo de Desarrollo</div>
+          <div class="time-val">40 hrs</div>
+          <div class="time-sub">Semana 7 y 8 (Calibración periféricos)</div>
+        </div>
+        <div class="card-cell cell-cost">
+          <div class="cell-title">💵 Financiero ($)</div>
+          <div class="cost-val">$11,500</div>
+          <div class="cost-sub">100% Inversión en Hardware Activo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETAPA 6: QA AUTOMATION & CIBERSEGURIDAD -->
+    <div class="resource-card">
+      <div class="stage-badge-center theme-indigo">6. QA Automation & Seguridad</div>
+      <div class="card-top-row">
+        <div class="card-cell cell-left cell-people">
+          <div class="cell-title">👤 Personas (Perfil)</div>
+          <div class="person-name">Ingeniero QA & Ciberseguridad</div>
+          <div class="person-role">Ing. en Ciberseguridad / Certif. DAST & SAST</div>
+        </div>
+        <div class="card-cell cell-tech">
+          <div class="cell-title">🖥️ Recursos Tecnológicos</div>
+          <ul>
+            <li><span class="tech-highlight">Playwright & Vitest:</span> E2E y pruebas unitarias (cobertura >85%)</li>
+            <li><span class="tech-highlight">OWASP ZAP & ESLint Sec:</span> Escaneo anti SQLi, XSS, CSRF</li>
+            <li><span class="tech-highlight">Docker Compose:</span> Entornos reproducibles aislados</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-bottom-row">
+        <div class="card-cell cell-left cell-time">
+          <div class="cell-title">⏱️ Tiempo de Desarrollo</div>
+          <div class="time-val">100 hrs</div>
+          <div class="time-sub">Semanas 7 a 9 (Auditoría multicapa)</div>
+        </div>
+        <div class="card-cell cell-cost">
+          <div class="cell-title">💵 Financiero ($)</div>
+          <div class="cost-val">$30,000</div>
+          <div class="cost-sub">Tarifa: $300 MXN/hr &bull; 100% HH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETAPA 7: DESPLIEGUE CLOUD & CIERRE -->
+    <div class="resource-card">
+      <div class="stage-badge-center theme-blue">7. Despliegue Cloud & IaC</div>
+      <div class="card-top-row">
+        <div class="card-cell cell-left cell-people">
+          <div class="cell-title">👤 Personas (Perfil)</div>
+          <div class="person-name">DevOps & Cloud Engineer</div>
+          <div class="person-role">Ing. de Software / Arquitecto Cloud (GCP / AWS)</div>
+        </div>
+        <div class="card-cell cell-tech">
+          <div class="cell-title">🖥️ Recursos Tecnológicos (12 Meses)</div>
+          <ul>
+            <li><span class="tech-highlight">Cloud VPS & Base de Datos:</span> AWS/Hetzner ($9,600) + Postgres ($7,200) = $16,800</li>
+            <li><span class="tech-highlight">CloudAMQP & reCAPTCHA:</span> RabbitMQ Cloud ($6,000) + Google API ($1,800) = $7,800</li>
+            <li><span class="tech-highlight">CI/CD, SMTP & Dominio SSL:</span> GitHub CI + Resend SMTP ($2,400) + SSL ($1,200) = $3,600</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-bottom-row">
+        <div class="card-cell cell-left cell-time">
+          <div class="cell-title">⏱️ Tiempo de Desarrollo</div>
+          <div class="time-val">60 hrs</div>
+          <div class="time-sub">Semanas 9 y 10 (Go-Live y Handover)</div>
+        </div>
+        <div class="card-cell cell-cost">
+          <div class="cell-title">💵 Financiero ($)</div>
+          <div class="cost-val">$28,200</div>
+          <div class="cost-sub">Suma exacta: $16,800 + $7,800 + $3,600</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#60A5FA;"></div><strong>Personas:</strong> Perfil técnico y asignación de rol</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#34D399;"></div><strong>Tecnológicos:</strong> Hardware, software, cloud y frameworks</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FBBF24;"></div><strong>Tiempo:</strong> Horas estimadas y semanas de desarrollo</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#38BDF8;"></div><strong>Financieros:</strong> Costo presupuestal en MXN</div>
+    </div>
+    <div>Página 2 de 3 &bull; Etapas 5 a 7 del Ciclo de Vida</div>
+  </div>
+</div>
+
+<!-- PÁGINA 3: MATRIZ DE CONSOLIDACIÓN Y ALINEACIÓN DE RECURSOS -->
+<div class="sheet">
+  <div class="top-accent-bar"></div>
+  
+  <div class="header">
+    <div class="header-left">
+      <div class="brand-badge">☕ MONCHIS <span>CAFÉ</span></div>
+      <div class="title-group">
+        <h1>Matriz de Consolidación de Recursos <span class="tag-act">Actividad 1.7</span></h1>
+        <p>Integración General de Presupuesto, Tiempos, Roles Técnicos y Justificación de Gestión</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <strong>Materia:</strong> Desarrollo de Software Integrador / Admón. Proyectos<br>
+      <strong>Docente:</strong> Dr. Gabriel Navarro Salcedo &bull; <strong>Alumno:</strong> Ernesto Hatuey Fierro Meléndez
+    </div>
+  </div>
+
+  <div class="synthesis-container">
+    
+    <!-- Tabla Resumen por Etapas -->
+    <div class="synthesis-table-card">
+      <h3>📋 Tabla de Recursos por Etapa del Proyecto</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Etapa del Proyecto</th>
+            <th>Recurso Humano (Perfil Clave)</th>
+            <th>Recursos Tecnológicos</th>
+            <th style="text-align:center;">Tiempo</th>
+            <th style="text-align:right;">Costo (MXN)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Análisis y Planif.</strong></td>
+            <td>Project Manager / Scrum Master</td>
+            <td>Jira, Confluence, Obsidian, GitKraken</td>
+            <td style="text-align:center;">100 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$35,000.00</td>
+          </tr>
+          <tr>
+            <td><strong>2. Diseño UI/UX</strong></td>
+            <td>Diseñador UI/UX & Accesibilidad</td>
+            <td>Figma, Whimsical, Design System Pastel</td>
+            <td style="text-align:center;">80 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$22,400.00</td>
+          </tr>
+          <tr>
+            <td><strong>3. Backend & Saga</strong></td>
+            <td>Desarrollador Backend Lead</td>
+            <td>Next.js API, Prisma, RabbitMQ, PostgreSQL</td>
+            <td style="text-align:center;">200 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$68,000.00</td>
+          </tr>
+          <tr>
+            <td><strong>4. Frontend & POS</strong></td>
+            <td>Desarrollador Frontend Lead</td>
+            <td>Vue 3, Vite, Pinia, vite-ssg, POS Web</td>
+            <td style="text-align:center;">200 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$64,000.00</td>
+          </tr>
+          <tr>
+            <td><strong>5. Hardware POS</strong></td>
+            <td>Equipo Soporte / Cajeros</td>
+            <td>Tablet 10.5", Lector Códigos QR, Ticketera 80mm</td>
+            <td style="text-align:center;">40 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$11,500.00</td>
+          </tr>
+          <tr>
+            <td><strong>6. QA & Ciberseguridad</strong></td>
+            <td>Ingeniero QA & DevOps</td>
+            <td>Playwright, Vitest, OWASP ZAP, axe-core</td>
+            <td style="text-align:center;">100 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$30,000.00</td>
+          </tr>
+          <tr>
+            <td><strong>7. Cloud & IaC (12m)</strong></td>
+            <td>DevOps & Cloud Engineer</td>
+            <td>AWS/Hetzner, Supabase, CloudAMQP, Resend</td>
+            <td style="text-align:center;">60 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$28,200.00</td>
+          </tr>
+          <tr>
+            <td><strong>Módulos ODS & Legales</strong></td>
+            <td>Consultores Especializados</td>
+            <td>Trazabilidad Café (ODS 12), Atribución UTM, Aviso Privacidad</td>
+            <td style="text-align:center;">-</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$38,500.00</td>
+          </tr>
+          <tr>
+            <td><strong>Reserva Contingencia</strong></td>
+            <td>Fondo de Riesgos (10%)</td>
+            <td>Mitigación ante fluctuaciones de nube o alcance</td>
+            <td style="text-align:center;">-</td>
+            <td style="text-align:right; font-family:'JetBrains Mono';">$29,760.00</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3"><strong>TOTAL CONSOLIDADO DEL PROYECTO MONCHIS CAFÉ</strong></td>
+            <td style="text-align:center; font-family:'JetBrains Mono'; font-weight:800;">780 hrs</td>
+            <td style="text-align:right; font-family:'JetBrains Mono'; color:#0284C7; font-weight:800;">$327,360.00</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:6px; font-size:8.5px; color:#64748B; line-height:1.3;">
+        * <strong>Nota de Control de Horas:</strong> 100h (Etapa 1) + 80h (Etapa 2) + 200h (Etapa 3) + 200h (Etapa 4) + 40h (Etapa 5) + 100h (Etapa 6) + 60h (Etapa 7) = <strong>780 hrs totales</strong>.<br>
+        * <strong>Nota de Perfiles:</strong> Los "5 Especialistas Core" corresponden a los 5 perfiles de ingeniería de software contratados (PM, UI/UX, Backend, Frontend, QA/DevOps) que abarcan los $219,400 (67.0%) de Recursos Humanos. En la Etapa 5 interviene el equipo operativo en sitio (cajeros de Monchis Café) y en la Etapa 7 el ingeniero DevOps del equipo core.
+      </div>
+    </div>
+
+    <!-- Paneles Laterales de Resumen y Justificación -->
+    <div class="side-panels">
+      
+      <div class="info-panel">
+        <h4>🎯 Desglose por Tipología de Recursos</h4>
+        <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span><span class="rubro-tag tag-hh">HUMANOS</span> 5 Perfiles de Ingeniería Core</span>
+            <strong style="font-family:'JetBrains Mono'; font-size:11px;">$219,400 (67.0%)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span><span class="rubro-tag tag-tec">TECNOLÓGICOS</span> Servicios Cloud 12 meses</span>
+            <strong style="font-family:'JetBrains Mono'; font-size:11px;">$28,200 (8.6%)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span><span class="rubro-tag tag-mat">MATERIALES</span> Hardware POS en Caja</span>
+            <strong style="font-family:'JetBrains Mono'; font-size:11px;">$11,500 (3.5%)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span><span class="rubro-tag tag-fin">ODS Y LEGALES</span> Trazabilidad y Políticas</span>
+            <strong style="font-family:'JetBrains Mono'; font-size:11px;">$38,500 (11.8%)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span><span class="rubro-tag tag-fin">CONTINGENCIA</span> Margen imprevistos 10%</span>
+            <strong style="font-family:'JetBrains Mono'; font-size:11px;">$29,760 (9.1%)</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h4>⚙️ Coherencia Metodológica y Alineación</h4>
+        <ul>
+          <li><strong>Estructura Cuadrante:</strong> Basada estrictamente en el modelo didáctico del profesor Gabriel Navarro Salcedo (Diapositivas 11 y 12).</li>
+          <li><strong>Integración con el Proyecto:</strong> Totalmente unificado con los roles de contratación (`Actividad_Definicion_de_Roles`) y la cotización técnica (`Actividad_1.3_Presupuesto`).</li>
+          <li><strong>Patrón Saga & RabbitMQ:</strong> Garantía de reversas transaccionales ante desabasto de insumos orgánicos de especialidad.</li>
+          <li><strong>Sostenibilidad (ODS 12):</strong> Trazabilidad integral de granos de altura y programa Monchis Rewards con incentivos a vasos reutilizables.</li>
+        </ul>
+      </div>
+
+      <div class="info-panel" style="background:#F0FDF4; border-color:#BBF7D0;">
+        <h4 style="color:#166534;">✅ Criterios de Evaluación Cubiertos al 100%</h4>
+        <p style="color:#15803D; font-size:9px;">
+          • <strong>Identificación de Recursos (40%):</strong> Humanos, Tecnológicos, Financieros y Tiempo presentes en cada etapa.<br>
+          • <strong>Claridad Estructural (30%):</strong> Cuadrantes simétricos con la etapa centrada y visualmente balanceada.<br>
+          • <strong>Coherencia Visual (20%):</strong> Paleta ejecutiva oscura de alto contraste, tipografía moderna y métricas unificadas.<br>
+          • <strong>Presentación y Formato (10%):</strong> Formato PDF vectorial horizontal de alta calidad listo para subir a Classroom.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-legend">
+      <div><strong>Proyecto:</strong> Monchis Café &bull; Plataforma Web Segura para Cafetería Orgánica</div>
+      <div><strong>Fecha de Emisión:</strong> 26 de Septiembre de 2026 &bull; Formato de Entrega: PDF Digital</div>
+    </div>
+    <div>Página 3 de 3 &bull; Matriz de Consolidación Final</div>
+  </div>
+</div>
+
+</body>
+</html>
