@@ -14,13 +14,16 @@
     "prisma:migrate": "pnpm --filter @monchis/database migrate"
   },
   "devDependencies": {
-    "turbo": "^1.13.0",
-    "typescript": "^5.4.5",
+    "eslint": "^8.57.0",
     "prettier": "^3.2.5",
-    "eslint": "^8.57.0"
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.5"
   },
   "packageManager": "pnpm@9.1.0",
   "engines": {
     "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "docx": "^9.7.1"
   }
 }
