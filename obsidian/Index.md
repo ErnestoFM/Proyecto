@@ -12,13 +12,14 @@ Bienvenido al Vault de Obsidian del proyecto **Monchis Café**. Este vault sirve
 ---
 
 ## 🏷️ Etiquetas Rápidas (Tags)
-- `#agente` `#bitacora` `#arquitectura` `#monorepo` `#saga` `#rabbitmq` `#jwt` `#recaptcha` `#seo`
+- `#agente` `#bitacora` `#arquitectura` `#monorepo` `#saga` `#rabbitmq` `#jwt` `#recaptcha` `#seo` `#pert`
 
 ---
 
 ## 📅 Últimas Bitácoras
-- [[Bitacora/2026-09-19]] — *Unidad 3: Actividad 3.1 Contrato Informático — Análisis Técnico y Modelo Contractual (Dr. Gabriel Navarro Salcedo).*
-- [[Bitacora/2026-09-09]] — *Unidad 2: Actividad Participación - Buenas Prácticas de Calidad (Dr. Gabriel Navarro Salcedo).*
-- [[Bitacora/2026-09-06]] — *Unidad 1: Producto Integrador - Presentación de Proyecto APA 7 (Dr. Gabriel Navarro Salcedo).*
+- [[Bitacora/2026-09-26]] — *Unidad 1: Actividades 1.6 (Diagrama PERT / Ruta Crítica) y 1.7 (Diagrama de Recursos en PDF) (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-09-05]] — *Unidad 1: Actividad 1.5 Diagrama de Gantt en Excel y PDF (Dr. Gabriel Navarro Salcedo).*
-
+- [[Bitacora/2026-09-01]] — *Elaboración de la Actividad 1.3: Diseño de Presupuesto para Monchis Café y generación de entregable Word (.docx).*
+- [[Bitacora/2026-08-31]] — *Unidad 1: Planificación de Proyecto de Desarrollo de Software Enfocado a los ODS (Dr. Gabriel Navarro Salcedo).*
+- [[Bitacora/2026-08-23]] — *Fase 1: Setup de Arquitectura Monorepo, RabbitMQ Saga, JWT, reCAPTCHA, Prisma e Infraestructura.*
+- [[Bitacora/2026-08-22]] — *Registro inicial del espacio de trabajo.*
