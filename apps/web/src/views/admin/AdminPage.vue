@@ -1,8 +1,63 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useAdminStore } from '@/stores/adminStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const admin = useAdminStore();
+const auth = useAuthStore();
+
+const modal2FAAbierto = ref(false);
+const setup2FAData = ref<{ secret: string; otpAuthUrl: string; qrCodeDataUrl: string } | null>(null);
+const codigoTOTP = ref('');
+const cargando2FA = ref(false);
+const mensaje2FA = ref<string | null>(null);
+const error2FA = ref<string | null>(null);
+
+async function abrirModal2FA() {
+  modal2FAAbierto.value = true;
+  codigoTOTP.value = '';
+  mensaje2FA.value = null;
+  error2FA.value = null;
+
+  if (!auth.user?.dosFactoresActivo) {
+    cargando2FA.value = true;
+    const data = await auth.setup2FA();
+    if (data) {
+      setup2FAData.value = data;
+    }
+    cargando2FA.value = false;
+  }
+}
+
+async function activar2FA() {
+  if (!setup2FAData.value || codigoTOTP.value.length !== 6) return;
+  cargando2FA.value = true;
+  error2FA.value = null;
+  const ok = await auth.enable2FA(setup2FAData.value.secret, codigoTOTP.value);
+  cargando2FA.value = false;
+  if (ok) {
+    mensaje2FA.value = '¡Doble factor de autenticación activado con éxito!';
+    codigoTOTP.value = '';
+  } else {
+    error2FA.value = auth.error || 'Código incorrecto. Intente de nuevo.';
+  }
+}
+
+async function desactivar2FA() {
+  if (codigoTOTP.value.length !== 6) return;
+  cargando2FA.value = true;
+  error2FA.value = null;
+  const ok = await auth.disable2FA(codigoTOTP.value);
+  cargando2FA.value = false;
+  if (ok) {
+    mensaje2FA.value = '2FA desactivado correctamente.';
+    codigoTOTP.value = '';
+    const data = await auth.setup2FA();
+    if (data) setup2FAData.value = data;
+  } else {
+    error2FA.value = auth.error || 'Código incorrecto.';
+  }
+}
 
 function refrescarTodo() {
   admin.cargarMetricas();
@@ -84,6 +139,13 @@ function exportarPDF() {
         <div class="admin-actions">
           <button class="btn btn--secondary btn--sm" @click="refrescarTodo" :disabled="admin.isLoading">
             🔄 {{ admin.isLoading ? 'Actualizando...' : 'Refrescar' }}
+          </button>
+          <button
+            class="btn btn--secondary btn--sm"
+            @click="abrirModal2FA"
+            :title="auth.user?.dosFactoresActivo ? '2FA Activo y Protegido' : 'Configurar Doble Factor'"
+          >
+            🔐 {{ auth.user?.dosFactoresActivo ? '2FA Activo' : 'Configurar 2FA' }}
           </button>
           <button class="btn btn--secondary btn--sm export-btn" @click="exportarExcel" title="Exportar reporte compatible con Excel">
             📊 Exportar Excel
@@ -225,6 +287,86 @@ function exportarPDF() {
           </tbody>
         </table>
       </section>
+
+      <!-- Modal de Configuración y Gestión 2FA / TOTP -->
+      <div v-if="modal2FAAbierto" class="modal-overlay" @click.self="modal2FAAbierto = false">
+        <div class="modal-card card" v-motion-pop>
+          <div class="modal-header">
+            <h3>🔐 Seguridad — Doble Factor de Autenticación (2FA)</h3>
+            <button class="close-btn" @click="modal2FAAbierto = false">✕</button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Estado Activo -->
+            <div v-if="auth.user?.dosFactoresActivo" class="twofa-status active">
+              <span class="status-badge success">🛡️ 2FA Activo y Protegido</span>
+              <p>Tu cuenta de Administrador exige autenticación con aplicación móvil (Google Authenticator / Authy) en cada inicio de sesión.</p>
+
+              <div class="disable-section">
+                <h4>Desactivar Doble Factor</h4>
+                <p class="small-text">Para desactivarlo, ingresa tu código TOTP actual de 6 dígitos:</p>
+                <div class="input-inline">
+                  <input
+                    v-model="codigoTOTP"
+                    type="text"
+                    maxlength="6"
+                    placeholder="123456"
+                    class="totp-code-input"
+                  />
+                  <button
+                    class="btn btn--danger btn--sm"
+                    :disabled="cargando2FA || codigoTOTP.length !== 6"
+                    @click="desactivar2FA"
+                  >
+                    Desactivar 2FA
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estado Inactivo (Configuración Inicial) -->
+            <div v-else class="twofa-status inactive">
+              <span class="status-badge warning">⚠️ 2FA Desactivado (Obligatorio para Administradores)</span>
+              <p>Escanea el código QR con <strong>Google Authenticator</strong> o <strong>Authy</strong>:</p>
+
+              <div v-if="cargando2FA && !setup2FAData" class="loading-state">
+                <span>🔄 Generando secreto criptográfico...</span>
+              </div>
+
+              <div v-else-if="setup2FAData" class="qr-container">
+                <img :src="setup2FAData.qrCodeDataUrl" alt="Código QR TOTP" class="qr-image" />
+                <div class="secret-box">
+                  <small>Clave de configuración manual:</small>
+                  <code>{{ setup2FAData.secret }}</code>
+                </div>
+
+                <div class="verify-step">
+                  <label>Ingresa el código de 6 dígitos para validar la vinculación:</label>
+                  <div class="input-inline">
+                    <input
+                      v-model="codigoTOTP"
+                      type="text"
+                      maxlength="6"
+                      placeholder="123456"
+                      class="totp-code-input"
+                    />
+                    <button
+                      class="btn btn--primary btn--sm"
+                      :disabled="cargando2FA || codigoTOTP.length !== 6"
+                      @click="activar2FA"
+                    >
+                      Verificar y Activar 2FA
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="mensaje2FA" class="feedback success">✅ {{ mensaje2FA }}</div>
+            <div v-if="error2FA" class="feedback error">❌ {{ error2FA }}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -426,5 +568,137 @@ function exportarPDF() {
     border: 1px solid #CBD5E1 !important;
     break-inside: avoid;
   }
+}
+
+/* Modal 2FA */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(40, 30, 25, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-card {
+  max-width: 520px;
+  width: 100%;
+  padding: 2rem;
+  background: var(--color-bg-card, #FFFFFF);
+  border-radius: var(--radius-md, 16px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+  font-size: 1.15rem;
+  color: var(--color-primary-dark);
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.status-badge.success {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-badge.warning {
+  background: #FFF3E0;
+  color: #E65100;
+}
+
+.qr-container {
+  text-align: center;
+  margin: 1.2rem 0;
+}
+
+.qr-image {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 1rem;
+  border-radius: 12px;
+  border: 4px solid var(--color-border);
+}
+
+.secret-box {
+  background: rgba(243, 201, 201, 0.2);
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+}
+
+.secret-box code {
+  display: block;
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-primary-dark);
+  margin-top: 0.2rem;
+}
+
+.input-inline {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.totp-code-input {
+  font-family: monospace;
+  font-size: 1.3rem;
+  letter-spacing: 0.3rem;
+  text-align: center;
+  font-weight: 700;
+  max-width: 180px;
+  padding: 0.5rem;
+}
+
+.disable-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.feedback {
+  margin-top: 1rem;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.feedback.success {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.feedback.error {
+  background: #FFEBEE;
+  color: #C62828;
 }
 </style>

@@ -8,6 +8,21 @@ export const LoginSchema = z.object({
   email: z.string().email('Formato de correo electrónico inválido').trim(),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
   recaptchaToken: z.string().min(1, 'Token de verificación reCAPTCHA requerido'),
+  totpCode: z.string().regex(/^\d{6}$/, 'El código 2FA debe ser exactamente de 6 dígitos numéricos').optional(),
+});
+
+export const Enable2FASchema = z.object({
+  secret: z.string().min(16, 'Secreto 2FA inválido').trim(),
+  totpCode: z.string().regex(/^\d{6}$/, 'El código 2FA debe ser exactamente de 6 dígitos numéricos').trim(),
+});
+
+export const Verify2FASchema = z.object({
+  tempToken: z.string().min(1, 'Token temporal de autenticación requerido'),
+  totpCode: z.string().regex(/^\d{6}$/, 'El código 2FA debe ser exactamente de 6 dígitos numéricos').trim(),
+});
+
+export const Disable2FASchema = z.object({
+  totpCode: z.string().regex(/^\d{6}$/, 'El código 2FA debe ser exactamente de 6 dígitos numéricos').trim(),
 });
 
 export const RegisterSchema = z.object({

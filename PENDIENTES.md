@@ -52,9 +52,9 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
 
 ## ⚙️ Prioridad 3: Funcionalidades Faltantes (Prometidas en Documentación)
 
-- [ ] **3.1. Doble Factor de Autenticación (2FA / TOTP) para Administrador**
-  - **Ubicación:** Requerimientos funcionales 2.1; en BD existen `dosFactoresActivo` y `dosFactoresSecret`.
-  - **Estado:** No existe ningún endpoint para generar el secreto TOTP (`speakeasy` / `otplib`), renderizar el código QR ni validar el token de 6 dígitos en el flujo de login.
+- [x] **3.1. Doble Factor de Autenticación (2FA / TOTP) para Administrador** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/lib/totp.ts`, `apps/api/src/app/api/auth/2fa/`, `apps/web/src/stores/authStore.ts`, `apps/web/src/views/auth/LoginPage.vue` y `apps/web/src/views/admin/AdminPage.vue`.
+  - **Resolución:** Se implementó el servicio criptográfico `TotpService` bajo estándares RFC 6238 y RFC 4226 (secreto Base32, códigos de 6 dígitos con ventana de ±30s, generación de QR con `qrcode` y URLs `otpauth://`). Se crearon endpoints `/api/auth/2fa/setup`, `/api/auth/2fa/enable`, `/api/auth/2fa/verify` y `/api/auth/2fa/disable`. Se integró el desafío de 2FA en el login y un modal de administración en el panel con 11 pruebas unitarias dedicadas.
 
 - [x] **3.2. Consumidor Activo (Worker) de RabbitMQ para Patrón Saga** — *RESUELTO (2026-10-06)*
   - **Ubicación:** `packages/messaging/src/sagaWorker.ts`, `packages/messaging/src/index.ts` y `apps/api/src/app/api/pos/orders/route.ts`.

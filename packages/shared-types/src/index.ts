@@ -12,6 +12,7 @@ export interface UserDTO {
   puntosFidelidad: number;
   sellosAcumulados: number;
   creadoEn: string;
+  dosFactoresActivo?: boolean;
 }
 
 export interface JwtPayloadDTO {

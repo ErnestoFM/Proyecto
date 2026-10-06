@@ -15,21 +15,27 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
+  // Estado para flujo de Doble Factor (2FA / TOTP)
+  const requires2FA = ref(false);
+  const tempToken = ref<string | null>(null);
+
   const isAuthenticated = computed(() => !!accessToken.value && !!user.value);
   const userRole = computed<UserRole | null>(() => user.value?.rol ?? null);
   const isAdmin = computed(() => userRole.value === 'ADMIN');
   const isCajero = computed(() => userRole.value === 'CAJERO');
 
-  async function login(email: string, password: string, recaptchaToken: string) {
+  async function login(email: string, password: string, recaptchaToken: string, totpCode?: string) {
     isLoading.value = true;
     error.value = null;
+    requires2FA.value = false;
+    tempToken.value = null;
 
     try {
       const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // Necesario para enviar/recibir cookies httpOnly
-        body: JSON.stringify({ email, password, recaptchaToken }),
+        body: JSON.stringify({ email, password, recaptchaToken, totpCode }),
       });
 
       const data = await res.json();
@@ -37,6 +43,12 @@ export const useAuthStore = defineStore('auth', () => {
       if (!res.ok) {
         error.value = data.error || 'Error al iniciar sesión';
         return false;
+      }
+
+      if (data.requiere2FA) {
+        requires2FA.value = true;
+        tempToken.value = data.tempToken;
+        return true;
       }
 
       accessToken.value = data.accessToken;
@@ -47,6 +59,116 @@ export const useAuthStore = defineStore('auth', () => {
       return false;
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  async function verify2FA(totpCode: string) {
+    if (!tempToken.value) {
+      error.value = 'No hay sesión de autenticación 2FA pendiente';
+      return false;
+    }
+
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      const res = await fetch(`${API_URL}/api/auth/2fa/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          tempToken: tempToken.value,
+          totpCode,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        error.value = data.error || 'Código 2FA incorrecto';
+        return false;
+      }
+
+      accessToken.value = data.accessToken;
+      user.value = data.usuario;
+      requires2FA.value = false;
+      tempToken.value = null;
+      return true;
+    } catch (e: any) {
+      error.value = 'Error al verificar código de doble factor';
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function setup2FA(): Promise<{ secret: string; otpAuthUrl: string; qrCodeDataUrl: string; dosFactoresActivo: boolean } | null> {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/2fa/setup`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        throw new Error('Error al generar configuración 2FA');
+      }
+      return await res.json();
+    } catch (e: any) {
+      error.value = e.message;
+      return null;
+    }
+  }
+
+  async function enable2FA(secret: string, totpCode: string) {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/2fa/enable`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+        body: JSON.stringify({ secret, totpCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        error.value = data.error || 'Error al activar 2FA';
+        return false;
+      }
+      if (user.value) {
+        user.value.dosFactoresActivo = true;
+      }
+      return true;
+    } catch (e: any) {
+      error.value = 'Error al activar 2FA';
+      return false;
+    }
+  }
+
+  async function disable2FA(totpCode: string) {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/2fa/disable`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+        body: JSON.stringify({ totpCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        error.value = data.error || 'Error al desactivar 2FA';
+        return false;
+      }
+      if (user.value) {
+        user.value.dosFactoresActivo = false;
+      }
+      return true;
+    } catch (e: any) {
+      error.value = 'Error al desactivar 2FA';
+      return false;
     }
   }
 
@@ -142,7 +264,13 @@ export const useAuthStore = defineStore('auth', () => {
     userRole,
     isAdmin,
     isCajero,
+    requires2FA,
+    tempToken,
     login,
+    verify2FA,
+    setup2FA,
+    enable2FA,
+    disable2FA,
     register,
     refreshSession,
     logout,

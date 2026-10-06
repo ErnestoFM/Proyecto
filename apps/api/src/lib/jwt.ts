@@ -54,3 +54,31 @@ export function verifyAccessToken(token: string): JwtPayloadDTO {
 export function verifyRefreshToken(token: string): JwtPayloadDTO {
   return jwt.verify(token, getRefreshSecret(), { algorithms: ['HS256'] }) as JwtPayloadDTO;
 }
+
+export interface Temp2FAPayload {
+  sub: string;
+  email: string;
+  rol: UserRole;
+  is2FA: boolean;
+}
+
+export function signTemp2FAToken(payload: { userId: string; email: string; rol: UserRole }): string {
+  const jwtPayload: Temp2FAPayload = {
+    sub: payload.userId,
+    email: payload.email,
+    rol: payload.rol,
+    is2FA: true,
+  };
+  return jwt.sign(jwtPayload, getAccessSecret(), {
+    expiresIn: '5m',
+    algorithm: 'HS256',
+  });
+}
+
+export function verifyTemp2FAToken(token: string): Temp2FAPayload {
+  const decoded = jwt.verify(token, getAccessSecret(), { algorithms: ['HS256'] }) as Temp2FAPayload;
+  if (!decoded.is2FA) {
+    throw new Error('Token inválido para verificación de segundo factor');
+  }
+  return decoded;
+}

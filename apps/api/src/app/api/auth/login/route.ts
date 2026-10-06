@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { LoginSchema } from '@/lib/zodSchemas';
 import { verifyGoogleRecaptcha } from '@/lib/recaptcha';
 import { comparePassword } from '@/lib/password';
-import { signAccessToken, signRefreshToken } from '@/lib/jwt';
+import { signAccessToken, signRefreshToken, signTemp2FAToken } from '@/lib/jwt';
+import { TotpService } from '@/lib/totp';
 import { prisma } from '@/lib/prisma';
 import { UserDTO } from '@monchis/shared-types';
 
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, password, recaptchaToken } = parseResult.data;
+    const { email, password, recaptchaToken, totpCode } = parseResult.data;
 
     // 1. Verificación de Google reCAPTCHA
     const isCaptchaValid = await verifyGoogleRecaptcha(recaptchaToken);
@@ -50,7 +51,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 4. Emisión de Tokens JWT Stateless
+    // 4. Verificación de Doble Factor de Autenticación (2FA / TOTP)
+    if (user.dosFactoresActivo) {
+      if (totpCode) {
+        const isTotpValid = TotpService.verifyToken(totpCode, user.dosFactoresSecret || '');
+        if (!isTotpValid) {
+          return NextResponse.json(
+            { error: 'Código 2FA / TOTP inválido o expirado. Verifique su aplicación autenticadora.' },
+            { status: 401 }
+          );
+        }
+      } else {
+        const tempToken = signTemp2FAToken({
+          userId: user.id,
+          email: user.email,
+          rol: user.rol,
+        });
+
+        return NextResponse.json({
+          requiere2FA: true,
+          tempToken,
+          mensaje: 'Se requiere código de autenticación de doble factor (2FA / TOTP)',
+        });
+      }
+    }
+
+    // 5. Emisión de Tokens JWT Stateless
     const tokenPayload = {
       userId: user.id,
       email: user.email,
@@ -68,6 +94,7 @@ export async function POST(request: NextRequest) {
       puntosFidelidad: user.puntosFidelidad,
       sellosAcumulados: user.sellosAcumulados,
       creadoEn: user.createdAt.toISOString(),
+      dosFactoresActivo: user.dosFactoresActivo,
     };
 
     // 5. Respuesta con Access Token en Body y Refresh Token en Cookie httpOnly

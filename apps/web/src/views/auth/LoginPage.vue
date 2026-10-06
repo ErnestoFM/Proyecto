@@ -9,12 +9,26 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const recaptchaToken = ref('test-valid-recaptcha-token'); // TODO: Integrar widget reCAPTCHA real
+const totpCode = ref('');
 
 async function handleLogin() {
   const success = await auth.login(email.value, password.value, recaptchaToken.value);
+  if (success && !auth.requires2FA) {
+    router.push('/dashboard');
+  }
+}
+
+async function handleVerify2FA() {
+  const success = await auth.verify2FA(totpCode.value);
   if (success) {
     router.push('/dashboard');
   }
+}
+
+function cancelar2FA() {
+  auth.requires2FA = false;
+  auth.tempToken = null;
+  totpCode.value = '';
 }
 </script>
 
@@ -22,52 +36,93 @@ async function handleLogin() {
   <div class="auth-page">
     <div class="container">
       <div class="auth-card card" v-motion-slide-visible-bottom>
-        <div class="auth-card__header">
-          <span class="auth-card__emoji">☕</span>
-          <h1>Bienvenido de Vuelta</h1>
-          <p>Ingresa a tu cuenta de Monchis Café</p>
-        </div>
-
-        <form @submit.prevent="handleLogin" class="auth-card__form">
-          <div class="form-group">
-            <label for="login-email">Correo Electrónico</label>
-            <input
-              id="login-email"
-              v-model="email"
-              type="email"
-              placeholder="tu@correo.com"
-              required
-              autocomplete="email"
-            />
+        <!-- Vista 1: Formulario Normal de Login -->
+        <template v-if="!auth.requires2FA">
+          <div class="auth-card__header">
+            <span class="auth-card__emoji">☕</span>
+            <h1>Bienvenido de Vuelta</h1>
+            <p>Ingresa a tu cuenta de Monchis Café</p>
           </div>
 
-          <div class="form-group">
-            <label for="login-password">Contraseña</label>
-            <input
-              id="login-password"
-              v-model="password"
-              type="password"
-              placeholder="••••••••"
-              required
-              autocomplete="current-password"
-            />
+          <form @submit.prevent="handleLogin" class="auth-card__form">
+            <div class="form-group">
+              <label for="login-email">Correo Electrónico</label>
+              <input
+                id="login-email"
+                v-model="email"
+                type="email"
+                placeholder="tu@correo.com"
+                required
+                autocomplete="email"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Contraseña</label>
+              <input
+                id="login-password"
+                v-model="password"
+                type="password"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+              />
+            </div>
+
+            <!-- TODO: Insertar widget de Google reCAPTCHA aquí -->
+            <div class="recaptcha-placeholder">
+              <small>🛡️ Protegido por Google reCAPTCHA</small>
+            </div>
+
+            <p v-if="auth.error" class="error-message">{{ auth.error }}</p>
+
+            <button type="submit" class="btn btn--primary auth-card__submit" :disabled="auth.isLoading">
+              {{ auth.isLoading ? 'Verificando...' : 'Iniciar Sesión' }}
+            </button>
+          </form>
+
+          <div class="auth-card__footer">
+            <p>¿No tienes cuenta? <RouterLink to="/registro">Regístrate aquí</RouterLink></p>
+          </div>
+        </template>
+
+        <!-- Vista 2: Desafío de Doble Factor (2FA / TOTP) -->
+        <template v-else>
+          <div class="auth-card__header">
+            <span class="auth-card__emoji">🔐</span>
+            <h1>Doble Factor Requerido</h1>
+            <p>Tu cuenta de Administrador está protegida con 2FA</p>
           </div>
 
-          <!-- TODO: Insertar widget de Google reCAPTCHA aquí -->
-          <div class="recaptcha-placeholder">
-            <small>🛡️ Protegido por Google reCAPTCHA</small>
-          </div>
+          <form @submit.prevent="handleVerify2FA" class="auth-card__form">
+            <div class="form-group">
+              <label for="totp-code">Código de Verificación (6 dígitos)</label>
+              <input
+                id="totp-code"
+                v-model="totpCode"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                maxlength="6"
+                placeholder="123456"
+                required
+                autofocus
+                class="totp-input"
+              />
+              <small class="helper-text">Consulta el código en tu app Google Authenticator o Authy</small>
+            </div>
 
-          <p v-if="auth.error" class="error-message">{{ auth.error }}</p>
+            <p v-if="auth.error" class="error-message">{{ auth.error }}</p>
 
-          <button type="submit" class="btn btn--primary auth-card__submit" :disabled="auth.isLoading">
-            {{ auth.isLoading ? 'Verificando...' : 'Iniciar Sesión' }}
-          </button>
-        </form>
+            <button type="submit" class="btn btn--primary auth-card__submit" :disabled="auth.isLoading || totpCode.length !== 6">
+              {{ auth.isLoading ? 'Verificando código...' : 'Confirmar y Acceder' }}
+            </button>
 
-        <div class="auth-card__footer">
-          <p>¿No tienes cuenta? <RouterLink to="/registro">Regístrate aquí</RouterLink></p>
-        </div>
+            <button type="button" class="btn btn--secondary auth-card__submit back-btn" @click="cancelar2FA">
+              ⬅️ Regresar al Login
+            </button>
+          </form>
+        </template>
       </div>
     </div>
   </div>
@@ -136,5 +191,26 @@ async function handleLogin() {
 
 .auth-card__footer a {
   font-weight: 600;
+}
+
+.totp-input {
+  text-align: center;
+  font-size: 1.8rem;
+  letter-spacing: 0.5rem;
+  font-weight: 700;
+  font-family: monospace;
+  padding: 0.75rem;
+}
+
+.helper-text {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.4rem;
+  text-align: center;
+}
+
+.back-btn {
+  margin-top: 0.5rem;
 }
 </style>

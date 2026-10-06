@@ -10,22 +10,24 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@monchis/database": "workspace:*",
+    "@monchis/messaging": "workspace:*",
+    "@monchis/shared-types": "workspace:*",
+    "@types/qrcode": "^1.5.6",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
     "next": "^14.2.3",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "jsonwebtoken": "^9.0.2",
-    "bcryptjs": "^2.4.3",
-    "zod": "^3.23.8",
-    "@monchis/database": "workspace:*",
-    "@monchis/shared-types": "workspace:*",
-    "@monchis/messaging": "workspace:*"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.12",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/bcryptjs": "^2.4.6",
     "@types/supertest": "^6.0.2",
     "supertest": "^7.0.0",
     "typescript": "^5.4.5",
