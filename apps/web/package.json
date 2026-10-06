@@ -13,23 +13,24 @@
     "lint": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.2",
-    "pinia": "^2.1.7",
+    "@monchis/config": "workspace:*",
+    "@monchis/shared-types": "workspace:*",
     "@vueuse/head": "^2.0.0",
     "@vueuse/motion": "^2.2.3",
+    "pinia": "^2.1.7",
     "vite-ssg": "^0.23.8",
-    "@monchis/shared-types": "workspace:*",
-    "@monchis/config": "workspace:*"
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
+    "@phosphor-icons/vue": "^2.2.1",
+    "@playwright/test": "^1.63.0",
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.2.11",
-    "typescript": "^5.4.5",
-    "vue-tsc": "^2.0.16",
-    "vitest": "^1.6.0",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^24.1.0",
-    "@phosphor-icons/vue": "^2.2.1"
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vitest": "^1.6.0",
+    "vue-tsc": "^2.0.16"
   }
 }

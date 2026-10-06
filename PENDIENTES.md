@@ -93,3 +93,21 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
 - [x] **4.2. Eliminar advertencia de deprecación de Vite Node API (CJS)** — *RESUELTO (2026-10-06)*
   - **Ubicación:** `apps/api/vitest.config.mts`.
   - **Resolución:** Se migró la configuración de Vitest en la API al formato ESM explícito (`vitest.config.mts` con `fileURLToPath`), eliminando por completo la advertencia de Vite CJS Node API obsoleta y dejando la salida de consola 100% limpia.
+
+---
+
+## 🎭 Prioridad 5: Cobertura End-to-End (E2E) y Multi-Dispositivo con Playwright
+
+- [x] **5.1. Suite Integral de Pruebas E2E (Desktop, Tablet y Mobile)** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/web/e2e/app.spec.ts`, `apps/web/playwright.config.ts`, `package.json` y `apps/web/package.json`.
+  - **Resolución:** Se instaló y configuró `@playwright/test` con `webServer` automatizado (`pnpm dev` en puerto 3000) y perfiles multi-dispositivo (`chromium-desktop`, `tablet` iPad gen 7, y `mobile-chrome` Pixel 7). Se implementaron 8 pruebas completas cubriendo:
+    1. Renderizado de HomePage, branding y badges de café orgánico en todos los viewports.
+    2. Menú de hamburguesa y drawer colapsable interactivo en móviles.
+    3. Catálogo público de café y alimentos con precios.
+    4. Monchis Rewards (tarjeta de 7 sellos y bonificación ecológica por termo).
+    5. Navigation Guards con RBAC estricto (bloqueo y redirección de `/pos` sin sesión hacia `/login`).
+    6. Operación completa del Punto de Venta (POS) como Cajero autenticado: búsqueda, agregado de cafés al carrito, activación de incentivo de termo reutilizable (ODS 12), cálculo reactivo y vaciado de orden.
+    7. Formulario de inicio de sesión con reCAPTCHA visual y campos de credenciales.
+    8. Formulario de registro con captura de parámetros de atribución de campañas UTM (`google_maps`, `verano2026`).
+  - **Resultado:** 24 pruebas E2E ejecutadas y aprobadas al 100% en verde (`24 passed` en Chromium, Tablet y Mobile). Script raíz `pnpm test:e2e` y `pnpm --filter web test:e2e` operativos.
+

@@ -25,13 +25,20 @@ export default defineConfig({
     },
     // 2. Tablet Viewport
     {
-      name: 'tablet-ipad',
-      use: { ...devices['iPad (gen 7)'], viewport: { width: 768, height: 1024 } },
+      name: 'tablet',
+      use: { ...devices['iPad (gen 7)'], browserName: 'chromium', viewport: { width: 768, height: 1024 } },
     },
-    // 3. Mobile Viewport
+    // 3. Mobile Viewport (Android / Chrome Mobile)
     {
-      name: 'mobile-iphone',
-      use: { ...devices['iPhone 13'], viewport: { width: 375, height: 812 } },
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 7'], browserName: 'chromium' },
     },
   ],
+  webServer: {
+    command: 'pnpm dev',
+    port: 3000,
+    reuseExistingServer: true,
+    timeout: 120 * 1000,
+  },
 });
+

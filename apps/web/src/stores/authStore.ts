@@ -230,6 +230,9 @@ export const useAuthStore = defineStore('auth', () => {
 
       const data = await res.json();
       accessToken.value = data.accessToken;
+      if (data.usuario) {
+        user.value = data.usuario;
+      }
       return true;
     } catch {
       logout();

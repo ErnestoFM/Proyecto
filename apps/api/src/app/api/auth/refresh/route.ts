@@ -60,6 +60,16 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
       mensaje: 'Tokens renovados exitosamente',
       accessToken: newAccessToken,
+      usuario: {
+        id: user.id,
+        email: user.email,
+        nombre: user.nombre,
+        rol: user.rol,
+        puntosFidelidad: user.puntosFidelidad,
+        sellosAcumulados: user.sellosAcumulados,
+        creadoEn: user.createdAt.toISOString(),
+        dosFactoresActivo: user.dosFactoresActivo,
+      },
     });
 
     response.cookies.set({
