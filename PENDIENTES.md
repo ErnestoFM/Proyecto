@@ -58,9 +58,9 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
   - **Ubicación:** `packages/messaging/src/sagaWorker.ts`, `packages/messaging/src/index.ts` y `apps/api/src/app/api/pos/orders/route.ts`.
   - **Resolución:** Se implementó la clase `SagaWorker` para escuchar y coordinar verificaciones de reservas de inventario orgánico. En caso de insumo insuficiente o caducado, orquesta automáticamente la reversa compensatoria (`CANCELADA_REEMBOLSADA`), registra en `SagaStateLog` y emite eventos al exchange `'cafeteria.events'`.
 
-- [ ] **3.3. Servicio de Alertas por Correo SMTP**
-  - **Ubicación:** Requerimientos funcionales 2.2 y 2.3 (alertas por caducidad de lotes orgánicos y mensajes caídos en Dead Letter Queue).
-  - **Estado:** No existe ningún transporte de correo (ej. Nodemailer) ni plantillas de notificación por email configuradas.
+- [x] **3.3. Servicio de Alertas por Correo SMTP** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/lib/emailService.ts`, `apps/api/src/app/api/admin/notifications/check-alerts/route.ts`, `apps/api/src/app/api/pos/orders/route.ts` y `apps/api/tests/email.test.ts`.
+  - **Resolución:** Se implementó `EmailService` con transporte SMTP vía `nodemailer` y modo resiliente en JSON. Se crearon plantillas HTML corporativas para: (1) Alertas críticas de Dead Letter Queue (DLQ) enviadas automáticamente al administrador ante fallos compensados en Saga, (2) Alertas preventivas y urgentes de caducidad próxima de lotes orgánicos de café, (3) Alertas de stock crítico en bodega, y (4) Comprobantes de compra para clientes con desglose de puntos y sellos Monchis Rewards. Se creó el endpoint `/api/admin/notifications/check-alerts` y 5 pruebas unitarias dedicadas.
 
 - [x] **3.4. Exportes en PDF y Excel desde el Panel de Administración** — *RESUELTO (2026-10-06)*
   - **Ubicación:** `apps/web/src/views/admin/AdminPage.vue`.

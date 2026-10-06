@@ -11,6 +11,7 @@ import { PaymentProcessor } from '@/lib/paymentProcessor';
 import { LoyaltyService } from '@/lib/loyalty';
 import { publishMessage, SagaWorker } from '@monchis/messaging';
 import type { CreateOrderRequestDTO } from '@monchis/shared-types';
+import { EmailService } from '@/lib/emailService';
 
 export async function POST(req: Request) {
   try {
@@ -235,6 +236,13 @@ export async function POST(req: Request) {
               estadoActual: 'CANCELADA_REEMBOLSADA',
               motivoFalla: motivo,
             },
+          });
+          // Alerta inmediata por correo SMTP al administrador (Req 2.3 DLQ Alert)
+          await EmailService.sendDLQAlert({
+            orderId,
+            motivo,
+            sagaId: `saga_${orderId}`,
+            intentos: 1,
           });
         } catch (_) {}
       }
