@@ -14,14 +14,13 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
   - **Ubicación:** `apps/api/src/app/api/pos/orders/route.ts`.
   - **Resolución:** El backend ahora valida y utiliza los precios oficiales del catálogo de servidor para cada `productoId`, blindando el cálculo de subtotal contra manipulación del JSON del cliente.
 
-- [ ] **1.3. Forzar reCAPTCHA estricto y evitar bypass silencioso**
-  - **Ubicación:** `apps/api/src/lib/recaptcha.ts` (línea 29).
-  - **Problema:** Si `RECAPTCHA_SECRET_KEY` no está configurada, en ambiente de desarrollo retorna `true` automáticamente, permitiendo saltarse la verificación de bots.
-  - **Solución:** Alertar explícitamente en logs o restringir el bypass únicamente a tests unitarios con variables de entorno explícitas (`NODE_ENV === 'test'`).
+- [x] **1.3. Forzar reCAPTCHA estricto y evitar bypass silencioso** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/lib/recaptcha.ts`.
+  - **Resolución:** Se eliminó el bypass automático en desarrollo (`return process.env.NODE_ENV === 'development'`). En producción se exige estrictamente `RECAPTCHA_SECRET_KEY` y se rechaza cualquier token dummy. En desarrollo/test sólo se admite de forma explícita el token `test-valid-recaptcha-token`; cualquier otro token sin credenciales activas es rechazado con advertencia.
 
-- [ ] **1.4. Implementar validación activa de Blacklist de Tokens Revocados**
-  - **Ubicación:** `apps/api/src/app/api/auth/logout/route.ts` y middleware de autenticación.
-  - **Problema:** La tabla `RevokedToken` existe en `schema.prisma`, pero al recibir peticiones protegidas (`verifyAccessToken`) no se consulta Redis ni la base de datos para verificar si el token fue revocado tras un logout.
+- [x] **1.4. Implementar validación activa de Blacklist de Tokens Revocados** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/lib/jwt.ts`, `apps/api/src/app/api/auth/logout/route.ts`, `apps/api/src/app/api/auth/refresh/route.ts`, `apps/api/src/middleware/authMiddleware.ts` y rutas protegidas.
+  - **Resolución:** Se incorporó el identificador único `jti` (UUID v4) en cada Access Token y Refresh Token generado. Al ejecutar `POST /api/auth/logout`, se extraen e invalidan activamente el Access Token y el Refresh Token en memoria (`REVOKED_TOKENS_CACHE` O(1)) y en PostgreSQL (`prisma.revokedToken`). Tanto el middleware (`requireAuth`) como `verifyAccessTokenAsync` y los endpoints protegidos consultan la blacklist y rechazan con HTTP 401 tokens revocados. Se agregó además rotación de Refresh Tokens en `/api/auth/refresh`.
 
 ---
 

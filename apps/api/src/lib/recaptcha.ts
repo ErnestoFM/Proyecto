@@ -17,19 +17,31 @@ export async function verifyGoogleRecaptcha(token: string): Promise<boolean> {
     return false;
   }
 
-  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isTestOrDev = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development';
+  const isTestToken = token === 'test-valid-recaptcha-token';
 
-  // En ambiente de desarrollo o testing con token de prueba explícito
-  if (process.env.NODE_ENV === 'test' || token === 'test-valid-recaptcha-token') {
+  // Permitir token de prueba explícito ÚNICAMENTE fuera de producción (tests y desarrollo controlado)
+  if (isTestOrDev && isTestToken) {
     return true;
   }
 
-  if (!secretKey) {
-    console.warn('⚠️ [reCAPTCHA] RECAPTCHA_SECRET_KEY no configurada en variables de entorno.');
-    return process.env.NODE_ENV === 'development';
+  // En producción, rechazar tajantemente el token dummy de prueba
+  if (isProduction && isTestToken) {
+    console.warn('⚠️ [reCAPTCHA] Intento de utilizar token de prueba dummy en ambiente de producción.');
+    return false;
   }
 
-  if (!token) {
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+
+  if (!secretKey) {
+    if (isProduction) {
+      console.error('❌ [reCAPTCHA] CRÍTICO: RECAPTCHA_SECRET_KEY no configurada en producción.');
+    } else {
+      console.warn(
+        "⚠️ [reCAPTCHA] RECAPTCHA_SECRET_KEY no configurada. Token rechazado para evitar bypass silencioso. Use 'test-valid-recaptcha-token' en pruebas locales."
+      );
+    }
     return false;
   }
 

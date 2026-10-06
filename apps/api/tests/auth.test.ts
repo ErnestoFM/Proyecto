@@ -3,7 +3,15 @@
 // ==============================================================================
 
 import { describe, it, expect, vi } from 'vitest';
-import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from '../src/lib/jwt';
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken,
+  revokeToken,
+  isTokenRevoked,
+  verifyAccessTokenAsync,
+} from '../src/lib/jwt';
 import { hashPassword, comparePassword } from '../src/lib/password';
 import { LoginSchema, RegisterSchema } from '../src/lib/zodSchemas';
 import { verifyGoogleRecaptcha } from '../src/lib/recaptcha';
@@ -112,9 +120,88 @@ describe('🔒 Módulo de Autenticación Stateless y Seguridad (TDD)', () => {
       expect(isValid).toBe(true);
     });
 
-    it('Debe rechazar tokens vacíos', async () => {
-      const isValid = await verifyGoogleRecaptcha('');
+    it('Debe rechazar tokens vacíos o sólo espacios', async () => {
+      const isValidEmpty = await verifyGoogleRecaptcha('');
+      const isValidWhitespace = await verifyGoogleRecaptcha('   ');
+      expect(isValidEmpty).toBe(false);
+      expect(isValidWhitespace).toBe(false);
+    });
+
+    it('Debe rechazar tokens aleatorios sin clave secreta (sin bypass silencioso)', async () => {
+      const originalSecret = process.env.RECAPTCHA_SECRET_KEY;
+      delete process.env.RECAPTCHA_SECRET_KEY;
+
+      const isValid = await verifyGoogleRecaptcha('token-aleatorio-no-autorizado');
       expect(isValid).toBe(false);
+
+      if (originalSecret) process.env.RECAPTCHA_SECRET_KEY = originalSecret;
+    });
+
+    it('Debe rechazar tokens dummy en entorno de producción', async () => {
+      const originalEnv = process.env.NODE_ENV;
+      (process.env as any).NODE_ENV = 'production';
+
+      const isValid = await verifyGoogleRecaptcha('test-valid-recaptcha-token');
+      expect(isValid).toBe(false);
+
+      (process.env as any).NODE_ENV = originalEnv;
+    });
+  });
+
+  describe('5. Pruebas de Revocación Activa y Blacklist de Tokens (Logout Real)', () => {
+    const mockUser = {
+      userId: 'uuid-admin-blacklisted',
+      email: 'admin.revoked@monchiscafe.com',
+      rol: 'ADMIN' as const,
+    };
+
+    it('Debe incluir un identificador único jti en el token firmado', () => {
+      const token = signAccessToken(mockUser);
+      const decoded = verifyAccessToken(token);
+
+      expect(decoded.jti).toBeDefined();
+      expect(typeof decoded.jti).toBe('string');
+      expect(decoded.jti!.length).toBeGreaterThan(10);
+    });
+
+    it('Debe revocar un token y detectar que está en la blacklist', async () => {
+      const token = signAccessToken(mockUser);
+      const decoded = verifyAccessToken(token);
+
+      // Inicialmente no debe estar revocado
+      expect(await isTokenRevoked(token, decoded.jti)).toBe(false);
+
+      // Revocar el token
+      await revokeToken(token, 'Cierre de sesión de prueba');
+
+      // Debe figurar como revocado tanto por token como por jti
+      expect(await isTokenRevoked(token, decoded.jti)).toBe(true);
+      expect(await isTokenRevoked(token)).toBe(true);
+      expect(await isTokenRevoked(decoded.jti!)).toBe(true);
+    });
+
+    it('Debe rechazar la verificación de un token revocado lanzando TokenRevokedError', async () => {
+      const token = signAccessToken(mockUser);
+      await revokeToken(token, 'Prueba de rechazo');
+
+      // verifyAccessToken síncrono debe lanzar error
+      expect(() => verifyAccessToken(token)).toThrow(/Token revocado/);
+
+      // verifyAccessTokenAsync asíncrono debe rechazar la promesa
+      await expect(verifyAccessTokenAsync(token)).rejects.toThrow(/Token revocado/);
+    });
+
+    it('Debe revocar un Refresh Token e impedir su verificación', async () => {
+      const refreshToken = signRefreshToken(mockUser);
+      const decoded = verifyRefreshToken(refreshToken);
+
+      expect(await isTokenRevoked(refreshToken, decoded.jti)).toBe(false);
+
+      await revokeToken(refreshToken, 'Prueba de revocación de Refresh Token');
+
+      expect(await isTokenRevoked(refreshToken, decoded.jti)).toBe(true);
+      expect(() => verifyRefreshToken(refreshToken)).toThrow(/Refresh token revocado/);
     });
   });
 });
+

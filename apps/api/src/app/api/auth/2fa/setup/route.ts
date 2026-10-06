@@ -3,7 +3,7 @@
 // ==============================================================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAccessToken } from '@/lib/jwt';
+import { verifyAccessTokenAsync } from '@/lib/jwt';
 import { TotpService } from '@/lib/totp';
 import { prisma } from '@/lib/prisma';
 
@@ -16,8 +16,11 @@ export async function GET(request: NextRequest) {
 
     let payload;
     try {
-      payload = verifyAccessToken(authHeader.split(' ')[1]);
-    } catch {
+      payload = await verifyAccessTokenAsync(authHeader.split(' ')[1]);
+    } catch (err: any) {
+      if (err.name === 'TokenRevokedError') {
+        return NextResponse.json({ error: 'Token revocado o sesión cerrada' }, { status: 401 });
+      }
       return NextResponse.json({ error: 'Token inválido o expirado' }, { status: 401 });
     }
 

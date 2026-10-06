@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyAccessToken } from '@/lib/jwt';
+import { verifyAccessTokenAsync } from '@/lib/jwt';
 import { PaymentProcessor } from '@/lib/paymentProcessor';
 import { LoyaltyService } from '@/lib/loyalty';
 import { publishMessage, SagaWorker } from '@monchis/messaging';
@@ -21,7 +21,16 @@ export async function POST(req: Request) {
     }
 
     const token = authHeader.split(' ')[1];
-    const payload = verifyAccessToken(token);
+    let payload;
+    try {
+      payload = await verifyAccessTokenAsync(token);
+    } catch (err: any) {
+      if (err.name === 'TokenRevokedError') {
+        return NextResponse.json({ error: 'Token revocado o sesión cerrada' }, { status: 401 });
+      }
+      return NextResponse.json({ error: 'Token de acceso inválido o expirado' }, { status: 401 });
+    }
+
     if (!payload || (payload.rol !== 'ADMIN' && payload.rol !== 'CAJERO')) {
       return NextResponse.json({ error: 'Acceso denegado: Se requiere rol de CAJERO o ADMIN' }, { status: 403 });
     }

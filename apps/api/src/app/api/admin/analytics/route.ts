@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyAccessToken } from '@/lib/jwt';
+import { verifyAccessTokenAsync } from '@/lib/jwt';
 import { AnalyticsService } from '@/lib/analytics';
 
 // Muestras de contingencia en caso de que la base de datos esté offline o no tenga órdenes iniciales
@@ -41,7 +41,16 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'No autorizado: Token ausente' }, { status: 401 });
     }
 
-    const payload = verifyAccessToken(authHeader.split(' ')[1]);
+    let payload;
+    try {
+      payload = await verifyAccessTokenAsync(authHeader.split(' ')[1]);
+    } catch (err: any) {
+      if (err.name === 'TokenRevokedError') {
+        return NextResponse.json({ error: 'Token revocado o sesión cerrada' }, { status: 401 });
+      }
+      return NextResponse.json({ error: 'No autorizado: Token inválido o expirado' }, { status: 401 });
+    }
+
     if (!payload || payload.rol !== 'ADMIN') {
       return NextResponse.json({ error: 'Acceso restringido a administradores' }, { status: 403 });
     }

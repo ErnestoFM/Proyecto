@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyRefreshToken, signAccessToken, signRefreshToken } from '@/lib/jwt';
+import { verifyRefreshToken, signAccessToken, signRefreshToken, isTokenRevoked, revokeToken } from '@/lib/jwt';
 import { prisma } from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
@@ -24,6 +24,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 1.1 Verificar si el refresh token ha sido revocado
+    if (await isTokenRevoked(refreshTokenCookie.value, decoded.jti)) {
+      return NextResponse.json(
+        { error: 'Refresh token revocado. Inicie sesión nuevamente.' },
+        { status: 401 }
+      );
+    }
+
     // 2. Comprobar que el usuario aún existe y está activo
     const user = await prisma.user.findUnique({
       where: { id: decoded.sub },
@@ -36,7 +44,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3. Rotación de Tokens (Emisión de nuevo par)
+    // Rotación de Refresh Tokens: invalidar el token anterior
+    await revokeToken(refreshTokenCookie.value, 'Rotación de Refresh Token');
+
+    // 3. Emisión de nuevo par de tokens
     const tokenPayload = {
       userId: user.id,
       email: user.email,

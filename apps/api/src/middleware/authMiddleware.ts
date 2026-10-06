@@ -3,7 +3,7 @@
 // ==============================================================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAccessToken } from '@/lib/jwt';
+import { verifyAccessTokenAsync } from '@/lib/jwt';
 import { JwtPayloadDTO, UserRole } from '@monchis/shared-types';
 
 export interface AuthenticatedRequest extends NextRequest {
@@ -27,7 +27,7 @@ export function requireAuth(allowedRoles?: UserRole[]) {
     const token = authHeader.substring(7);
 
     try {
-      const decodedUser = verifyAccessToken(token);
+      const decodedUser = await verifyAccessTokenAsync(token);
 
       // Verificación de Roles RBAC
       if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(decodedUser.rol)) {
@@ -43,6 +43,12 @@ export function requireAuth(allowedRoles?: UserRole[]) {
 
       return await handler(request, decodedUser);
     } catch (error: any) {
+      if (error.name === 'TokenRevokedError') {
+        return NextResponse.json(
+          { error: 'Token revocado o sesión cerrada. Por favor inicie sesión nuevamente.' },
+          { status: 401 }
+        );
+      }
       if (error.name === 'TokenExpiredError') {
         return NextResponse.json(
           { error: 'El token de acceso ha expirado. Por favor solicite renovación (/api/auth/refresh).' },

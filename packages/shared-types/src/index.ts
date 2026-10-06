@@ -19,6 +19,7 @@ export interface JwtPayloadDTO {
   sub: string;
   email: string;
   rol: UserRole;
+  jti?: string;
   iat?: number;
   exp?: number;
 }
