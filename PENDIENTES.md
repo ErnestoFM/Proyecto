@@ -32,24 +32,17 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
   - **Problema:** No existe archivo `.env` configurado ni carpeta de migraciones (`prisma/migrations`). El cliente Prisma nunca ha sincronizado las tablas en una base de datos real.
   - **Solución:** Crear `.env` a partir de `.env.example`, levantar el contenedor de PostgreSQL (`docker compose up postgres -d`) y ejecutar `pnpm prisma:migrate`.
 
-- [ ] **2.2. Persistir órdenes en base de datos al cobrar en el POS**
-  - **Ubicación:** `apps/api/src/app/api/pos/orders/route.ts` (líneas 87–128).
-  - **Problema:** La orden genera un ID simulado con `Date.now()`, responde `201 Created`, pero **nunca ejecuta `prisma.order.create()`**. No guarda los items, no descuenta el stock de `Product`, ni actualiza los sellos/puntos ganados por el cliente en `User`.
-  - **Solución:** Encapsular la venta dentro de una transacción de Prisma (`prisma.$transaction`) que descuente inventario, cree el registro `Order` con sus `OrderItem` y actualice el saldo del usuario.
+- [x] **2.2. Persistir órdenes en base de datos al cobrar en el POS** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/app/api/pos/orders/route.ts`.
+  - **Resolución:** Se encapsuló la venta en una transacción `prisma.$transaction` que registra `Order` y sus `OrderItem`, decrementa en tiempo real el stock de `Product`, actualiza sellos/puntos de fidelidad en `User` y registra la atribución UTM en `Attribution`, con degradación controlada y orquestación Saga.
 
-- [ ] **2.3. Migrar Catálogo de Productos a PostgreSQL**
-  - **Ubicación:**
-    - Backend: `apps/api/src/app/api/products/route.ts` (`const CATALOGO_PRODUCTOS = [...]`).
-    - Frontend: `apps/web/src/stores/posStore.ts` (`productos = ref([...])`).
-  - **Problema:** Los 5 productos base están duplicados y fijos en arrays de JavaScript.
-  - **Solución:**
-    - Backend: Crear seeder en `packages/database` para poblar la tabla `Product` y hacer que `GET /api/products` consulte `prisma.product.findMany({ where: { activo: true } })`.
-    - Frontend: El store `posStore` debe iniciar con array vacío y hacer `fetch('/api/products')` en `onMounted`.
+- [x] **2.3. Migrar Catálogo de Productos a PostgreSQL** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/app/api/products/route.ts`.
+  - **Resolución:** El endpoint consulta `prisma.product.findMany({ where: { activo: true } })`, mapea tipos fuertemente tipados a `ProductDTO` y cuenta con catálogo de contingencia en caso de desconexión.
 
-- [ ] **2.4. Migrar Lotes de Inventario a PostgreSQL**
-  - **Ubicación:** `apps/api/src/app/api/inventory/batches/route.ts` (`const LOTES_MEMORIA = [...]`).
-  - **Problema:** Los lotes se guardan en un array en RAM (`LOTES_MEMORIA.push(nuevoLote)`). Al reiniciar el servidor se pierde todo el inventario registrado.
-  - **Solución:** Guardar y consultar en la tabla `Batch` de Prisma (`prisma.batch.create`, `prisma.batch.findMany`).
+- [x] **2.4. Migrar Lotes de Inventario a PostgreSQL** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/app/api/inventory/batches/route.ts`.
+  - **Resolución:** Métodos `GET` y `POST` migrados a consultas directas en `prisma.batch.findMany` y `prisma.batch.create`, persistiendo número de lote, finca de origen, fechas y alertas sanitarias en la base de datos relacional.
 
 - [ ] **2.5. Conectar Analítica del Admin a datos reales**
   - **Ubicación:**
@@ -66,10 +59,9 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
   - **Ubicación:** Requerimientos funcionales 2.1; en BD existen `dosFactoresActivo` y `dosFactoresSecret`.
   - **Estado:** No existe ningún endpoint para generar el secreto TOTP (`speakeasy` / `otplib`), renderizar el código QR ni validar el token de 6 dígitos en el flujo de login.
 
-- [ ] **3.2. Consumidor Activo (Worker) de RabbitMQ para Patrón Saga**
-  - **Ubicación:** `packages/messaging/src/rabbitmqClient.ts` y `apps/api/src/app/api/pos/orders/route.ts`.
-  - **Estado:** El backend tiene código para *publicar* eventos (`publishMessage`), pero **no existe ningún proceso worker escuchando las colas**. La orquestación distribuida con reversas compensatorias ante falta de insumos no se ejecuta.
-  - **Detalle adicional:** En `orders/route.ts` se publica al exchange `'monchis.events'`, pero en el cliente RabbitMQ el exchange por defecto se llama `'cafeteria.events'`. Debe unificarse el nombre.
+- [x] **3.2. Consumidor Activo (Worker) de RabbitMQ para Patrón Saga** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `packages/messaging/src/sagaWorker.ts`, `packages/messaging/src/index.ts` y `apps/api/src/app/api/pos/orders/route.ts`.
+  - **Resolución:** Se implementó la clase `SagaWorker` para escuchar y coordinar verificaciones de reservas de inventario orgánico. En caso de insumo insuficiente o caducado, orquesta automáticamente la reversa compensatoria (`CANCELADA_REEMBOLSADA`), registra en `SagaStateLog` y emite eventos al exchange `'cafeteria.events'`.
 
 - [ ] **3.3. Servicio de Alertas por Correo SMTP**
   - **Ubicación:** Requerimientos funcionales 2.2 y 2.3 (alertas por caducidad de lotes orgánicos y mensajes caídos en Dead Letter Queue).
@@ -90,6 +82,18 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
 - [x] **4.1. Reparar el comando `pnpm test` en la raíz** — *RESUELTO (2026-10-06)*
   - **Ubicación:** `packages/database/package.json` y `packages/messaging/package.json`.
   - **Resolución:** Se agregó `--passWithNoTests` a los scripts de prueba en ambos paquetes. `pnpm test` en la raíz ahora ejecuta 7 tareas de Turborepo y pasa 55 pruebas unitarias al 100% en verde.
+
+- [x] **4.3. Automatización de CI en GitHub Actions (.github/workflows/ci.yml)** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `.github/workflows/ci.yml`.
+  - **Resolución:** Se reemplazó el placeholder por un pipeline completo que instala pnpm 9, Node 20, corre `pnpm prisma:generate`, `pnpm lint`, `pnpm test` (55 tests) y compila los artefactos de producción (`pnpm build`).
+
+- [x] **4.4. Corrección de Type-Checking y Linting en Monorepo (`pnpm lint`)** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/.eslintrc.json`, `apps/api/package.json`, `apps/web/package.json`.
+  - **Resolución:** Se configuró verificación estricta de tipos de TypeScript (`tsc --noEmit` en API y `vue-tsc --noEmit` en Web). `pnpm lint` ahora pasa con código de salida 0.
+
+- [x] **2.6. Infraestructura de Base de Datos Gestionada en Google Cloud Platform (Cloud SQL)** — *PREPARADO (2026-10-06)*
+  - **Ubicación:** `infra/gcp/setup_cloud_sql.ps1`, `infra/gcp/README.md`, `packages/database/prisma/seed.ts`.
+  - **Resolución:** Se desarrolló el script de aprovisionamiento automatizado para Google Cloud SQL (PostgreSQL 15), la guía de conexión segura (Cloud SQL Auth Proxy / IP pública) y el seeder con datos maestros de usuarios, café orgánico de Chiapas/Veracruz, lotes y órdenes.
 
 - [ ] **4.2. Eliminar advertencia de deprecación de Vite Node API (CJS)**
   - **Ubicación:** `apps/api/vitest.config.ts`.

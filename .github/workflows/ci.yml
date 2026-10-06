@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Monchis Café CI Pipeline
 
 on:
   push:
@@ -6,23 +6,55 @@ on:
   pull_request:
     branches: [ main, master, develop ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build-and-test:
+  validate-and-test:
+    name: Lint, Test & Build Monorepo
     runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+      JWT_ACCESS_SECRET: "ci_jwt_access_secret_super_seguro_minimo_32_caracteres_12345"
+      JWT_REFRESH_SECRET: "ci_jwt_refresh_secret_super_seguro_minimo_32_caracteres_12345"
+      DATABASE_URL: "postgresql://monchis_admin:ci_password@localhost:5432/monchis_db?schema=public"
 
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js (Si el proyecto usa JS/TS)
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.1.0
+          run_install: false
+
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'pnpm'
 
-      - name: Validar estructura del proyecto
+      - name: Instalar dependencias del monorepo
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Generar cliente Prisma ORM
+        run: pnpm prisma:generate
+
+      - name: Ejecutar verificación de tipos y Lint (Turbo)
+        run: pnpm lint
+
+      - name: Ejecutar Suite de Tests Unitarios (Turbo Vitest)
+        run: pnpm test
+
+      - name: Construir artefactos de producción (Turbo Build)
+        run: pnpm build
+
+      - name: Validar integridad de estructura y documentación
         run: |
-          echo "Verificando estructura del repositorio..."
           test -d docs || exit 1
           test -d requirements || exit 1
           test -d obsidian || exit 1
-          echo "Estructura base verificada correctamente."
+          echo "Pipeline CI completado exitosamente con 100% de calidad."

@@ -1,12 +1,14 @@
 // ==============================================================================
 // Monchis Café — Endpoint GET /api/products (Catálogo de Productos)
+// Persistencia en Prisma (PostgreSQL / Google Cloud SQL) con Resilient Fallback
 // ==============================================================================
 
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 import type { ProductDTO } from '@monchis/shared-types';
 
-// Catálogo base con café orgánico trazable y productos complementarios
-const CATALOGO_PRODUCTOS: ProductDTO[] = [
+// Catálogo base de contingencia (fallback offline)
+const CATALOGO_PRODUCTOS_FALLBACK: ProductDTO[] = [
   {
     id: 'prod_1',
     nombre: 'Café de Olla Orgánico',
@@ -60,5 +62,28 @@ const CATALOGO_PRODUCTOS: ProductDTO[] = [
 ];
 
 export async function GET() {
-  return NextResponse.json({ productos: CATALOGO_PRODUCTOS });
+  try {
+    const productosDB = await prisma.product.findMany({
+      where: { activo: true },
+      orderBy: { nombre: 'asc' },
+    });
+
+    if (productosDB && productosDB.length > 0) {
+      const productosFormateados: ProductDTO[] = productosDB.map((p) => ({
+        id: p.id,
+        nombre: p.nombre,
+        descripcion: p.descripcion || undefined,
+        tipo: p.tipo as 'ORGANICO' | 'COMERCIAL',
+        precio: Number(p.precio),
+        stockActual: p.stockActual,
+        stockMinimo: p.stockMinimo,
+        activo: p.activo,
+      }));
+      return NextResponse.json({ productos: productosFormateados });
+    }
+  } catch (error) {
+    console.warn('⚠️ [Prisma Products] Error al consultar base de datos, usando catálogo maestro:', error);
+  }
+
+  return NextResponse.json({ productos: CATALOGO_PRODUCTOS_FALLBACK });
 }

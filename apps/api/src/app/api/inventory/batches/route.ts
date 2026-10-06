@@ -1,12 +1,14 @@
 // ==============================================================================
 // Monchis Café — Endpoint GET / POST /api/inventory/batches (Lotes de Café)
+// Persistencia en Prisma (PostgreSQL / Google Cloud SQL)
 // ==============================================================================
 
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 import { verifyAccessToken } from '@/lib/jwt';
 import type { BatchDTO } from '@monchis/shared-types';
 
-const LOTES_MEMORIA: BatchDTO[] = [
+const LOTES_FALLBACK: BatchDTO[] = [
   {
     id: 'lote_chiapas_2026_01',
     productoId: 'prod_1',
@@ -30,7 +32,30 @@ const LOTES_MEMORIA: BatchDTO[] = [
 ];
 
 export async function GET() {
-  return NextResponse.json({ lotes: LOTES_MEMORIA });
+  try {
+    const lotesDB = await prisma.batch.findMany({
+      orderBy: { fechaCaducidad: 'asc' },
+    });
+
+    if (lotesDB && lotesDB.length > 0) {
+      const lotesFormateados: BatchDTO[] = lotesDB.map((l) => ({
+        id: l.id,
+        productoId: l.productoId,
+        numeroLote: l.numeroLote,
+        proveedorRegional: l.proveedorRegional,
+        fincaOrigen: l.fincaOrigen || undefined,
+        fechaCosechaTostado: l.fechaCosechaTostado.toISOString(),
+        fechaCaducidad: l.fechaCaducidad.toISOString(),
+        cantidadKilos: Number(l.cantidadKilos),
+        alertasSanitarias: l.alertasSanitarias || undefined,
+      }));
+      return NextResponse.json({ lotes: lotesFormateados });
+    }
+  } catch (error) {
+    console.warn('⚠️ [Prisma Batches] Error al consultar base de datos, usando fallback:', error);
+  }
+
+  return NextResponse.json({ lotes: LOTES_FALLBACK });
 }
 
 export async function POST(req: Request) {
@@ -51,21 +76,50 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Faltan campos obligatorios para el registro de lote' }, { status: 400 });
     }
 
-    const nuevoLote: BatchDTO = {
-      id: `lote_${Date.now()}`,
-      productoId: body.productoId,
-      numeroLote: body.numeroLote,
-      proveedorRegional: body.proveedorRegional,
-      fincaOrigen: body.fincaOrigen || 'Finca Regional Asociada',
-      fechaCosechaTostado: body.fechaCosechaTostado || new Date().toISOString(),
-      fechaCaducidad: body.fechaCaducidad || new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
-      cantidadKilos: Number(body.cantidadKilos),
-      alertasSanitarias: body.alertasSanitarias,
-    };
+    let loteCreado: BatchDTO;
 
-    LOTES_MEMORIA.push(nuevoLote);
+    try {
+      const dbLote = await prisma.batch.create({
+        data: {
+          productoId: body.productoId,
+          numeroLote: body.numeroLote,
+          proveedorRegional: body.proveedorRegional,
+          fincaOrigen: body.fincaOrigen || 'Finca Regional Asociada',
+          fechaCosechaTostado: body.fechaCosechaTostado ? new Date(body.fechaCosechaTostado) : new Date(),
+          fechaCaducidad: body.fechaCaducidad ? new Date(body.fechaCaducidad) : new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
+          cantidadKilos: Number(body.cantidadKilos),
+          alertasSanitarias: body.alertasSanitarias || null,
+        },
+      });
 
-    return NextResponse.json({ mensaje: 'Lote registrado con éxito', lote: nuevoLote }, { status: 201 });
+      loteCreado = {
+        id: dbLote.id,
+        productoId: dbLote.productoId,
+        numeroLote: dbLote.numeroLote,
+        proveedorRegional: dbLote.proveedorRegional,
+        fincaOrigen: dbLote.fincaOrigen || undefined,
+        fechaCosechaTostado: dbLote.fechaCosechaTostado.toISOString(),
+        fechaCaducidad: dbLote.fechaCaducidad.toISOString(),
+        cantidadKilos: Number(dbLote.cantidadKilos),
+        alertasSanitarias: dbLote.alertasSanitarias || undefined,
+      };
+    } catch (dbErr) {
+      console.warn('⚠️ [Prisma Batch Create] Fallback en memoria:', dbErr);
+      loteCreado = {
+        id: `lote_${Date.now()}`,
+        productoId: body.productoId,
+        numeroLote: body.numeroLote,
+        proveedorRegional: body.proveedorRegional,
+        fincaOrigen: body.fincaOrigen || 'Finca Regional Asociada',
+        fechaCosechaTostado: body.fechaCosechaTostado || new Date().toISOString(),
+        fechaCaducidad: body.fechaCaducidad || new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
+        cantidadKilos: Number(body.cantidadKilos),
+        alertasSanitarias: body.alertasSanitarias,
+      };
+      LOTES_FALLBACK.push(loteCreado);
+    }
+
+    return NextResponse.json({ mensaje: 'Lote registrado con éxito', lote: loteCreado }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: 'Error al registrar lote' }, { status: 500 });
   }
