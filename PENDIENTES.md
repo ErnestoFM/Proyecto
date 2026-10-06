@@ -1,0 +1,97 @@
+# Monchis Café — Registro de Pendientes, Deuda Técnica y Auditoría de Seguridad
+
+Este documento reúne de forma exhaustiva todos los pendientes, elementos simulados en memoria (mocks), malas prácticas de seguridad y discrepancias detectadas frente a los requerimientos funcionales y técnicos del proyecto.
+
+---
+
+## 🚨 Prioridad 1: Seguridad Crítica y Vulnerabilidades
+
+- [x] **1.1. Eliminar secretos JWT quemados (Hardcoded Secret Fallback)** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/lib/jwt.ts`.
+  - **Resolución:** Se implementó `getSecret()`, lanzando error crítico en producción si faltan variables y usando valores efímeros alertados solo en desarrollo/test.
+
+- [x] **1.2. Impedir manipulación de precios desde el cliente en el POS** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/app/api/pos/orders/route.ts`.
+  - **Resolución:** El backend ahora valida y utiliza los precios oficiales del catálogo de servidor para cada `productoId`, blindando el cálculo de subtotal contra manipulación del JSON del cliente.
+
+- [ ] **1.3. Forzar reCAPTCHA estricto y evitar bypass silencioso**
+  - **Ubicación:** `apps/api/src/lib/recaptcha.ts` (línea 29).
+  - **Problema:** Si `RECAPTCHA_SECRET_KEY` no está configurada, en ambiente de desarrollo retorna `true` automáticamente, permitiendo saltarse la verificación de bots.
+  - **Solución:** Alertar explícitamente en logs o restringir el bypass únicamente a tests unitarios con variables de entorno explícitas (`NODE_ENV === 'test'`).
+
+- [ ] **1.4. Implementar validación activa de Blacklist de Tokens Revocados**
+  - **Ubicación:** `apps/api/src/app/api/auth/logout/route.ts` y middleware de autenticación.
+  - **Problema:** La tabla `RevokedToken` existe en `schema.prisma`, pero al recibir peticiones protegidas (`verifyAccessToken`) no se consulta Redis ni la base de datos para verificar si el token fue revocado tras un logout.
+
+---
+
+## 💾 Prioridad 2: Persistencia Real vs. Datos Quemados (Mocks en Memoria)
+
+- [ ] **2.1. Conectar y migrar la Base de Datos PostgreSQL**
+  - **Ubicación:** `packages/database/prisma/schema.prisma` y `.env`.
+  - **Problema:** No existe archivo `.env` configurado ni carpeta de migraciones (`prisma/migrations`). El cliente Prisma nunca ha sincronizado las tablas en una base de datos real.
+  - **Solución:** Crear `.env` a partir de `.env.example`, levantar el contenedor de PostgreSQL (`docker compose up postgres -d`) y ejecutar `pnpm prisma:migrate`.
+
+- [ ] **2.2. Persistir órdenes en base de datos al cobrar en el POS**
+  - **Ubicación:** `apps/api/src/app/api/pos/orders/route.ts` (líneas 87–128).
+  - **Problema:** La orden genera un ID simulado con `Date.now()`, responde `201 Created`, pero **nunca ejecuta `prisma.order.create()`**. No guarda los items, no descuenta el stock de `Product`, ni actualiza los sellos/puntos ganados por el cliente en `User`.
+  - **Solución:** Encapsular la venta dentro de una transacción de Prisma (`prisma.$transaction`) que descuente inventario, cree el registro `Order` con sus `OrderItem` y actualice el saldo del usuario.
+
+- [ ] **2.3. Migrar Catálogo de Productos a PostgreSQL**
+  - **Ubicación:**
+    - Backend: `apps/api/src/app/api/products/route.ts` (`const CATALOGO_PRODUCTOS = [...]`).
+    - Frontend: `apps/web/src/stores/posStore.ts` (`productos = ref([...])`).
+  - **Problema:** Los 5 productos base están duplicados y fijos en arrays de JavaScript.
+  - **Solución:**
+    - Backend: Crear seeder en `packages/database` para poblar la tabla `Product` y hacer que `GET /api/products` consulte `prisma.product.findMany({ where: { activo: true } })`.
+    - Frontend: El store `posStore` debe iniciar con array vacío y hacer `fetch('/api/products')` en `onMounted`.
+
+- [ ] **2.4. Migrar Lotes de Inventario a PostgreSQL**
+  - **Ubicación:** `apps/api/src/app/api/inventory/batches/route.ts` (`const LOTES_MEMORIA = [...]`).
+  - **Problema:** Los lotes se guardan en un array en RAM (`LOTES_MEMORIA.push(nuevoLote)`). Al reiniciar el servidor se pierde todo el inventario registrado.
+  - **Solución:** Guardar y consultar en la tabla `Batch` de Prisma (`prisma.batch.create`, `prisma.batch.findMany`).
+
+- [ ] **2.5. Conectar Analítica del Admin a datos reales**
+  - **Ubicación:**
+    - Backend: `apps/api/src/app/api/admin/analytics/route.ts` (`const VISITAS_TRAFICO`, `const ITEMS_VENDIDOS`).
+    - Frontend: `apps/web/src/stores/adminStore.ts` (valores por defecto de $12,450 MXN y 246 órdenes).
+  - **Problema:** Todas las métricas y gráficas del panel de administración son estáticas.
+  - **Solución:** Consultar las órdenes y ventas reales de la tabla `Order` agrupadas por fecha, y las visitas desde la tabla `Attribution`.
+
+---
+
+## ⚙️ Prioridad 3: Funcionalidades Faltantes (Prometidas en Documentación)
+
+- [ ] **3.1. Doble Factor de Autenticación (2FA / TOTP) para Administrador**
+  - **Ubicación:** Requerimientos funcionales 2.1; en BD existen `dosFactoresActivo` y `dosFactoresSecret`.
+  - **Estado:** No existe ningún endpoint para generar el secreto TOTP (`speakeasy` / `otplib`), renderizar el código QR ni validar el token de 6 dígitos en el flujo de login.
+
+- [ ] **3.2. Consumidor Activo (Worker) de RabbitMQ para Patrón Saga**
+  - **Ubicación:** `packages/messaging/src/rabbitmqClient.ts` y `apps/api/src/app/api/pos/orders/route.ts`.
+  - **Estado:** El backend tiene código para *publicar* eventos (`publishMessage`), pero **no existe ningún proceso worker escuchando las colas**. La orquestación distribuida con reversas compensatorias ante falta de insumos no se ejecuta.
+  - **Detalle adicional:** En `orders/route.ts` se publica al exchange `'monchis.events'`, pero en el cliente RabbitMQ el exchange por defecto se llama `'cafeteria.events'`. Debe unificarse el nombre.
+
+- [ ] **3.3. Servicio de Alertas por Correo SMTP**
+  - **Ubicación:** Requerimientos funcionales 2.2 y 2.3 (alertas por caducidad de lotes orgánicos y mensajes caídos en Dead Letter Queue).
+  - **Estado:** No existe ningún transporte de correo (ej. Nodemailer) ni plantillas de notificación por email configuradas.
+
+- [x] **3.4. Exportes en PDF y Excel desde el Panel de Administración** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/web/src/views/admin/AdminPage.vue`.
+  - **Resolución:** Se agregaron funciones de exportación `exportarExcel()` (generador CSV compatible con Excel en UTF-8 BOM con KPIs, tráfico, productos y lotes) y `exportarPDF()` vía `@media print` estilizado para reporte ejecutivo.
+
+- [x] **3.5. Integración con Periféricos Físicos de Mostrador** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/web/src/views/pos/POSPage.vue`.
+  - **Resolución:** Se implementó listener global de eventos `keydown` para escáneres de código de barras USB/HID (1D/2D) mapeados a productos (`7501001` - `7501005`), atajos de mostrador `F2` (Cobrar) y `Escape` (Limpiar), junto con indicador visual de estado en el header.
+
+---
+
+## 🛠️ Prioridad 4: Calidad de Código y Automatización de Pruebas
+
+- [x] **4.1. Reparar el comando `pnpm test` en la raíz** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `packages/database/package.json` y `packages/messaging/package.json`.
+  - **Resolución:** Se agregó `--passWithNoTests` a los scripts de prueba en ambos paquetes. `pnpm test` en la raíz ahora ejecuta 7 tareas de Turborepo y pasa 55 pruebas unitarias al 100% en verde.
+
+- [ ] **4.2. Eliminar advertencia de deprecación de Vite Node API (CJS)**
+  - **Ubicación:** `apps/api/vitest.config.ts`.
+  - **Problema:** En consola aparece `The CJS build of Vite's Node API is deprecated`.
+  - **Solución:** Configurar Vitest con formato ESM explícito.

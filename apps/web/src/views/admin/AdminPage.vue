@@ -8,6 +8,63 @@ onMounted(() => {
   admin.cargarMetricas();
   admin.cargarDLQ();
 });
+
+// Función para exportar reporte completo a Excel (CSV con formato amigable y UTF-8 BOM)
+function exportarExcel() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const BOM = '\uFEFF';
+  let csv = 'REPORTE EJECUTIVO DE VENTAS Y ANALÍTICA — MONCHIS CAFÉ\r\n';
+  csv += `Fecha de Generación:;${hoy}\r\n\r\n`;
+
+  // 1. Resumen de KPIs
+  csv += '1. RESUMEN FINANCIERO Y OPERATIVO\r\n';
+  csv += 'Métrica;Valor\r\n';
+  csv += `Ingresos Totales;$${admin.resumen?.totalIngresos?.toFixed(2) || '0.00'} MXN\r\n`;
+  csv += `Total de Órdenes;${admin.resumen?.totalOrdenes || 0}\r\n`;
+  csv += `Ventas Café Orgánico;$${admin.resumen?.totalVentasOrganico?.toFixed(2) || '0.00'} MXN\r\n`;
+  csv += `Ventas Comercial;$${admin.resumen?.totalVentasComercial?.toFixed(2) || '0.00'} MXN\r\n`;
+  csv += `Porcentaje Orgánico;${admin.resumen?.porcentajeOrganico || 0}%\r\n`;
+  csv += `Mensajes en DLQ;${admin.mensajesDLQ.length}\r\n\r\n`;
+
+  // 2. Atribución de Tráfico
+  csv += '2. ATRIBUCIÓN DE TRÁFICO (MARKETING Y CONVERSIÓN)\r\n';
+  csv += 'Canal de Origen;Visitas;Ventas;Conversión (%);Monto Generado (MXN)\r\n';
+  admin.atribucionTrafico.forEach((canal) => {
+    const conv = canal.totalVisitas > 0 ? ((canal.totalVentas / canal.totalVisitas) * 100).toFixed(1) : '0.0';
+    csv += `${canal.source};${canal.totalVisitas};${canal.totalVentas};${conv}%;$${canal.montoGenerado.toFixed(2)}\r\n`;
+  });
+  csv += '\r\n';
+
+  // 3. Productos Más Vendidos
+  csv += '3. PRODUCTOS MÁS VENDIDOS\r\n';
+  csv += 'Producto;Categoría;Unidades Vendidas;Ingresos Totales (MXN)\r\n';
+  admin.topVendidos.forEach((p) => {
+    csv += `${p.nombre};${p.tipo};${p.unidadesVendidas};$${p.ingresosTotales.toFixed(2)}\r\n`;
+  });
+  csv += '\r\n';
+
+  // 4. Lotes Activos
+  csv += '4. TRAZABILIDAD Y LOTES DE CAFÉ ORGÁNICO\r\n';
+  csv += 'Número de Lote;Proveedor Regional;Finca de Origen;Kilos Disponibles;Caducidad\r\n';
+  admin.lotesActivos.forEach((l) => {
+    csv += `${l.numeroLote};${l.proveedorRegional};${l.fincaOrigen || 'N/A'};${l.cantidadKilos};${l.fechaCaducidad.split('T')[0]}\r\n`;
+  });
+
+  const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `Reporte_Monchis_Cafe_${hoy}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+// Función para imprimir / exportar reporte formal a PDF
+function exportarPDF() {
+  window.print();
+}
 </script>
 
 <template>
@@ -19,9 +76,17 @@ onMounted(() => {
           <h1>Métricas & Analítica — <strong>Monchis Café</strong></h1>
           <p>Supervisión en tiempo real de ingresos, canales de tráfico, trazabilidad y mensajería</p>
         </div>
-        <button class="btn btn--secondary btn--sm" @click="admin.cargarMetricas" :disabled="admin.isLoading">
-          🔄 {{ admin.isLoading ? 'Actualizando...' : 'Refrescar Datos' }}
-        </button>
+        <div class="admin-actions">
+          <button class="btn btn--secondary btn--sm" @click="admin.cargarMetricas" :disabled="admin.isLoading">
+            🔄 {{ admin.isLoading ? 'Actualizando...' : 'Refrescar' }}
+          </button>
+          <button class="btn btn--secondary btn--sm export-btn" @click="exportarExcel" title="Exportar reporte compatible con Excel">
+            📊 Exportar Excel
+          </button>
+          <button class="btn btn--primary btn--sm export-btn" @click="exportarPDF" title="Generar versión imprimible en PDF">
+            📄 Exportar PDF
+          </button>
+        </div>
       </header>
 
       <!-- KPI Summary Cards -->
@@ -318,6 +383,43 @@ onMounted(() => {
   .admin-header {
     flex-direction: column;
     gap: 1rem;
+    align-items: flex-start;
+  }
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+@media print {
+  .admin-header .admin-actions,
+  .admin-header button,
+  .badge {
+    display: none !important;
+  }
+
+  .admin-page {
+    padding: 0 !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #CBD5E1 !important;
+    break-inside: avoid;
   }
 }
 </style>

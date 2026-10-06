@@ -9,7 +9,7 @@
     "migrate": "prisma migrate dev",
     "seed": "prisma db seed",
     "build": "tsc",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0"

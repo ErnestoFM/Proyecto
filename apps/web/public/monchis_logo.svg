@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Filtros de sombra suave -->
+    <filter id="soft-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1B140E" flood-opacity="0.4" />
+    </filter>
+    <filter id="glow-subtle" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <!-- Degradados elegantes -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#433025" />
+      <stop offset="60%" stop-color="#2D1F17" />
+      <stop offset="100%" stop-color="#1A110B" />
+    </linearGradient>
+
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E08D80" />
+      <stop offset="50%" stop-color="#DDA15E" />
+      <stop offset="100%" stop-color="#C97567" />
+    </linearGradient>
+
+    <linearGradient id="cupGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#F4ECE1" />
+      <stop offset="100%" stop-color="#E2D2BD" />
+    </linearGradient>
+
+    <linearGradient id="coffeeSurface" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#844E31" />
+      <stop offset="100%" stop-color="#4F2913" />
+    </linearGradient>
+
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#84DCC6" />
+      <stop offset="50%" stop-color="#52B788" />
+      <stop offset="100%" stop-color="#2D6A4F" />
+    </linearGradient>
+
+    <linearGradient id="steamGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#F4ECE1" stop-opacity="0.8" />
+      <stop offset="60%" stop-color="#DDA15E" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="beanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9C5D3B" />
+      <stop offset="100%" stop-color="#532E16" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo Circular con Bisel Estilizado -->
+  <circle cx="250" cy="250" r="236" fill="url(#bgGrad)" stroke="url(#ringGrad)" stroke-width="6" />
+  <circle cx="250" cy="250" r="220" fill="none" stroke="#DDA15E" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="6 6" />
+
+  <!-- Plato Base de la Taza -->
+  <ellipse cx="250" cy="316" rx="122" ry="16" fill="#140C07" opacity="0.4" filter="url(#soft-shadow)" />
+  <ellipse cx="250" cy="310" rx="116" ry="13" fill="url(#cupGrad)" stroke="#CBB49C" stroke-width="2" />
+  <ellipse cx="250" cy="308" rx="84" ry="7" fill="#DCC8B2" opacity="0.5" />
+
+  <!-- Cuerpo de la Taza de Café -->
+  <g id="cup-group" filter="url(#soft-shadow)">
+    <!-- Asa de la taza -->
+    <path d="M 320 206 C 375 206, 375 276, 320 276" fill="none" stroke="url(#cupGrad)" stroke-width="15" stroke-linecap="round" />
+    <path d="M 320 210 C 362 210, 362 272, 320 272" fill="none" stroke="#CBB49C" stroke-width="2.5" opacity="0.4" />
+
+    <!-- Silueta principal taza -->
+    <path d="M 170 192 C 172 268, 204 298, 250 298 C 296 298, 328 268, 330 192 Z" fill="url(#cupGrad)" stroke="#D4C0A8" stroke-width="2" />
+    <!-- Borde superior elíptico -->
+    <ellipse cx="250" cy="192" rx="80" ry="16" fill="url(#cupGrad)" stroke="#CBB49C" stroke-width="2" />
+    <!-- Superficie líquida café -->
+    <ellipse cx="250" cy="193" rx="72" ry="12" fill="url(#coffeeSurface)" />
+    <!-- Crema / Latte Art sutil -->
+    <path d="M 235 193 C 245 189, 255 189, 265 193 C 258 196, 242 196, 235 193 Z" fill="#F4ECE1" opacity="0.75" />
+  </g>
+
+  <!-- Hoja Verde Orgánica (Símbolo ODS 12 / Sustentabilidad) -->
+  <g id="organic-leaf" filter="url(#glow-subtle)">
+    <path d="M 250 166 C 290 134, 302 94, 274 74 C 248 100, 246 138, 250 166 Z" fill="url(#leafGrad)" />
+    <!-- Nervadura central de la hoja -->
+    <path d="M 252 162 C 255 132, 267 104, 274 76" fill="none" stroke="#D8F3DC" stroke-width="2" stroke-linecap="round" opacity="0.85" />
+  </g>
+
+  <!-- Vapores de Café Aromático Curvos -->
+  <g id="aroma-steam" stroke="url(#steamGrad)" stroke-width="5" stroke-linecap="round" fill="none">
+    <path d="M 215 174 C 205 150, 218 132, 208 108 C 200 89, 210 75, 205 64" />
+    <path d="M 233 168 C 227 142, 238 126, 231 103 C 225 84, 233 72, 229 58" stroke-width="4" opacity="0.85" />
+  </g>
+
+  <!-- Granos de Café Orgánico a los Lados -->
+  <!-- Grano Izquierdo -->
+  <g id="bean-left" transform="translate(142, 288) rotate(-22) scale(0.95)" filter="url(#soft-shadow)">
+    <ellipse cx="0" cy="0" rx="19" ry="13" fill="url(#beanGrad)" stroke="#2B170B" stroke-width="1.5" />
+    <path d="M 0 -11 C -4 -4, 4 4, 0 11" fill="none" stroke="#F4ECE1" stroke-width="2" stroke-linecap="round" opacity="0.85" />
+  </g>
+  <!-- Grano Derecho -->
+  <g id="bean-right" transform="translate(358, 290) rotate(24) scale(0.95)" filter="url(#soft-shadow)">
+    <ellipse cx="0" cy="0" rx="19" ry="13" fill="url(#beanGrad)" stroke="#2B170B" stroke-width="1.5" />
+    <path d="M 0 -11 C -4 -4, 4 4, 0 11" fill="none" stroke="#F4ECE1" stroke-width="2" stroke-linecap="round" opacity="0.85" />
+  </g>
+
+  <!-- Tipografía Integrada 'MONCHIS CAFÉ' -->
+  <g id="brand-typography">
+    <text x="250" y="375" text-anchor="middle" font-family="'Century Gothic', 'Montserrat', 'Segoe UI', Arial, sans-serif" font-size="34" font-weight="900" fill="#FFFDF9" letter-spacing="4">MONCHIS CAFÉ</text>
+    <text x="250" y="408" text-anchor="middle" font-family="'Century Gothic', 'Montserrat', 'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#E29578" letter-spacing="4">ORGÁNICO · ESPECIALIDAD</text>
+  </g>
+</svg>

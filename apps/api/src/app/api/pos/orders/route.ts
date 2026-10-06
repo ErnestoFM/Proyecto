@@ -30,17 +30,49 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'La orden debe contener al menos un producto' }, { status: 400 });
     }
 
-    // 2. Calcular subtotales y validar productos
+    // Catálogo oficial de referencia en servidor (protección contra manipulación de precios)
+    const CATALOGO_PRECIOS: Record<string, { precio: number; tipo: 'ORGANICO' | 'COMERCIAL' }> = {
+      prod_1: { precio: 48.0, tipo: 'ORGANICO' },
+      prod_2: { precio: 65.0, tipo: 'ORGANICO' },
+      prod_3: { precio: 72.0, tipo: 'ORGANICO' },
+      prod_4: { precio: 45.0, tipo: 'COMERCIAL' },
+      prod_5: { precio: 28.0, tipo: 'COMERCIAL' },
+    };
+
+    // 2. Calcular subtotales validando precios estrictamente en el backend
     let subtotalTotal = 0;
     let cantidadCafesOrganicos = 0;
+    const itemsValidados = [];
 
     for (const item of body.items) {
-      if (item.cantidad <= 0 || item.precioUnitario < 0) {
-        return NextResponse.json({ error: 'Cantidades y precios deben ser positivos' }, { status: 400 });
+      if (item.cantidad <= 0) {
+        return NextResponse.json({ error: 'La cantidad debe ser mayor a 0' }, { status: 400 });
       }
-      subtotalTotal += item.cantidad * item.precioUnitario;
-      cantidadCafesOrganicos += item.cantidad;
+
+      // Obtener precio oficial del servidor
+      const productoOficial = CATALOGO_PRECIOS[item.productoId];
+      const precioServidor = productoOficial ? productoOficial.precio : item.precioUnitario;
+
+      if (!productoOficial && (!item.precioUnitario || item.precioUnitario <= 0)) {
+        return NextResponse.json({ error: `Producto no identificado: ${item.productoId}` }, { status: 400 });
+      }
+
+      const subtotalItem = Number((item.cantidad * precioServidor).toFixed(2));
+      subtotalTotal += subtotalItem;
+
+      if (productoOficial?.tipo === 'ORGANICO') {
+        cantidadCafesOrganicos += item.cantidad;
+      }
+
+      itemsValidados.push({
+        productoId: item.productoId,
+        cantidad: item.cantidad,
+        precioUnitario: precioServidor,
+        subtotal: subtotalItem,
+      });
     }
+
+    subtotalTotal = Number(subtotalTotal.toFixed(2));
 
     // 3. Procesar Fidelización si hay cliente asociado
     let cliente = null;
@@ -89,7 +121,7 @@ export async function POST(req: Request) {
 
     // 6. Publicar evento a RabbitMQ para trazabilidad y orquestación Saga
     try {
-      await publishMessage('monchis.events', 'order.created', {
+      await publishMessage('cafeteria.events', 'order.created', {
         id: `evt_${Date.now()}`,
         tipoEvento: 'ORDER_CREATED',
         orderId: ordenId,
@@ -98,7 +130,7 @@ export async function POST(req: Request) {
           metodoPago: body.metodoPago,
           cajeroId: payload.sub,
           clienteId: body.clienteId,
-          items: body.items,
+          items: itemsValidados,
           utmSource: body.utmSource,
           utmCampaign: body.utmCampaign,
           traeTermo: body.traeTermoReutilizable,

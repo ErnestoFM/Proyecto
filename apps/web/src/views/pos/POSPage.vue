@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { usePosStore } from '@/stores/posStore';
 import type { ProductType, PaymentMethod } from '@monchis/shared-types';
 
@@ -8,6 +8,83 @@ const pos = usePosStore();
 const categoriaSeleccionada = ref<'TODOS' | ProductType>('TODOS');
 const filtroBusqueda = ref('');
 const modalVentaAbierto = ref(false);
+
+// Mapeo de códigos de barras (1D EAN/UPC y QR) a IDs de producto
+const CODIGOS_BARRAS: Record<string, string> = {
+  '7501001': 'prod_1', // Café de Olla Orgánico
+  '7501002': 'prod_2', // Cold Brew de la Sierra
+  '7501003': 'prod_3', // Latte Lavanda y Miel
+  '7501004': 'prod_4', // Panqué Artesanal de Elote
+  '7501005': 'prod_5', // Galleta de Avena y Arándanos
+};
+
+const mensajeEscaner = ref<string | null>(null);
+let bufferCodigo = '';
+let tiempoUltimaTecla = 0;
+
+function manejarKeydown(e: KeyboardEvent) {
+  // Atajo F2: Cobrar inmediatamente si hay productos
+  if (e.key === 'F2') {
+    e.preventDefault();
+    if (pos.cart.length > 0 && !modalVentaAbierto.value) {
+      realizarCobro();
+    }
+    return;
+  }
+
+  // Atajo Escape: Cerrar modal o limpiar carrito
+  if (e.key === 'Escape') {
+    if (modalVentaAbierto.value) {
+      cerrarModal();
+    } else if (pos.cart.length > 0) {
+      pos.limpiarCarrito();
+      mensajeEscaner.value = 'Carrito limpiado';
+      setTimeout(() => { mensajeEscaner.value = null; }, 1500);
+    }
+    return;
+  }
+
+  const target = e.target as HTMLElement;
+  const esInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA');
+
+  const ahora = Date.now();
+  // Los escáneres de código de barras USB/HID emiten caracteres con menos de 60ms de intervalo
+  if (ahora - tiempoUltimaTecla > 80) {
+    bufferCodigo = '';
+  }
+  tiempoUltimaTecla = ahora;
+
+  if (e.key === 'Enter') {
+    const codigoLimpio = bufferCodigo.trim();
+    if (codigoLimpio.length >= 3) {
+      const productoId = CODIGOS_BARRAS[codigoLimpio];
+      const prod = pos.productos.find((p) => p.id === productoId || p.id === codigoLimpio);
+      if (prod) {
+        pos.agregarProducto(prod);
+        mensajeEscaner.value = `¡Escaneado: ${prod.nombre}! (Código: ${codigoLimpio})`;
+        setTimeout(() => { mensajeEscaner.value = null; }, 2500);
+        bufferCodigo = '';
+        if (esInput) {
+          (target as HTMLInputElement).value = '';
+          filtroBusqueda.value = '';
+        }
+        e.preventDefault();
+        return;
+      }
+    }
+    bufferCodigo = '';
+  } else if (e.key.length === 1) {
+    bufferCodigo += e.key;
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', manejarKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', manejarKeydown);
+});
 
 const productosFiltrados = computed(() => {
   return pos.productos.filter((p) => {
@@ -37,15 +114,28 @@ function cerrarModal() {
       <header class="pos-catalog__header">
         <div>
           <h1>Punto de Venta — <strong>Monchis Café</strong></h1>
-          <p>Selecciona los productos para agregar a la orden</p>
+          <p>Selecciona productos o escanea código de barras en mostrador</p>
         </div>
-        <input
-          v-model="filtroBusqueda"
-          type="search"
-          placeholder="🔍 Buscar café o alimento..."
-          class="pos-search"
-        />
+        <div class="header-tools">
+          <div class="scanner-indicator" title="Escáner USB/HID listo. Atajos: [F2] Cobrar | [Esc] Limpiar">
+            <span class="pulse-dot"></span>
+            <small>Lector 1D/2D Activo <code>[F2 Cobrar]</code></small>
+          </div>
+          <input
+            v-model="filtroBusqueda"
+            type="search"
+            placeholder="🔍 Buscar café o alimento..."
+            class="pos-search"
+          />
+        </div>
       </header>
+
+      <!-- Banner de Escaneo Exitoso -->
+      <transition name="fade">
+        <div v-if="mensajeEscaner" class="scan-alert">
+          ⚡ {{ mensajeEscaner }}
+        </div>
+      </transition>
 
       <!-- Filtro de Categorías -->
       <div class="pos-categories">
@@ -255,8 +345,69 @@ function cerrarModal() {
   font-size: 1.5rem;
 }
 
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.scanner-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(183, 217, 177, 0.25);
+  border: 1px solid #B7D9B1;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full);
+  color: #3B6E32;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.scanner-indicator code {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: monospace;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #48BB78;
+  border-radius: 50%;
+  box-shadow: 0 0 0 rgba(72, 187, 120, 0.4);
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(72, 187, 120, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
+  }
+}
+
+.scan-alert {
+  background: #B7D9B1;
+  color: #1F4517;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(183, 217, 177, 0.4);
+}
+
 .pos-search {
-  max-width: 300px;
+  max-width: 260px;
   padding: 0.6rem 1rem;
   border-radius: var(--radius-full);
   border: 1px solid var(--color-border);
