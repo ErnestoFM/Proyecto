@@ -116,6 +116,26 @@ export const useAdminStore = defineStore('admin', () => {
     }
   }
 
+  async function cargarLotes() {
+    try {
+      const res = await fetch('/api/inventory/batches', {
+        headers: {
+          'Content-Type': 'application/json',
+          ...auth.getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.lotes && data.lotes.length > 0) {
+          lotesActivos.value = data.lotes;
+        }
+      }
+    } catch (e) {
+      console.warn('Error al consultar lotes:', e);
+    }
+  }
+
   return {
     resumen,
     atribucionTrafico,
@@ -126,5 +146,6 @@ export const useAdminStore = defineStore('admin', () => {
     error,
     cargarMetricas,
     cargarDLQ,
+    cargarLotes,
   };
 });

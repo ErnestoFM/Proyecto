@@ -44,12 +44,9 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
   - **Ubicación:** `apps/api/src/app/api/inventory/batches/route.ts`.
   - **Resolución:** Métodos `GET` y `POST` migrados a consultas directas en `prisma.batch.findMany` y `prisma.batch.create`, persistiendo número de lote, finca de origen, fechas y alertas sanitarias en la base de datos relacional.
 
-- [ ] **2.5. Conectar Analítica del Admin a datos reales**
-  - **Ubicación:**
-    - Backend: `apps/api/src/app/api/admin/analytics/route.ts` (`const VISITAS_TRAFICO`, `const ITEMS_VENDIDOS`).
-    - Frontend: `apps/web/src/stores/adminStore.ts` (valores por defecto de $12,450 MXN y 246 órdenes).
-  - **Problema:** Todas las métricas y gráficas del panel de administración son estáticas.
-  - **Solución:** Consultar las órdenes y ventas reales de la tabla `Order` agrupadas por fecha, y las visitas desde la tabla `Attribution`.
+- [x] **2.5. Conectar Analítica del Admin a datos reales** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/src/app/api/admin/analytics/route.ts`, `apps/api/src/app/api/admin/audit/dlq/route.ts`, `apps/web/src/stores/adminStore.ts` y `apps/web/src/views/admin/AdminPage.vue`.
+  - **Resolución:** El backend ahora consulta dinámicamente las órdenes completadas (`prisma.order.findMany`), extrae items y productos vendidos clasificando ingresos de café orgánico vs comercial, agrega canales de tráfico desde la tabla `Attribution`, consulta registros de falla en `SagaStateLog` para la vista de DLQ, y el frontend sincroniza métricas, DLQ y lotes en tiempo real manteniendo tolerancia a fallos offline.
 
 ---
 

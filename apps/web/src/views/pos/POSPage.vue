@@ -80,6 +80,7 @@ function manejarKeydown(e: KeyboardEvent) {
 
 onMounted(() => {
   window.addEventListener('keydown', manejarKeydown);
+  pos.cargarProductos();
 });
 
 onUnmounted(() => {

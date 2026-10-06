@@ -4,9 +4,14 @@ import { useAdminStore } from '@/stores/adminStore';
 
 const admin = useAdminStore();
 
-onMounted(() => {
+function refrescarTodo() {
   admin.cargarMetricas();
   admin.cargarDLQ();
+  admin.cargarLotes();
+}
+
+onMounted(() => {
+  refrescarTodo();
 });
 
 // Función para exportar reporte completo a Excel (CSV con formato amigable y UTF-8 BOM)
@@ -77,7 +82,7 @@ function exportarPDF() {
           <p>Supervisión en tiempo real de ingresos, canales de tráfico, trazabilidad y mensajería</p>
         </div>
         <div class="admin-actions">
-          <button class="btn btn--secondary btn--sm" @click="admin.cargarMetricas" :disabled="admin.isLoading">
+          <button class="btn btn--secondary btn--sm" @click="refrescarTodo" :disabled="admin.isLoading">
             🔄 {{ admin.isLoading ? 'Actualizando...' : 'Refrescar' }}
           </button>
           <button class="btn btn--secondary btn--sm export-btn" @click="exportarExcel" title="Exportar reporte compatible con Excel">

@@ -1,13 +1,15 @@
 // ==============================================================================
-// Monchis Café — Endpoint GET /api/admin/analytics
+// Monchis Café — Endpoint GET /api/admin/analytics (Analítica de Ventas y Tráfico)
+// Conectado con Prisma (PostgreSQL / Google Cloud SQL) y Resilient Fallback
 // ==============================================================================
 
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 import { verifyAccessToken } from '@/lib/jwt';
 import { AnalyticsService } from '@/lib/analytics';
 
-// Muestras de datos representativas para la analítica del panel
-const VISITAS_TRAFICO = [
+// Muestras de contingencia en caso de que la base de datos esté offline o no tenga órdenes iniciales
+const VISITAS_TRAFICO_FALLBACK = [
   { source: 'google_maps', convertido: true, monto: 145.0 },
   { source: 'google_maps', convertido: true, monto: 96.0 },
   { source: 'google_maps', convertido: false, monto: 0 },
@@ -18,7 +20,13 @@ const VISITAS_TRAFICO = [
   { source: 'direct', convertido: false, monto: 0 },
 ];
 
-const ITEMS_VENDIDOS: Array<{ productoId: string; nombre: string; tipo: 'ORGANICO' | 'COMERCIAL'; cantidad: number; precio: number }> = [
+const ITEMS_VENDIDOS_FALLBACK: Array<{
+  productoId: string;
+  nombre: string;
+  tipo: 'ORGANICO' | 'COMERCIAL';
+  cantidad: number;
+  precio: number;
+}> = [
   { productoId: 'prod_1', nombre: 'Café de Olla Orgánico', tipo: 'ORGANICO', cantidad: 85, precio: 48.0 },
   { productoId: 'prod_2', nombre: 'Cold Brew de la Sierra', tipo: 'ORGANICO', cantidad: 62, precio: 65.0 },
   { productoId: 'prod_3', nombre: 'Latte Lavanda y Miel', tipo: 'ORGANICO', cantidad: 45, precio: 72.0 },
@@ -38,11 +46,87 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Acceso restringido a administradores' }, { status: 403 });
     }
 
-    const trafico = AnalyticsService.calcularMetricasTrafico(VISITAS_TRAFICO);
-    const productos = AnalyticsService.clasificarVentasProductos(ITEMS_VENDIDOS);
+    let visitas = VISITAS_TRAFICO_FALLBACK;
+    let itemsVendidos = ITEMS_VENDIDOS_FALLBACK;
+
+    try {
+      // 1. Consultar órdenes completadas con sus items, producto y atribución UTM
+      const ordenesDB = await prisma.order.findMany({
+        where: { estado: 'COMPLETADA' },
+        include: {
+          items: {
+            include: {
+              producto: true,
+            },
+          },
+          attributions: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      // 2. Consultar registros de atribución de tráfico
+      const atribucionesDB = await prisma.attribution.findMany({
+        include: {
+          order: true,
+        },
+      });
+
+      if (ordenesDB && ordenesDB.length > 0) {
+        const itemsExtraidos: Array<{
+          productoId: string;
+          nombre: string;
+          tipo: 'ORGANICO' | 'COMERCIAL';
+          cantidad: number;
+          precio: number;
+        }> = [];
+
+        for (const orden of ordenesDB) {
+          for (const item of orden.items) {
+            itemsExtraidos.push({
+              productoId: item.productoId,
+              nombre: item.producto?.nombre || 'Producto Desconocido',
+              tipo: (item.producto?.tipo as 'ORGANICO' | 'COMERCIAL') || 'COMERCIAL',
+              cantidad: item.cantidad,
+              precio: Number(item.precioUnitario),
+            });
+          }
+        }
+
+        if (itemsExtraidos.length > 0) {
+          itemsVendidos = itemsExtraidos;
+        }
+
+        if (atribucionesDB && atribucionesDB.length > 0) {
+          visitas = atribucionesDB.map((at) => ({
+            source: at.utmSource || 'direct',
+            convertido: !!at.orderId,
+            monto: at.order ? Number(at.order.total) : 0,
+          }));
+        } else {
+          // Generar visitas a partir de las fuentes UTM registradas en las órdenes
+          const visitasDesdeOrdenes: Array<{ source: string; convertido: boolean; monto: number }> = [];
+          for (const ord of ordenesDB) {
+            const fuente = ord.attributions?.[0]?.utmSource || 'direct';
+            visitasDesdeOrdenes.push({
+              source: fuente,
+              convertido: true,
+              monto: Number(ord.total),
+            });
+          }
+          if (visitasDesdeOrdenes.length > 0) {
+            visitas = visitasDesdeOrdenes;
+          }
+        }
+      }
+    } catch (dbError) {
+      console.warn('⚠️ [Prisma Analytics] Base de datos no disponible, utilizando contingencia:', dbError);
+    }
+
+    const trafico = AnalyticsService.calcularMetricasTrafico(visitas);
+    const productos = AnalyticsService.clasificarVentasProductos(itemsVendidos);
 
     const totalIngresos = Number((productos.totalVentasOrganico + productos.totalVentasComercial).toFixed(2));
-    const totalOrdenes = ITEMS_VENDIDOS.reduce((sum, i) => sum + i.cantidad, 0);
+    const totalOrdenes = itemsVendidos.reduce((sum, i) => sum + i.cantidad, 0);
 
     return NextResponse.json({
       resumen: {
@@ -50,7 +134,7 @@ export async function GET(req: Request) {
         totalOrdenes,
         totalVentasOrganico: productos.totalVentasOrganico,
         totalVentasComercial: productos.totalVentasComercial,
-        porcentajeOrganico: Number(((productos.totalVentasOrganico / totalIngresos) * 100).toFixed(1)),
+        porcentajeOrganico: totalIngresos > 0 ? Number(((productos.totalVentasOrganico / totalIngresos) * 100).toFixed(1)) : 0,
       },
       atribucionTrafico: trafico,
       productos: {

@@ -213,6 +213,20 @@ export const usePosStore = defineStore('pos', () => {
     }
   }
 
+  async function cargarProductos() {
+    try {
+      const res = await fetch('/api/products');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.productos && data.productos.length > 0) {
+          productos.value = data.productos;
+        }
+      }
+    } catch (e) {
+      console.warn('Error al cargar productos desde API:', e);
+    }
+  }
+
   return {
     productos,
     cart,
@@ -241,5 +255,6 @@ export const usePosStore = defineStore('pos', () => {
     eliminarProducto,
     limpiarCarrito,
     procesarVenta,
+    cargarProductos,
   };
 });
