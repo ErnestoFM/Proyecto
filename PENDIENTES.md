@@ -26,10 +26,9 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
 
 ## 💾 Prioridad 2: Persistencia Real vs. Datos Quemados (Mocks en Memoria)
 
-- [ ] **2.1. Conectar y migrar la Base de Datos PostgreSQL**
-  - **Ubicación:** `packages/database/prisma/schema.prisma` y `.env`.
-  - **Problema:** No existe archivo `.env` configurado ni carpeta de migraciones (`prisma/migrations`). El cliente Prisma nunca ha sincronizado las tablas en una base de datos real.
-  - **Solución:** Crear `.env` a partir de `.env.example`, levantar el contenedor de PostgreSQL (`docker compose up postgres -d`) y ejecutar `pnpm prisma:migrate`.
+- [x] **2.1. Conectar y migrar la Base de Datos PostgreSQL** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `packages/database/prisma/schema.prisma`, `packages/database/prisma/migrations/`, `packages/database/prisma/seed.ts` y `.env`.
+  - **Resolución:** Se configuró `.env` para desarrollo local enlazado al contenedor PostgreSQL (`cafeteria_db` en `localhost:5432`), se generó y ejecutó la migración inicial de Prisma (`20261006230529_init_monchis_cafe`) creando las 8 tablas maestras con sus índices y relaciones, y se ejecutó exitosamente el seeder poblando usuarios iniciales (Admin, Cajero, Cliente), catálogo de productos, lotes y órdenes.
 
 - [x] **2.2. Persistir órdenes en base de datos al cobrar en el POS** — *RESUELTO (2026-10-06)*
   - **Ubicación:** `apps/api/src/app/api/pos/orders/route.ts`.
@@ -91,7 +90,6 @@ Este documento reúne de forma exhaustiva todos los pendientes, elementos simula
   - **Ubicación:** `infra/gcp/setup_cloud_sql.ps1`, `infra/gcp/README.md`, `packages/database/prisma/seed.ts`.
   - **Resolución:** Se desarrolló el script de aprovisionamiento automatizado para Google Cloud SQL (PostgreSQL 15), la guía de conexión segura (Cloud SQL Auth Proxy / IP pública) y el seeder con datos maestros de usuarios, café orgánico de Chiapas/Veracruz, lotes y órdenes.
 
-- [ ] **4.2. Eliminar advertencia de deprecación de Vite Node API (CJS)**
-  - **Ubicación:** `apps/api/vitest.config.ts`.
-  - **Problema:** En consola aparece `The CJS build of Vite's Node API is deprecated`.
-  - **Solución:** Configurar Vitest con formato ESM explícito.
+- [x] **4.2. Eliminar advertencia de deprecación de Vite Node API (CJS)** — *RESUELTO (2026-10-06)*
+  - **Ubicación:** `apps/api/vitest.config.mts`.
+  - **Resolución:** Se migró la configuración de Vitest en la API al formato ESM explícito (`vitest.config.mts` con `fileURLToPath`), eliminando por completo la advertencia de Vite CJS Node API obsoleta y dejando la salida de consola 100% limpia.
