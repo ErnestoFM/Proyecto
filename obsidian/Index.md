@@ -18,6 +18,8 @@ Bienvenido al Vault de Obsidian del proyecto **Monchis Café**. Este vault sirve
 ---
 
 ## 📅 Últimas Bitácoras
+- [[Bitacora/2026-10-07]] — *Elaboración de Manuales de Usuario y Administrador, Estabilización de Build Next.js y Verificación de Producción.*
+- [[Bitacora/2026-10-06]] — *Auditoría Técnica Integral, 2FA TOTP, reCAPTCHA estricto, Blacklist de Tokens, PostgreSQL Seed y Suite E2E Playwright.*
 - [[Bitacora/2026-10-05]] — *Unidad 2: Actividad 2.3 Tabla Comparativa de Estimación del Proyecto (Presupuesto Inicial, COCOMO Básico y COCOMO Intermedio en PDF).*
 - [[Bitacora/2026-10-01]] — *Unidad 2: Actividad 2.2 Problemas COCOMO Intermedio (Rediseño visual Monchis Café y correcciones analíticas).*
 - [[Bitacora/2026-09-29]] — *Unidad 2: Actividad 2.1 Modelo COCOMO Básico (Clínica Universitaria Salud Integral) en Word y PDF (Dr. Gabriel Navarro Salcedo).*

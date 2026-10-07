@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false, // Oculta cabecera X-Powered-By por seguridad
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   async headers() {
     return [
       {

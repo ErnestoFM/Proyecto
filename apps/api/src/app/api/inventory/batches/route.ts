@@ -31,6 +31,8 @@ const LOTES_FALLBACK: BatchDTO[] = [
   },
 ];
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const lotesDB = await prisma.batch.findMany({

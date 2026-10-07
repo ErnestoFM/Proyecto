@@ -34,6 +34,8 @@ const ITEMS_VENDIDOS_FALLBACK: Array<{
   { productoId: 'prod_5', nombre: 'Galleta de Avena y Arándanos', tipo: 'COMERCIAL', cantidad: 18, precio: 28.0 },
 ];
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
   try {
     const authHeader = req.headers.get('Authorization');

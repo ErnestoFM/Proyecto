@@ -61,6 +61,8 @@ const CATALOGO_PRODUCTOS_FALLBACK: ProductDTO[] = [
   },
 ];
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const productosDB = await prisma.product.findMany({

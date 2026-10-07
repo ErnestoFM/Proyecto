@@ -7,6 +7,8 @@ import { verifyAccessTokenAsync } from '@/lib/jwt';
 import { TotpService } from '@/lib/totp';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get('Authorization');
