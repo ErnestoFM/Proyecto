@@ -43,3 +43,10 @@ variable "recaptcha_secret_key" {
   sensitive   = true
   default     = "mock-google-recaptcha-secret-key"
 }
+
+variable "domain_name" {
+  description = "Dominio principal de producción para certificados SSL (ej. monchiscafe.com)"
+  type        = string
+  default     = "monchiscafe.com"
+}
+

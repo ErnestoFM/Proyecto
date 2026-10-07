@@ -41,6 +41,7 @@ resource "google_sql_database_instance" "postgres_instance" {
     tier = "db-f1-micro" # Escalable para producción
     ip_configuration {
       ipv4_enabled = true
+      require_ssl  = true
     }
     backup_configuration {
       enabled = true
@@ -186,3 +187,119 @@ resource "google_compute_security_policy" "cloud_armor_policy" {
     description = "Mitigación de ataques de fuerza bruta y DDoS (Máx 120 peticiones/minuto por IP)"
   }
 }
+
+# ------------------------------------------------------------------------------
+# 8. External HTTPS Application Load Balancer con Certificados SSL Gestionados
+# y Conexión de Cloud Armor WAF a los Servicios Cloud Run
+# ------------------------------------------------------------------------------
+
+# 8.1 Certificado SSL Gestionado por Google (Auto-renovable)
+resource "google_compute_managed_ssl_certificate" "lb_ssl_cert" {
+  name = "monchis-managed-ssl-cert"
+  managed {
+    domains = [var.domain_name, "www.${var.domain_name}"]
+  }
+}
+
+# 8.2 Serverless Network Endpoint Groups (NEGs) para Cloud Run
+resource "google_compute_region_network_endpoint_group" "web_neg" {
+  name                  = "monchis-web-neg"
+  network_endpoint_type = "SERVERLESS"
+  region                = var.region
+  cloud_run {
+    service = google_cloud_run_v2_service.web_service.name
+  }
+}
+
+resource "google_compute_region_network_endpoint_group" "api_neg" {
+  name                  = "monchis-api-neg"
+  network_endpoint_type = "SERVERLESS"
+  region                = var.region
+  cloud_run {
+    service = google_cloud_run_v2_service.api_service.name
+  }
+}
+
+# 8.3 Backend Services (Vinculación con Política WAF de Cloud Armor)
+resource "google_compute_backend_service" "web_backend" {
+  name                  = "monchis-web-backend"
+  protocol              = "HTTPS"
+  security_policy       = google_compute_security_policy.cloud_armor_policy.id
+  backend {
+    group = google_compute_region_network_endpoint_group.web_neg.id
+  }
+}
+
+resource "google_compute_backend_service" "api_backend" {
+  name                  = "monchis-api-backend"
+  protocol              = "HTTPS"
+  security_policy       = google_compute_security_policy.cloud_armor_policy.id
+  backend {
+    group = google_compute_region_network_endpoint_group.api_neg.id
+  }
+}
+
+# 8.4 URL Map (Enrutamiento /api/* a Backend y resto a Web Frontend)
+resource "google_compute_url_map" "https_url_map" {
+  name            = "monchis-https-url-map"
+  default_service = google_compute_backend_service.web_backend.id
+
+  host_rule {
+    hosts        = ["*"]
+    path_matcher = "allpaths"
+  }
+
+  path_matcher {
+    name            = "allpaths"
+    default_service = google_compute_backend_service.web_backend.id
+
+    path_rule {
+      paths   = ["/api/*"]
+      service = google_compute_backend_service.api_backend.id
+    }
+  }
+}
+
+# 8.5 IP Estática Pública Global Reservada para el Load Balancer
+resource "google_compute_global_address" "lb_ipv4" {
+  name = "monchis-lb-ipv4"
+}
+
+# 8.6 Target HTTPS Proxy y Forwarding Rule (Puerto 443)
+resource "google_compute_target_https_proxy" "https_proxy" {
+  name             = "monchis-target-https-proxy"
+  url_map          = google_compute_url_map.https_url_map.id
+  ssl_certificates = [google_compute_managed_ssl_certificate.lb_ssl_cert.id]
+}
+
+resource "google_compute_global_forwarding_rule" "https_forwarding_rule" {
+  name                  = "monchis-https-forwarding-rule"
+  target                = google_compute_target_https_proxy.https_proxy.id
+  port_range            = "443"
+  ip_address            = google_compute_global_address.lb_ipv4.address
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+}
+
+# 8.7 Redirección Forzosa Global de HTTP (Puerto 80) a HTTPS (Puerto 443)
+resource "google_compute_url_map" "http_redirect_map" {
+  name = "monchis-http-redirect-map"
+  default_url_redirect {
+    https_redirect         = true
+    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
+    strip_query            = false
+  }
+}
+
+resource "google_compute_target_http_proxy" "http_proxy" {
+  name    = "monchis-target-http-proxy"
+  url_map = google_compute_url_map.http_redirect_map.id
+}
+
+resource "google_compute_global_forwarding_rule" "http_forwarding_rule" {
+  name                  = "monchis-http-forwarding-rule"
+  target                = google_compute_target_http_proxy.http_proxy.id
+  port_range            = "80"
+  ip_address            = google_compute_global_address.lb_ipv4.address
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+}
+

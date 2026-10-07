@@ -1,0 +1,2 @@
+# Carpeta para certificados SSL/TLS (key.pem y cert.pem ignorados por .gitignore)
+# Ejecuta generate_certs.sh o generate_certs.ps1 para generarlos localmente
