@@ -18,6 +18,7 @@ Bienvenido al Vault de Obsidian del proyecto **Monchis Café**. Este vault sirve
 ---
 
 ## 📅 Últimas Bitácoras
+- [[Bitacora/2026-10-08]] — *Unidad 3: Actividad 3.2 SCRUM y Estimación COCOMO Intermedio (TechSolutions, 60 KLOC) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-07]] — *Elaboración de Manuales de Usuario y Administrador, Estabilización de Build Next.js y Verificación de Producción.*
 - [[Bitacora/2026-10-06]] — *Auditoría Técnica Integral, 2FA TOTP, reCAPTCHA estricto, Blacklist de Tokens, PostgreSQL Seed y Suite E2E Playwright.*
 - [[Bitacora/2026-10-05]] — *Unidad 2: Actividad 2.3 Tabla Comparativa de Estimación del Proyecto (Presupuesto Inicial, COCOMO Básico y COCOMO Intermedio en PDF).*
