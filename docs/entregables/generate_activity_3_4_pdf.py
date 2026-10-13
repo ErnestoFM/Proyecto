@@ -1,0 +1,994 @@
+# -*- coding: utf-8 -*-
+"""
+Generador del Entregable Académico Oficial:
+Actividad 3.4. Buenas prácticas de calidad y sus estándares
+Cátedra: Proyecto Integrador de Desarrollo de Software
+Docente: Dr. Gabriel Navarro Salcedo
+Estudiante: Ernesto Hatuey Fierro Medina (Código: 215487963)
+Centro Universitario de Tonalá (CUTonalá) - Universidad de Guadalajara
+"""
+
+import os
+import subprocess
+import shutil
+import docx
+from docx import Document
+from docx.shared import Inches, Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.section import WD_SECTION, WD_ORIENT
+from docx.oxml import parse_xml, OxmlElement
+from docx.oxml.ns import nsdecls, qn
+
+doc = Document()
+
+# Configuración de estilos base (Arial 12 pt, interlineado 1.5, márgenes de 2.54 cm)
+style_normal = doc.styles['Normal']
+style_normal.font.name = 'Arial'
+style_normal.font.size = Pt(12)
+style_normal.font.color.rgb = RGBColor(0x1A, 0x20, 0x2C)
+style_normal.paragraph_format.line_spacing = 1.5
+style_normal.paragraph_format.space_after = Pt(6)
+
+def add_heading_1(text):
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(16)
+    p.paragraph_format.space_after = Pt(6)
+    p.paragraph_format.line_spacing = 1.15
+    p.paragraph_format.keep_with_next = True
+    run = p.add_run(text)
+    run.bold = True
+    run.font.name = 'Arial'
+    run.font.size = Pt(14)
+    run.font.color.rgb = RGBColor(0x1A, 0x36, 0x5D)
+    return p
+
+def add_heading_2(text):
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(12)
+    p.paragraph_format.space_after = Pt(4)
+    p.paragraph_format.line_spacing = 1.15
+    p.paragraph_format.keep_with_next = True
+    run = p.add_run(text)
+    run.bold = True
+    run.font.name = 'Arial'
+    run.font.size = Pt(12)
+    run.font.color.rgb = RGBColor(0x2B, 0x4C, 0x7E)
+    return p
+
+def add_page_number_to_footer(section):
+    p_footer = section.footer.paragraphs[0]
+    p_footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_footer.text = ""
+    run = p_footer.add_run()
+    run.font.name = 'Arial'
+    run.font.size = Pt(10)
+    run.font.color.rgb = RGBColor(0x71, 0x80, 0x96)
+    
+    fldChar1 = OxmlElement('w:fldChar')
+    fldChar1.set(qn('w:fldCharType'), 'begin')
+    instrText = OxmlElement('w:instrText')
+    instrText.set(qn('xml:space'), 'preserve')
+    instrText.text = "PAGE"
+    fldChar2 = OxmlElement('w:fldChar')
+    fldChar2.set(qn('w:fldCharType'), 'separate')
+    fldChar3 = OxmlElement('w:fldChar')
+    fldChar3.set(qn('w:fldCharType'), 'end')
+    run._r.append(fldChar1)
+    run._r.append(instrText)
+    run._r.append(fldChar2)
+    run._r.append(fldChar3)
+
+# -------------------------------------------------------------------------
+# SECCIÓN 1: PORTADA, INTRODUCCIÓN Y RESUMEN TÉCNICO (PORTRAIT)
+# -------------------------------------------------------------------------
+sec1 = doc.sections[0]
+sec1.orientation = WD_ORIENT.PORTRAIT
+sec1.page_width = Inches(8.5)
+sec1.page_height = Inches(11.0)
+sec1.top_margin = Inches(1.0)
+sec1.bottom_margin = Inches(1.0)
+sec1.left_margin = Inches(1.0)
+sec1.right_margin = Inches(1.0)
+
+# Portada académica sobria
+p_inst = doc.add_paragraph()
+p_inst.alignment = WD_ALIGN_PARAGRAPH.CENTER
+p_inst.paragraph_format.space_before = Pt(36)
+p_inst.paragraph_format.space_after = Pt(24)
+p_inst.paragraph_format.line_spacing = 1.2
+r_inst = p_inst.add_run(
+    "UNIVERSIDAD DE GUADALAJARA\n"
+    "Centro Universitario de Tonalá (CUTonalá)\n"
+    "División de Ingenierías e Innovación Tecnológica\n"
+    "Licenciatura en Ingeniería en Computación\n"
+)
+r_inst.bold = True
+r_inst.font.size = Pt(12)
+
+p_tit = doc.add_paragraph()
+p_tit.alignment = WD_ALIGN_PARAGRAPH.CENTER
+p_tit.paragraph_format.space_before = Pt(40)
+p_tit.paragraph_format.space_after = Pt(40)
+p_tit.paragraph_format.line_spacing = 1.2
+r_tit = p_tit.add_run("Actividad 3.4. Buenas prácticas de calidad y sus estándares\n")
+r_tit.bold = True
+r_tit.font.size = Pt(14)
+r_tit.font.color.rgb = RGBColor(0x1A, 0x36, 0x5D)
+
+p_dat = doc.add_paragraph()
+p_dat.alignment = WD_ALIGN_PARAGRAPH.CENTER
+p_dat.paragraph_format.space_before = Pt(60)
+p_dat.paragraph_format.space_after = Pt(0)
+p_dat.paragraph_format.line_spacing = 1.3
+r_dat = p_dat.add_run(
+    "Materia: Proyecto Integrador de Desarrollo de Software\n"
+    "Estudiante: Ernesto Hatuey Fierro Medina (Código: 215487963)\n"
+    "Docente: Dr. Gabriel Navarro Salcedo\n"
+    "Fecha de entrega: 13 de octubre de 2026\n"
+)
+r_dat.font.size = Pt(11)
+
+# Salto a Introducción
+doc.add_page_break()
+
+# INTRODUCCIÓN
+add_heading_1("1. Introducción")
+
+doc.add_paragraph(
+    "En la formación como ingenieros en computación es común pensar que la calidad de un software se reduce a que el código "
+    "compile, ejecute sus funciones principales y no presente caídas visibles durante una demostración rápida. Sin embargo, "
+    "conforme se avanza en proyectos de desarrollo reales se hace evidente que un sistema puede funcionar hoy y resultar "
+    "inmantenible o vulnerable mañana si no se construye sobre bases técnicas sólidas. La calidad en el software no es un "
+    "evento aislado que se verifique al final del semestre; es una disciplina continua que debe integrarse en cada etapa del "
+    "ciclo de vida del producto."
+)
+doc.add_paragraph(
+    "Para lograr que una aplicación sea robusta, escalable y mantenible en el tiempo, la ingeniería de software moderna articula "
+    "tres niveles de calidad complementarios. En primer lugar, a nivel de diseño y código fuente, los principios SOLID formulados "
+    "por Robert C. Martin (2003, 2018) orientan la estructura de clases y módulos para evitar la rigidez y el acoplamiento perjudicial. "
+    "En segundo lugar, a nivel de evaluación del producto terminado, la norma internacional ISO/IEC 25010:2011 (ISO/IEC, 2011) "
+    "proporciona un marco sistemático para definir y medir las características de calidad tanto internas como externas (seguridad, "
+    "fiabilidad, usabilidad y eficiencia). En tercer lugar, a nivel de ciclo de vida operativo y entrega continua, las prácticas y la "
+    "cultura DevOps (Bass et al., 2015; Kim et al., 2016) permiten automatizar pruebas, empaquetar aplicaciones y desplegar versiones de "
+    "forma repetible mediante pipelines de integración continua (Humble & Farley, 2010)."
+)
+doc.add_paragraph(
+    "En este trabajo analizo de forma técnica estos tres pilares de calidad, presento una tabla comparativa con sus conceptos clave "
+    "y desarrollo una segunda tabla detallando cómo aplico concretamente cada estándar y buena práctica en el desarrollo individual "
+    "de mi proyecto integrador, la plataforma web Monchis Café."
+)
+
+# RESUMEN TÉCNICO
+add_heading_1("2. Resumen técnico de buenas prácticas y estándares")
+
+add_heading_2("2.1. Principios de diseño orientado a objetos: SOLID")
+doc.add_paragraph(
+    "El acrónimo SOLID reúne cinco principios fundamentales de diseño orientado a objetos recopilados por Robert C. Martin (2003, 2018). "
+    "Su propósito es guiar la creación de software modular, comprensible y preparado para evolucionar sin generar efectos secundarios no "
+    "deseados ante futuros requerimientos:\n\n"
+    "• Single Responsibility Principle (SRP - Responsabilidad Única): Establece que una clase o módulo debe tener una sola razón para cambiar, "
+    "lo que significa que debe encapsular una única responsabilidad de negocio. Si una clase maneja simultáneamente reglas de cálculo, "
+    "formato visual de presentación y persistencia en base de datos, cualquier cambio en una de esas áreas puede alterar accidentalmente las otras.\n\n"
+    "• Open/Closed Principle (OCP - Abierto/Cerrado): Formulado originalmente por Bertrand Meyer y adaptado por Martin (2018), indica que las "
+    "entidades de software deben estar abiertas a la extensión, pero cerradas a la modificación. Esto se logra mediante abstracciones e interfaces: "
+    "para agregar un nuevo comportamiento o método de pago, se crea una nueva clase que implemente la interfaz existente, en lugar de modificar "
+    "código ya probado y en producción.\n\n"
+    "• Liskov Substitution Principle (LSP - Sustitución de Liskov): Propuesto por Barbara Liskov (Liskov & Wing, 1994), señala que los objetos de "
+    "una subclase deben poder sustituir a los objetos de su clase base sin alterar la correctitud del programa. Las clases derivadas deben respetar "
+    "los contratos, precondiciones y postcondiciones fijados por la abstracción original.\n\n"
+    "• Interface Segregation Principle (ISP - Segregación de Interfaces): Dictamina que los clientes no deben ser forzados a depender de interfaces "
+    "que contienen métodos que no utilizan. Es preferible diseñar múltiples interfaces pequeñas y específicas a tener una interfaz general y pesada, "
+    "evitando que los módulos implementen código vacío o innecesario.\n\n"
+    "• Dependency Inversion Principle (DIP - Inversión de Dependencias): Establece que los módulos de alto nivel (la lógica central de negocio) "
+    "no deben depender de módulos de bajo nivel (bases de datos, controladores de red o librerías externas); ambos deben depender de abstracciones. "
+    "Asimismo, las abstracciones no deben depender de los detalles técnicos, sino los detalles de las abstracciones."
+)
+
+add_heading_2("2.2. Modelo de calidad del producto software: ISO/IEC 25010")
+doc.add_paragraph(
+    "La norma internacional ISO/IEC 25010:2011 (ISO/IEC, 2011), integrada dentro de la familia de estándares SQuaRE (Software Product Quality "
+    "Requirements and Evaluation), define un modelo integral para descomponer y evaluar la calidad del software en ocho características "
+    "fundamentales, cada una compuesta por subcaracterísticas verificables:\n\n"
+    "1. Adecuación funcional: Grado en que el software proporciona funciones que satisfacen las necesidades declaradas bajo condiciones "
+    "específicas (completitud, corrección y pertinencia funcional).\n"
+    "2. Eficiencia de desempeño: Rendimiento del software relativo a los recursos utilizados bajo condiciones establecidas (comportamiento temporal "
+    "o latencia, utilización de CPU/memoria y capacidad máxima de procesamiento).\n"
+    "3. Compatibilidad: Capacidad de dos o más sistemas o componentes para intercambiar información y ejecutar funciones compartiendo el mismo "
+    "entorno de hardware o software (coexistencia e interoperabilidad mediante APIs).\n"
+    "4. Usabilidad: Facilidad con la que usuarios específicos pueden utilizar el software para lograr objetivos con efectividad, eficiencia y "
+    "satisfacción (reconocibilidad de funciones, capacidad de aprendizaje, operabilidad, protección contra errores de usuario, estética de la "
+    "interfaz y accesibilidad).\n"
+    "5. Fiabilidad: Capacidad del sistema para mantener un nivel especificado de desempeño bajo condiciones fijas durante un tiempo determinado "
+    "(madurez, disponibilidad de servicio, tolerancia a fallos y capacidad de recuperación o resiliencia).\n"
+    "6. Seguridad: Grado en que el sistema protege la información y los datos para que personas o sistemas no autorizados no puedan acceder ni "
+    "modificarlos (confidencialidad, integridad de datos, no repudio, autenticidad y responsabilidad o auditoría).\n"
+    "7. Mantenibilidad: Efectividad y facilidad con la que el software puede ser modificado por los desarrolladores para corregirlo, mejorarlo o "
+    "adaptarlo a cambios del entorno (modularidad, reusabilidad, analizabilidad, modificabilidad y testabilidad o facilidad de prueba).\n"
+    "8. Portabilidad: Facilidad con la que el software puede ser transferido de un entorno de hardware, software u operativo a otro "
+    "(adaptabilidad, instalabilidad y capacidad de reemplazo)."
+)
+
+add_heading_2("2.3. Paradigma y prácticas DevOps")
+doc.add_paragraph(
+    "DevOps es una combinación de filosofías culturales, prácticas de ingeniería y herramientas de automatización que integra el desarrollo de "
+    "software (Dev) con las operaciones de tecnología (Ops) para acortar el ciclo de vida del desarrollo y entregar valor continuo con alta calidad "
+    "(Bass et al., 2015; Kim et al., 2016). Entre sus prácticas más representativas destacan:\n\n"
+    "• Integración Continua (CI): Los desarrolladores fusionan sus cambios de código con frecuencia en un repositorio central. Cada integración "
+    "desencadena automáticamente la compilación del proyecto, la ejecución de analizadores estáticos de código (linters) y la ejecución completa "
+    "de suites de pruebas automatizadas (pruebas unitarias y de integración) para detectar errores en etapas tempranas (Humble & Farley, 2010).\n\n"
+    "• Entrega y Despliegue Continuo (CD): Extensión de CI donde cada cambio aprobado en el código se empaqueta de forma automática (por ejemplo, en "
+    "imágenes de contenedores) y se despliega sin intervención manual hacia entornos de prueba (staging) o producción, reduciendo el riesgo de "
+    "errores humanos durante la puesta en marcha.\n\n"
+    "• Infraestructura como Código (IaC): Gestión y aprovisionamiento de servidores, redes, bases de datos y balanceadores mediante archivos de "
+    "configuración declarativos auditables en control de versiones (por ejemplo, con Docker Compose o Terraform), garantizando que los entornos "
+    "de desarrollo, pruebas y producción sean idénticos y reproducibles.\n\n"
+    "• Observabilidad, Monitoreo y Logging Centralizado: Recopilación estructurada de registros (logs), métricas de rendimiento y trazas de "
+    "ejecución distribuidas para supervisar la salud del sistema en tiempo real y diagnosticar incidencias rápidamente."
+)
+
+# -------------------------------------------------------------------------
+# SECCIÓN 2: TABLAS EN HOJA HORIZONTAL (LANDSCAPE)
+# -------------------------------------------------------------------------
+sec2 = doc.add_section(WD_SECTION.NEW_PAGE)
+sec2.orientation = WD_ORIENT.LANDSCAPE
+sec2.page_width = Inches(11.0)
+sec2.page_height = Inches(8.5)
+sec2.top_margin = Inches(0.8)
+sec2.bottom_margin = Inches(0.8)
+sec2.left_margin = Inches(0.8)
+sec2.right_margin = Inches(0.8)
+sec2.footer.is_linked_to_previous = False
+add_page_number_to_footer(sec2)
+
+add_heading_1("3. Tabla comparativa de buenas prácticas y estándares")
+doc.add_paragraph(
+    "La siguiente tabla sintetiza la definición, el propósito, las características clave y el impacto en el ciclo de vida del software "
+    "de los tres enfoques de calidad analizados:"
+)
+
+# TABLA 1: COMPARATIVA DE LOS 3 ESTÁNDARES
+t1_headers = ["Estándar o práctica", "Nivel de aplicación", "Definición y concepto clave", "Propósito principal", "Pilares o características centrales", "Impacto en el ciclo de vida del software"]
+t1_rows = [
+    [
+        "Principios SOLID\n(Robert C. Martin)",
+        "Nivel de código fuente y diseño orientado a objetos.",
+        "Cinco directrices de diseño estructurado que guían la relación entre clases, métodos y módulos para evitar dependencias frágiles (Martin, 2018).",
+        "Reducir el acoplamiento y aumentar la cohesión, permitiendo que el software crezca sin que un cambio local rompa otras partes del sistema.",
+        "• Single Responsibility (SRP)\n• Open/Closed (OCP)\n• Liskov Substitution (LSP)\n• Interface Segregation (ISP)\n• Dependency Inversion (DIP)",
+        "Facilita la fase de desarrollo y mantenimiento continuo; permite crear pruebas unitarias aisladas mediante mocks y reduce drásticamente el costo de refactorización."
+    ],
+    [
+        "Norma ISO/IEC 25010\n(SQuaRE - ISO/IEC, 2011)",
+        "Nivel de producto software terminado y especificación de calidad.",
+        "Estándar internacional que descompone y normaliza la calidad del software en un conjunto estructurado de características cuantificables.",
+        "Definir requisitos no funcionales objetivos, orientar las pruebas de aceptación y auditar la calidad integral percibida por los usuarios y operadores.",
+        "8 características de calidad:\n1. Adecuación funcional\n2. Eficiencia de desempeño\n3. Compatibilidad\n4. Usabilidad\n5. Fiabilidad\n6. Seguridad\n7. Mantenibilidad\n8. Portabilidad",
+        "Guía la fase de análisis de requisitos no funcionales, define los criterios de aceptación durante las pruebas de integración y valida el cumplimiento formal del producto."
+    ],
+    [
+        "Metodología DevOps\n(Bass et al., 2015;\nKim et al., 2016)",
+        "Nivel de proceso, ciclo de vida operativo, despliegue e infraestructura.",
+        "Cultura y conjunto de prácticas automatizadas que integran el desarrollo de software con las operaciones de infraestructura y entrega (Humble & Farley, 2010).",
+        "Acelerar el tiempo de entrega de software al mercado (time-to-market), garantizando despliegues estables, predecibles y de bajo riesgo.",
+        "• Integración Continua (CI)\n• Entrega Continua (CD)\n• Infraestructura como Código (IaC)\n• Contenedorización\n• Observabilidad y logging centralizado",
+        "Abarca desde la fase de construcción hasta la operación en producción; automatiza las pruebas ante cada commit, elimina errores manuales de despliegue y asegura monitoreo continuo."
+    ]
+]
+
+t1_obj = doc.add_table(rows=4, cols=6)
+t1_obj.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+t1_borders = parse_xml(
+    r'<w:tblBorders %s>'
+    r'<w:top w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:bottom w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:left w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:right w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:insideH w:val="single" w:sz="4" w:space="0" w:color="CBD5E0"/>'
+    r'<w:insideV w:val="single" w:sz="4" w:space="0" w:color="CBD5E0"/>'
+    r'</w:tblBorders>' % nsdecls('w')
+)
+t1_obj._tbl.tblPr.append(t1_borders)
+
+col_w1 = [Inches(1.3), Inches(1.3), Inches(1.8), Inches(1.6), Inches(1.8), Inches(1.6)]
+
+# Encabezado limpio
+for idx, text in enumerate(t1_headers):
+    cell = t1_obj.rows[0].cells[idx]
+    cell.width = col_w1[idx]
+    cell.text = text
+    p = cell.paragraphs[0]
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.line_spacing = 1.1
+    p.paragraph_format.space_before = Pt(4)
+    p.paragraph_format.space_after = Pt(4)
+    run = p.runs[0]
+    run.bold = True
+    run.font.name = 'Arial'
+    run.font.size = Pt(9.5)
+    run.font.color.rgb = RGBColor(0x1A, 0x36, 0x5D)
+
+for r_idx, row_data in enumerate(t1_rows):
+    row = t1_obj.rows[r_idx + 1]
+    for c_idx, cell_value in enumerate(row_data):
+        cell = row.cells[c_idx]
+        cell.width = col_w1[c_idx]
+        cell.text = cell_value
+        p = cell.paragraphs[0]
+        p.paragraph_format.line_spacing = 1.15
+        p.paragraph_format.space_before = Pt(3)
+        p.paragraph_format.space_after = Pt(3)
+        if c_idx == 0:
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p.runs[0].bold = True
+            p.runs[0].font.size = Pt(9)
+        else:
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.runs[0].font.size = Pt(8.5)
+
+doc.add_page_break()
+
+# TABLA 2: APLICACIÓN PRÁCTICA AL PROYECTO MONCHIS CAFÉ
+add_heading_1("4. Aplicación práctica al proyecto integrador: Monchis Café")
+doc.add_paragraph(
+    "En la siguiente tabla se detalla la aplicación técnica de los principios SOLID, la norma ISO/IEC 25010 y las prácticas DevOps "
+    "dentro de los módulos y componentes reales de mi proyecto integrador Monchis Café:"
+)
+
+t2_headers = ["Estándar o práctica", "Componente o módulo de Monchis Café", "Problema o riesgo atendido", "Implementación técnica en el proyecto", "Métrica o criterio de verificación"]
+t2_rows = [
+    [
+        "SOLID\n(Single Responsibility)",
+        "Backend: Handlers de API y servicios de venta (Next.js y Prisma).",
+        "Acoplamiento indebido si un controlador de ruta maneja validación HTTP, cálculo de totales, lógica de cobro y queries a base de datos.",
+        "Separación en tres capas independientes: 1) Handlers HTTP para parsear requests; 2) Servicios de dominio para reglas comerciales de caja; 3) Repositorios de datos para queries con Prisma ORM.",
+        "Cada archivo de servicio tiene menos de 200 líneas de código y una sola razón de cambio; cambios de base de datos no alteran los endpoints HTTP."
+    ],
+    [
+        "SOLID\n(Open/Closed)",
+        "Punto de Venta: Módulo de procesamiento de pagos (POS).",
+        "Riesgo de modificar código productivo cada vez que se agrega un método de pago (efectivo, tarjeta, SPEI o Monchis Rewards).",
+        "Definición de una interfaz común `IPaymentProcessor`. Cada forma de pago se implementa como una clase concreta independiente sin modificar el orquestador principal de checkout.",
+        "Incorporación de un nuevo método de pago (ej. monedero digital) creando únicamente una clase nueva y pruebas aisladas, con cero modificaciones al checkout."
+    ],
+    [
+        "SOLID\n(Liskov Substitution)",
+        "Eventos asíncronos y Patrón Saga (RabbitMQ).",
+        "Fallas en el consumidor de eventos si un evento derivado de compensación/reversa rompe el contrato del evento base de venta.",
+        "Todos los eventos del dominio heredan de la clase abstracta `DomainEvent`. Cualquier evento de reversa puede ser procesado por el despachador de eventos sin alterar su comportamiento.",
+        "100 % de los eventos de compensación pasan las pruebas de serialización y consumo en Vitest sin lanzar excepciones inesperadas de tipo."
+    ],
+    [
+        "SOLID\n(Interface Segregation)",
+        "Frontend: Vistas y componentes en Vue 3 (Pinia Stores).",
+        "Componentes sobrecargados que reciben interfaces monolíticas con métodos y propiedades que no utilizan.",
+        "Segregación de interfaces en TypeScript: `ICatalogoPublico` para clientes, `IPuntoVentaCajero` para barra de cobro y `IAdminDashboard` para métricas de gerencia.",
+        "Los componentes Vue 3 del catálogo público no tienen dependencias hacia funciones de caja ni de apertura de turno, reduciendo el bundle de JavaScript."
+    ],
+    [
+        "SOLID\n(Dependency Inversion)",
+        "Servicios de mensajería y persistencia.",
+        "Acoplamiento directo a la librería `amqplib` de RabbitMQ o a Prisma, impidiendo realizar pruebas unitarias rápidas sin conexión real.",
+        "Los servicios de negocio dependen de la interfaz abstracta `IMessageBroker`. La conexión real con RabbitMQ se inyecta en tiempo de ejecución.",
+        "Capacidad de ejecutar 100 % de las pruebas unitarias de negocio en memoria en menos de 3 segundos utilizando mocks del broker de mensajería."
+    ],
+    [
+        "ISO/IEC 25010\n(Seguridad)",
+        "Módulo de Autenticación Stateless y Control de Acceso (RBAC).",
+        "Robo de credenciales, suplantación de identidad en barra de cobro y ataques automatizados de bots.",
+        "Tokens JWT rotativos con refresh token en cookies seguras (`httpOnly, Secure, SameSite=Strict`), verificación Google reCAPTCHA v3 y roles diferenciados (admin, cajero, cliente).",
+        "Reportes de análisis estático SAST libres de vulnerabilidades críticas y bloqueo automático del 100 % de accesos no autorizados a endpoints protegidos."
+    ],
+    [
+        "ISO/IEC 25010\n(Fiabilidad)",
+        "Broker RabbitMQ y Patrón Saga (Transacciones compensatorias).",
+        "Inconsistencia transaccional si se cobra una venta en caja pero el lote de café orgánico regional se agotó físicamente en almacén.",
+        "Orquestación Saga asíncrona: ante falla de inventario, se emite automáticamente una transacción compensatoria de reembolso y desvío a colas Dead Letter Queue (DLQ).",
+        "Recuperación garantizada de consistencia eventual en menos de 2 segundos ante fallos simulados en pruebas de integración, con cero ventas huérfanas."
+    ],
+    [
+        "ISO/IEC 25010\n(Usabilidad)",
+        "Interfaz táctil del Punto de Venta (POS) en Vue 3.",
+        "Errores de tecleo de los cajeros en horas pico y lentitud en el cobro de bebidas y alimentos.",
+        "Diseño cálido pastel con botones grandes de alto contraste táctil, lectura rápida de código de barras/QR y cálculo automático de cambio en efectivo.",
+        "Tiempo de registro de una venta de café en mostrador completado en menos de 15 segundos en las pruebas de validación con el encargado de cafetería."
+    ],
+    [
+        "ISO/IEC 25010\n(Eficiencia)",
+        "Catálogo de Café Orgánico y Trazabilidad (Vite-SSG y PostgreSQL).",
+        "Lentitud en la carga web desde dispositivos móviles y cuellos de botella al consultar historial de cosechas y lotes.",
+        "Prerenderizado estático con `vite-ssg` para páginas de catálogo e indexación de base de datos en campos críticos (`fecha_caducidad`, `finca_origen`, `numero_lote`).",
+        "Puntaje de rendimiento en Google Lighthouse superior a 90 puntos y tiempos de respuesta de consulta de trazabilidad inferiores a 100 milisegundos."
+    ],
+    [
+        "ISO/IEC 25010\n(Mantenibilidad)",
+        "Arquitectura Monorepo (Turborepo) y Pruebas con TDD.",
+        "Degradación del código con el tiempo y temor a introducir regresiones al actualizar dependencias compartidas.",
+        "Estructura monorepo con paquetes tipados compartidos en TypeScript, linter estricto (ESLint/Prettier) y desarrollo guiado por pruebas (TDD) en Vitest.",
+        "Cobertura de pruebas automatizadas superior al 85 % en la lógica transaccional y pipelines de compilación limpios sin advertencias de tipado."
+    ],
+    [
+        "DevOps\n(Integración Continua - CI)",
+        "Pipeline de GitHub Actions del repositorio.",
+        "Integración de código defectuoso que rompa la rama principal o introduzca fallas inadvertidas al repositorio.",
+        "Pipeline automatizado que se ejecuta en cada push o pull request: valida sintaxis con `pnpm lint`, verifica tipos con `tsc` y corre suites completas de pruebas unitarias.",
+        "Bloqueo automático de commits si alguna prueba unitaria falla; tiempo total de ejecución del pipeline de integración inferior a 3 minutos."
+    ],
+    [
+        "DevOps\n(Contenedorización y CD)",
+        "Empaquetado de aplicaciones (Frontend Vue 3 y Backend Next.js).",
+        "El problema clásico de 'en mi máquina sí funciona' debido a diferencias en versiones de Node.js o librerías del sistema operativo.",
+        "Dockerfiles multi-stage para generar imágenes ligeras de producción que aíslan las dependencias de ejecución de las herramientas de compilación.",
+        "Imágenes Docker de producción con tamaño reducido (menos de 180 MB para el backend) y arranque de contenedores garantizado en cualquier servidor."
+    ],
+    [
+        "DevOps\n(Infraestructura como Código)",
+        "Entorno local de desarrollo y servicios de soporte.",
+        "Configuración manual tediosa y propensa a errores de bases de datos PostgreSQL y colas RabbitMQ en máquinas nuevas.",
+        "Archivo `docker-compose.yml` que orquesta PostgreSQL con extensiones, broker RabbitMQ con management plugin y variables de entorno parametrizadas.",
+        "Levantamiento completo del entorno de desarrollo funcional y listo para pruebas con un único comando (`docker compose up -d`)."
+    ],
+    [
+        "DevOps\n(Observabilidad y Logging)",
+        "Trazabilidad de eventos distribuidos de venta y reversa.",
+        "Dificultad para diagnosticar qué paso de una transacción Saga falló cuando intervienen múltiples colas de mensajería asíncrona.",
+        "Inyección de un identificador único de correlación (`correlation_id`) en cada mensaje de RabbitMQ y registro estructurado en logs de consola.",
+        "100 % de los eventos de venta y reversa rastreables de inicio a fin en los logs mediante su identificador único de transacción."
+    ]
+]
+
+t2_obj = doc.add_table(rows=len(t2_rows) + 1, cols=5)
+t2_obj.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+t2_borders = parse_xml(
+    r'<w:tblBorders %s>'
+    r'<w:top w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:bottom w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:left w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:right w:val="single" w:sz="6" w:space="0" w:color="A0AEC0"/>'
+    r'<w:insideH w:val="single" w:sz="4" w:space="0" w:color="CBD5E0"/>'
+    r'<w:insideV w:val="single" w:sz="4" w:space="0" w:color="CBD5E0"/>'
+    r'</w:tblBorders>' % nsdecls('w')
+)
+t2_obj._tbl.tblPr.append(t2_borders)
+
+col_w2 = [Inches(1.4), Inches(1.8), Inches(1.8), Inches(2.6), Inches(1.8)]
+
+for idx, text in enumerate(t2_headers):
+    cell = t2_obj.rows[0].cells[idx]
+    cell.width = col_w2[idx]
+    cell.text = text
+    p = cell.paragraphs[0]
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.line_spacing = 1.1
+    p.paragraph_format.space_before = Pt(4)
+    p.paragraph_format.space_after = Pt(4)
+    run = p.runs[0]
+    run.bold = True
+    run.font.name = 'Arial'
+    run.font.size = Pt(9.5)
+    run.font.color.rgb = RGBColor(0x1A, 0x36, 0x5D)
+
+for r_idx, row_data in enumerate(t2_rows):
+    row = t2_obj.rows[r_idx + 1]
+    for c_idx, cell_value in enumerate(row_data):
+        cell = row.cells[c_idx]
+        cell.width = col_w2[c_idx]
+        cell.text = cell_value
+        p = cell.paragraphs[0]
+        p.paragraph_format.line_spacing = 1.15
+        p.paragraph_format.space_before = Pt(2)
+        p.paragraph_format.space_after = Pt(2)
+        if c_idx == 0:
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p.runs[0].bold = True
+            p.runs[0].font.size = Pt(8.5)
+        else:
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.runs[0].font.size = Pt(8)
+
+# -------------------------------------------------------------------------
+# SECCIÓN 3: CONCLUSIONES Y REFERENCIAS (PORTRAIT)
+# -------------------------------------------------------------------------
+sec3 = doc.add_section(WD_SECTION.NEW_PAGE)
+sec3.orientation = WD_ORIENT.PORTRAIT
+sec3.page_width = Inches(8.5)
+sec3.page_height = Inches(11.0)
+sec3.top_margin = Inches(1.0)
+sec3.bottom_margin = Inches(1.0)
+sec3.left_margin = Inches(1.0)
+sec3.right_margin = Inches(1.0)
+sec3.footer.is_linked_to_previous = False
+add_page_number_to_footer(sec3)
+
+add_heading_1("5. Conclusiones generales")
+
+doc.add_paragraph(
+    "El análisis desarrollado en esta actividad me permitió comprender que la calidad en la ingeniería de software no es un "
+    "concepto teórico aislado, sino un engranaje donde interactúan tres niveles indispensables. Los principios SOLID operan en el "
+    "nivel más cercano al programador: garantizan que la arquitectura interna del código sea limpia, desacoplada y fácil de probar. "
+    "Por su parte, la norma ISO/IEC 25010 aporta la perspectiva del producto terminado: fija los criterios objetivos para evaluar si el "
+    "software es seguro, confiable, eficiente y agradable de utilizar para las personas. Finalmente, la cultura y herramientas DevOps "
+    "cierran la brecha operativa: automatizan las verificaciones de calidad y aseguran que el código probado pase a producción sin "
+    "depender de procesos manuales propensos a fallos."
+)
+doc.add_paragraph(
+    "Al desarrollar mi proyecto integrador Monchis Café de forma individual, adoptar este enfoque integral de calidad no representa un "
+    "lujo ni una carga burocrática adicional, sino la única estrategia viable para mantener bajo control un sistema de complejidad "
+    "considerable. Integrar colas de mensajería asíncrona con RabbitMQ y el patrón Saga para la reversa de cobros, junto con un punto de "
+    "venta táctil y trazabilidad de café orgánico, sería sumamente riesgoso si el código estuviera fuertemente acoplado o si tuviera que "
+    "probar manualmente cada pantalla antes de una entrega."
+)
+doc.add_paragraph(
+    "La aplicación práctica demostrada en la Tabla 2 evidencia beneficios inmediatos: la inversión de dependencias y la responsabilidad "
+    "única de SOLID me permiten escribir pruebas unitarias rápidas con Vitest sin necesidad de tener encendido el broker real de mensajería; "
+    "las características de seguridad y fiabilidad de la ISO 25010 protegen las ventas concurrentes y las credenciales de caja; y los pipelines "
+    "de integración continua de DevOps me dan la certeza de que ningún commit introducirá regresiones inadvertidas al monorepo. En conclusión, "
+    "estas buenas prácticas y estándares constituyen el cimiento técnico que me permite construir una plataforma profesional, mantenible y "
+    "verdaderamente útil para las operaciones comerciales de Monchis Café."
+)
+
+# REFERENCIAS BIBLIOGRÁFICAS
+add_heading_1("Referencias")
+
+referencias = [
+    "Bass, L., Weber, I., & Zhu, L. (2015). DevOps: A software architect's perspective. Addison-Wesley.",
+    "Humble, J., & Farley, D. (2010). Continuous delivery: Reliable software releases through build, test, and deployment automation. Addison-Wesley.",
+    "International Organization for Standardization, & International Electrotechnical Commission. (2011). Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models (ISO/IEC Standard No. 25010:2011). ISO/IEC.",
+    "Kim, G., Humble, J., Debois, P., & Willis, J. (2016). The DevOps handbook: How to create world-class agility, reliability, and security in technology organizations. IT Revolution Press.",
+    "Liskov, B., & Wing, J. M. (1994). A behavioral notion of subtyping. ACM Transactions on Programming Languages and Systems, 16(6), 1811–1841. https://doi.org/10.1145/197320.197383",
+    "Martin, R. C. (2003). Agile software development: Principles, patterns, and practices. Prentice Hall.",
+    "Martin, R. C. (2018). Clean architecture: A craftsman's guide to software structure and design. Prentice Hall."
+]
+
+for ref_text in referencias:
+    p_ref = doc.add_paragraph(ref_text)
+    p_ref.paragraph_format.line_spacing = 1.15
+    p_ref.paragraph_format.left_indent = Inches(0.5)
+    p_ref.paragraph_format.first_line_indent = Inches(-0.5)
+    p_ref.paragraph_format.space_before = Pt(0)
+    p_ref.paragraph_format.space_after = Pt(6)
+    p_ref.runs[0].font.name = 'Arial'
+    p_ref.runs[0].font.size = Pt(10)
+
+docx_path = r"d:\ernestofm\Proyecto\docs\entregables\Actividad_3_4_Buenas_Practicas_Calidad_Estandares.docx"
+doc.save(docx_path)
+print(f"Documento Word (.docx) guardado en: {docx_path}")
+
+# =========================================================================
+# GENERACIÓN DE HTML Y COMPILACIÓN A PDF CON CHROME HEADLESS
+# =========================================================================
+html_path = r"d:\ernestofm\Proyecto\docs\entregables\Actividad_3_4_Buenas_Practicas_Calidad_Estandares.html"
+pdf_repo = r"d:\ernestofm\Proyecto\docs\entregables\Actividad_3_4_Buenas_Practicas_Calidad_Estandares.pdf"
+pdf_downloads = r"C:\Users\erfierro\Downloads\Actividad_3_4_Buenas_Practicas_Calidad_Estandares.pdf"
+
+html_content = f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Actividad 3.4 - Buenas prácticas de calidad y sus estándares</title>
+<style>
+  @page {{
+    size: letter;
+    margin: 25mm 20mm 25mm 20mm;
+    @bottom-center {{
+      content: counter(page);
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      color: #718096;
+    }}
+  }}
+  @page landscape-section {{
+    size: letter landscape;
+    margin: 18mm 15mm 18mm 15mm;
+    @bottom-center {{
+      content: counter(page);
+      font-family: Arial, sans-serif;
+      font-size: 10pt;
+      color: #718096;
+    }}
+  }}
+  
+  body {{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #1a202c;
+    line-height: 1.5;
+    font-size: 11pt;
+    margin: 0;
+    padding: 0;
+  }}
+
+  .cover-page {{
+    page-break-after: always;
+    text-align: center;
+    padding-top: 40px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }}
+
+  .cover-header {{
+    font-size: 12pt;
+    font-weight: bold;
+    line-height: 1.4;
+    color: #1a365d;
+  }}
+
+  .cover-title {{
+    font-size: 15pt;
+    font-weight: bold;
+    color: #1a365d;
+    margin: 60px 0;
+    line-height: 1.3;
+  }}
+
+  .cover-meta {{
+    font-size: 11pt;
+    line-height: 1.6;
+    color: #2d3748;
+    margin-bottom: 40px;
+  }}
+
+  h1 {{
+    font-size: 13.5pt;
+    font-weight: bold;
+    color: #1a365d;
+    margin: 22px 0 8px 0;
+    page-break-after: avoid;
+  }}
+
+  h2 {{
+    font-size: 11.5pt;
+    font-weight: bold;
+    color: #2b4c7e;
+    margin: 14px 0 6px 0;
+    page-break-after: avoid;
+  }}
+
+  p {{
+    margin: 0 0 10px 0;
+    text-align: justify;
+  }}
+
+  .page-landscape {{
+    page: landscape-section;
+    page-break-before: always;
+    page-break-after: always;
+  }}
+
+  table.simple-table {{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 8pt;
+    line-height: 1.25;
+  }}
+
+  table.simple-table th, table.simple-table td {{
+    border: 1px solid #a0aec0;
+    padding: 5px 6px;
+    vertical-align: top;
+  }}
+
+  table.simple-table th {{
+    background-color: #ffffff;
+    color: #1a365d;
+    font-weight: bold;
+    text-align: center;
+  }}
+
+  .page-break {{
+    page-break-before: always;
+  }}
+
+  .ref-item {{
+    padding-left: 28px;
+    text-indent: -28px;
+    margin-bottom: 7px;
+    font-size: 10pt;
+    line-height: 1.35;
+    text-align: justify;
+  }}
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover-page">
+  <div class="cover-header">
+    UNIVERSIDAD DE GUADALAJARA<br>
+    Centro Universitario de Tonalá (CUTonalá)<br>
+    División de Ingenierías e Innovación Tecnológica<br>
+    Licenciatura en Ingeniería en Computación
+  </div>
+
+  <div class="cover-title">
+    Actividad 3.4. Buenas prácticas de calidad y sus estándares
+  </div>
+
+  <div class="cover-meta">
+    Materia: Proyecto Integrador de Desarrollo de Software<br>
+    Estudiante: Ernesto Hatuey Fierro Medina (Código: 215487963)<br>
+    Docente: Dr. Gabriel Navarro Salcedo<br>
+    Fecha de entrega: 13 de octubre de 2026
+  </div>
+</div>
+
+<!-- 1. INTRODUCCIÓN -->
+<h1>1. Introducción</h1>
+<p>
+  En la formación como ingenieros en computación es común pensar que la calidad de un software se reduce a que el código compile, ejecute sus funciones principales y no presente caídas visibles durante una demostración rápida. Sin embargo, conforme se avanza en proyectos de desarrollo reales se hace evidente que un sistema puede funcionar hoy y resultar inmantenible o vulnerable mañana si no se construye sobre bases técnicas sólidas. La calidad en el software no es un evento aislado que se verifique al final del semestre; es una disciplina continua que debe integrarse en cada etapa del ciclo de vida del producto.
+</p>
+<p>
+  Para lograr que una aplicación sea robusta, escalable y mantenible en el tiempo, la ingeniería de software moderna articula tres niveles de calidad complementarios. En primer lugar, a nivel de diseño y código fuente, los principios SOLID formulados por Robert C. Martin (2003, 2018) orientan la estructura de clases y módulos para evitar la rigidez y el acoplamiento perjudicial. En segundo lugar, a nivel de evaluación del producto terminado, la norma internacional ISO/IEC 25010:2011 (ISO/IEC, 2011) proporciona un marco sistemático para definir y medir las características de calidad tanto internas como externas (seguridad, fiabilidad, usabilidad y eficiencia). En tercer lugar, a nivel de ciclo de vida operativo y entrega continua, las prácticas y la cultura DevOps (Bass et al., 2015; Kim et al., 2016) permiten automatizar pruebas, empaquetar aplicaciones y desplegar versiones de forma repetible mediante pipelines de integración continua (Humble & Farley, 2010).
+</p>
+<p>
+  En este trabajo analizo de forma técnica estos tres pilares de calidad, presento una tabla comparativa con sus conceptos clave y desarrollo una segunda tabla detallando cómo aplico concretamente cada estándar y buena práctica en el desarrollo individual de mi proyecto integrador, la plataforma web Monchis Café.
+</p>
+
+<!-- 2. RESUMEN TÉCNICO -->
+<h1>2. Resumen técnico de buenas prácticas y estándares</h1>
+
+<h2>2.1. Principios de diseño orientado a objetos: SOLID</h2>
+<p>
+  El acrónimo SOLID reúne cinco principios fundamentales de diseño orientado a objetos recopilados por Robert C. Martin (2003, 2018). Su propósito es guiar la creación de software modular, comprensible y preparado para evolucionar sin generar efectos secundarios no deseados ante futuros requerimientos:
+</p>
+<p>
+  <b>• Single Responsibility Principle (SRP - Responsabilidad Única):</b> Establece que una clase o módulo debe tener una sola razón para cambiar, lo que significa que debe encapsular una única responsabilidad de negocio. Si una clase maneja simultáneamente reglas de cálculo, formato visual de presentación y persistencia en base de datos, cualquier cambio en una de esas áreas puede alterar accidentalmente las otras.
+</p>
+<p>
+  <b>• Open/Closed Principle (OCP - Abierto/Cerrado):</b> Formulado originalmente por Bertrand Meyer y adaptado por Martin (2018), indica que las entidades de software deben estar abiertas a la extensión, pero cerradas a la modificación. Esto se logra mediante abstracciones e interfaces: para agregar un nuevo comportamiento o método de pago, se crea una nueva clase que implemente la interfaz existente, en lugar de modificar código ya probado y en producción.
+</p>
+<p>
+  <b>• Liskov Substitution Principle (LSP - Sustitución de Liskov):</b> Propuesto por Barbara Liskov (Liskov & Wing, 1994), señala que los objetos de una subclase deben poder sustituir a los objetos de su clase base sin alterar la correctitud del programa. Las clases derivadas deben respetar los contratos, precondiciones y postcondiciones fijados por la abstracción original.
+</p>
+<p>
+  <b>• Interface Segregation Principle (ISP - Segregación de Interfaces):</b> Dictamina que los clientes no deben ser forzados a depender de interfaces que contienen métodos que no utilizan. Es preferible diseñar múltiples interfaces pequeñas y específicas a tener una interfaz general y pesada, evitando que los módulos implementen código vacío o innecesario.
+</p>
+<p>
+  <b>• Dependency Inversion Principle (DIP - Inversión de Dependencias):</b> Establece que los módulos de alto nivel (la lógica central de negocio) no deben depender de módulos de bajo nivel (bases de datos, controladores de red o librerías externas); ambos deben depender de abstracciones. Asimismo, las abstracciones no deben depender de los detalles técnicos, sino los detalles de las abstracciones.
+</p>
+
+<h2>2.2. Modelo de calidad del producto software: ISO/IEC 25010</h2>
+<p>
+  La norma internacional ISO/IEC 25010:2011 (ISO/IEC, 2011), integrada dentro de la familia de estándares SQuaRE (Software Product Quality Requirements and Evaluation), define un modelo integral para descomponer y evaluar la calidad del software en ocho características fundamentales, cada una compuesta por subcaracterísticas verificables:
+</p>
+<p>
+  1. <b>Adecuación funcional:</b> Grado en que el software proporciona funciones que satisfacen las necesidades declaradas bajo condiciones específicas (completitud, corrección y pertinencia funcional).<br>
+  2. <b>Eficiencia de desempeño:</b> Rendimiento del software relativo a los recursos utilizados bajo condiciones establecidas (comportamiento temporal o latencia, utilización de CPU/memoria y capacidad máxima de procesamiento).<br>
+  3. <b>Compatibilidad:</b> Capacidad de dos o más sistemas o componentes para intercambiar información y ejecutar funciones compartiendo el mismo entorno de hardware o software (coexistencia e interoperabilidad mediante APIs).<br>
+  4. <b>Usabilidad:</b> Facilidad con la que usuarios específicos pueden utilizar el software para lograr objetivos con efectividad, eficiencia y satisfacción (reconocibilidad de funciones, capacidad de aprendizaje, operabilidad, protección contra errores de usuario, estética de la interfaz y accesibilidad).<br>
+  5. <b>Fiabilidad:</b> Capacidad del sistema para mantener un nivel especificado de desempeño bajo condiciones fijas durante un tiempo determinado (madurez, disponibilidad de servicio, tolerancia a fallos y capacidad de recuperación o resiliencia).<br>
+  6. <b>Seguridad:</b> Grado en que el sistema protege la información y los datos para que personas o sistemas no autorizados no puedan acceder ni modificarlos (confidencialidad, integridad de datos, no repudio, autenticidad y responsabilidad o auditoría).<br>
+  7. <b>Mantenibilidad:</b> Efectividad y facilidad con la que el software puede ser modificado por los desarrolladores para corregirlo, mejorarlo o adaptarlo a cambios del entorno (modularidad, reusabilidad, analizabilidad, modificabilidad y testabilidad o facilidad de prueba).<br>
+  8. <b>Portabilidad:</b> Facilidad con la que el software puede ser transferido de un entorno de hardware, software u operativo a otro (adaptabilidad, instalabilidad y capacidad de reemplazo).
+</p>
+
+<h2>2.3. Paradigma y prácticas DevOps</h2>
+<p>
+  DevOps es una combinación de filosofías culturales, prácticas de ingeniería y herramientas de automatización que integra el desarrollo de software (Dev) con las operaciones de tecnología (Ops) para acortar el ciclo de vida del desarrollo y entregar valor continuo con alta calidad (Bass et al., 2015; Kim et al., 2016). Entre sus prácticas más representativas destacan:
+</p>
+<p>
+  <b>• Integración Continua (CI):</b> Los desarrolladores fusionan sus cambios de código con frecuencia en un repositorio central. Cada integración desencadena automáticamente la compilación del proyecto, la ejecución de analizadores estáticos de código (linters) y la ejecución completa de suites de pruebas automatizadas (pruebas unitarias y de integración) para detectar errores en etapas tempranas (Humble & Farley, 2010).<br>
+  <b>• Entrega y Despliegue Continuo (CD):</b> Extensión de CI donde cada cambio aprobado en el código se empaqueta de forma automática (por ejemplo, en imágenes de contenedores) y se despliega sin intervención manual hacia entornos de prueba (staging) o producción, reduciendo el riesgo de errores humanos durante la puesta en marcha.<br>
+  <b>• Infraestructura como Código (IaC):</b> Gestión y aprovisionamiento de servidores, redes, bases de datos y balanceadores mediante archivos de configuración declarativos auditables en control de versiones (por ejemplo, con Docker Compose o Terraform), garantizando que los entornos de desarrollo, pruebas y producción sean idénticos y reproducibles.<br>
+  <b>• Observabilidad, Monitoreo y Logging Centralizado:</b> Recopilación estructurada de registros (logs), métricas de rendimiento y trazas de ejecución distribuidas para supervisar la salud del sistema en tiempo real y diagnosticar incidencias rápidamente.
+</p>
+
+<!-- 3. TABLA COMPARATIVA (LANDSCAPE) -->
+<div class="page-landscape">
+  <h1>3. Tabla comparativa de buenas prácticas y estándares</h1>
+  <p>
+    La siguiente tabla sintetiza la definición, el propósito, las características clave y el impacto en el ciclo de vida del software de los tres enfoques de calidad analizados:
+  </p>
+
+  <table class="simple-table">
+    <thead>
+      <tr>
+        <th style="width: 14%;">Estándar o práctica</th>
+        <th style="width: 14%;">Nivel de aplicación</th>
+        <th style="width: 19%;">Definición y concepto clave</th>
+        <th style="width: 17%;">Propósito principal</th>
+        <th style="width: 19%;">Pilares o características centrales</th>
+        <th style="width: 17%;">Impacto en el ciclo de vida del software</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">Principios SOLID<br>(Robert C. Martin)</td>
+        <td>Nivel de código fuente y diseño orientado a objetos.</td>
+        <td>Cinco directrices de diseño estructurado que guían la relación entre clases, métodos y módulos para evitar dependencias frágiles (Martin, 2018).</td>
+        <td>Reducir el acoplamiento y aumentar la cohesión, permitiendo que el software crezca sin que un cambio local rompa otras partes del sistema.</td>
+        <td>• Single Responsibility (SRP)<br>• Open/Closed (OCP)<br>• Liskov Substitution (LSP)<br>• Interface Segregation (ISP)<br>• Dependency Inversion (DIP)</td>
+        <td>Facilita la fase de desarrollo y mantenimiento continuo; permite crear pruebas unitarias aisladas mediante mocks y reduce drásticamente el costo de refactorización.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">Norma ISO/IEC 25010<br>(SQuaRE - ISO/IEC, 2011)</td>
+        <td>Nivel de producto software terminado y especificación de calidad.</td>
+        <td>Estándar internacional que descompone y normaliza la calidad del software en un conjunto estructurado de características cuantificables.</td>
+        <td>Definir requisitos no funcionales objetivos, orientar las pruebas de aceptación y auditar la calidad integral percibida por los usuarios y operadores.</td>
+        <td>8 características de calidad:<br>1. Adecuación funcional<br>2. Eficiencia de desempeño<br>3. Compatibilidad<br>4. Usabilidad<br>5. Fiabilidad<br>6. Seguridad<br>7. Mantenibilidad<br>8. Portabilidad</td>
+        <td>Guía la fase de análisis de requisitos no funcionales, define los criterios de aceptación durante las pruebas de integración y valida el cumplimiento formal del producto.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">Metodología DevOps<br>(Bass et al., 2015;<br>Kim et al., 2016)</td>
+        <td>Nivel de proceso, ciclo de vida operativo, despliegue e infraestructura.</td>
+        <td>Cultura y conjunto de prácticas automatizadas que integran el desarrollo de software con las operaciones de infraestructura y entrega (Humble & Farley, 2010).</td>
+        <td>Acelerar el tiempo de entrega de software al mercado (time-to-market), garantizando despliegues estables, predecibles y de bajo riesgo.</td>
+        <td>• Integración Continua (CI)<br>• Entrega Continua (CD)<br>• Infraestructura como Código (IaC)<br>• Contenedorización<br>• Observabilidad y logging centralizado</td>
+        <td>Abarca desde la fase de construcción hasta la operación en producción; automatiza las pruebas ante cada commit, elimina errores manuales de despliegue y asegura monitoreo continuo.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+  <h1>4. Aplicación práctica al proyecto integrador: Monchis Café</h1>
+  <p>
+    En la siguiente tabla se detalla la aplicación técnica de los principios SOLID, la norma ISO/IEC 25010 y las prácticas DevOps dentro de los módulos y componentes reales de mi proyecto integrador Monchis Café:
+  </p>
+
+  <table class="simple-table">
+    <thead>
+      <tr>
+        <th style="width: 13%;">Estándar o práctica</th>
+        <th style="width: 18%;">Componente o módulo de Monchis Café</th>
+        <th style="width: 19%;">Problema o riesgo atendido</th>
+        <th style="width: 32%;">Implementación técnica en el proyecto</th>
+        <th style="width: 18%;">Métrica o criterio de verificación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">SOLID<br>(Single Responsibility)</td>
+        <td>Backend: Handlers de API y servicios de venta (Next.js y Prisma).</td>
+        <td>Acoplamiento indebido si un controlador de ruta maneja validación HTTP, cálculo de totales, lógica de cobro y queries a base de datos.</td>
+        <td>Separación en tres capas independientes: 1) Handlers HTTP para parsear requests; 2) Servicios de dominio para reglas comerciales de caja; 3) Repositorios de datos para queries con Prisma ORM.</td>
+        <td>Cada archivo de servicio tiene menos de 200 líneas de código y una sola razón de cambio; cambios de base de datos no alteran los endpoints HTTP.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">SOLID<br>(Open/Closed)</td>
+        <td>Punto de Venta: Módulo de procesamiento de pagos (POS).</td>
+        <td>Riesgo de modificar código productivo cada vez que se agrega un método de pago (efectivo, tarjeta, SPEI o Monchis Rewards).</td>
+        <td>Definición de una interfaz común <code>IPaymentProcessor</code>. Cada forma de pago se implementa como una clase concreta independiente sin modificar el orquestador principal de checkout.</td>
+        <td>Incorporación de un nuevo método de pago (ej. monedero digital) creando únicamente una clase nueva y pruebas aisladas, con cero modificaciones al checkout.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">SOLID<br>(Liskov Substitution)</td>
+        <td>Eventos asíncronos y Patrón Saga (RabbitMQ).</td>
+        <td>Fallas en el consumidor de eventos si un evento derivado de compensación/reversa rompe el contrato del evento base de venta.</td>
+        <td>Todos los eventos del dominio heredan de la clase abstracta <code>DomainEvent</code>. Cualquier evento de reversa puede ser procesado por el despachador de eventos sin alterar su comportamiento.</td>
+        <td>100 % de los eventos de compensación pasan las pruebas de serialización y consumo en Vitest sin lanzar excepciones inesperadas de tipo.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">SOLID<br>(Interface Segregation)</td>
+        <td>Frontend: Vistas y componentes en Vue 3 (Pinia Stores).</td>
+        <td>Componentes sobrecargados que reciben interfaces monolíticas con métodos y propiedades que no utilizan.</td>
+        <td>Segregación de interfaces en TypeScript: <code>ICatalogoPublico</code> para clientes, <code>IPuntoVentaCajero</code> para barra de cobro y <code>IAdminDashboard</code> para métricas de gerencia.</td>
+        <td>Los componentes Vue 3 del catálogo público no tienen dependencias hacia funciones de caja ni de apertura de turno, reduciendo el bundle de JavaScript.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">SOLID<br>(Dependency Inversion)</td>
+        <td>Servicios de mensajería y persistencia.</td>
+        <td>Acoplamiento directo a la librería <code>amqplib</code> de RabbitMQ o a Prisma, impidiendo realizar pruebas unitarias rápidas sin conexión real.</td>
+        <td>Los servicios de negocio dependen de la interfaz abstracta <code>IMessageBroker</code>. La conexión real con RabbitMQ se inyecta en tiempo de ejecución.</td>
+        <td>Capacidad de ejecutar 100 % de las pruebas unitarias de negocio en memoria en menos de 3 segundos utilizando mocks del broker de mensajería.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">ISO/IEC 25010<br>(Seguridad)</td>
+        <td>Módulo de Autenticación Stateless y Control de Acceso (RBAC).</td>
+        <td>Robo de credenciales, suplantación de identidad en barra de cobro y ataques automatizados de bots.</td>
+        <td>Tokens JWT rotativos con refresh token en cookies seguras (<code>httpOnly, Secure, SameSite=Strict</code>), verificación Google reCAPTCHA v3 y roles diferenciados (admin, cajero, cliente).</td>
+        <td>Reportes de análisis estático SAST libres de vulnerabilidades críticas y bloqueo automático del 100 % de accesos no autorizados a endpoints protegidos.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">ISO/IEC 25010<br>(Fiabilidad)</td>
+        <td>Broker RabbitMQ y Patrón Saga (Transacciones compensatorias).</td>
+        <td>Inconsistencia transaccional si se cobra una venta en caja pero el lote de café orgánico regional se agotó físicamente en almacén.</td>
+        <td>Orquestación Saga asíncrona: ante falla de inventario, se emite automáticamente una transacción compensatoria de reembolso y desvío a colas Dead Letter Queue (DLQ).</td>
+        <td>Recuperación garantizada de consistencia eventual en menos de 2 segundos ante fallos simulados en pruebas de integración, con cero ventas huérfanas.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">ISO/IEC 25010<br>(Usabilidad)</td>
+        <td>Interfaz táctil del Punto de Venta (POS) en Vue 3.</td>
+        <td>Errores de tecleo de los cajeros en horas pico y lentitud en el cobro de bebidas y alimentos.</td>
+        <td>Diseño cálido pastel con botones grandes de alto contraste táctil, lectura rápida de código de barras/QR y cálculo automático de cambio en efectivo.</td>
+        <td>Tiempo de registro de una venta de café en mostrador completado en menos de 15 segundos en las pruebas de validación con el encargado de cafetería.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">ISO/IEC 25010<br>(Eficiencia)</td>
+        <td>Catálogo de Café Orgánico y Trazabilidad (Vite-SSG y PostgreSQL).</td>
+        <td>Lentitud en la carga web desde dispositivos móviles y cuellos de botella al consultar historial de cosechas y lotes.</td>
+        <td>Prerenderizado estático con <code>vite-ssg</code> para páginas de catálogo e indexación de base de datos en campos críticos (<code>fecha_caducidad</code>, <code>finca_origen</code>, <code>numero_lote</code>).</td>
+        <td>Puntaje de rendimiento en Google Lighthouse superior a 90 puntos y tiempos de respuesta de consulta de trazabilidad inferiores a 100 milisegundos.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">ISO/IEC 25010<br>(Mantenibilidad)</td>
+        <td>Arquitectura Monorepo (Turborepo) y Pruebas con TDD.</td>
+        <td>Degradación del código con el tiempo y temor a introducir regresiones al actualizar dependencias compartidas.</td>
+        <td>Estructura monorepo con paquetes tipados compartidos en TypeScript, linter estricto (ESLint/Prettier) y desarrollo guiado por pruebas (TDD) en Vitest.</td>
+        <td>Cobertura de pruebas automatizadas superior al 85 % en la lógica transaccional y pipelines de compilación limpios sin advertencias de tipado.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">DevOps<br>(Integración Continua - CI)</td>
+        <td>Pipeline de GitHub Actions del repositorio.</td>
+        <td>Integración de código defectuoso que rompa la rama principal o introduzca fallas inadvertidas al repositorio.</td>
+        <td>Pipeline automatizado que se ejecuta en cada push o pull request: valida sintaxis con <code>pnpm lint</code>, verifica tipos con <code>tsc</code> y corre suites completas de pruebas unitarias.</td>
+        <td>Bloqueo automático de commits si alguna prueba unitaria falla; tiempo total de ejecución del pipeline de integración inferior a 3 minutos.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">DevOps<br>(Contenedorización y CD)</td>
+        <td>Empaquetado de aplicaciones (Frontend Vue 3 y Backend Next.js).</td>
+        <td>El problema clásico de "en mi máquina sí funciona" debido a diferencias en versiones de Node.js o librerías del sistema operativo.</td>
+        <td>Dockerfiles multi-stage para generar imágenes ligeras de producción que aíslan las dependencias de ejecución de las herramientas de compilación.</td>
+        <td>Imágenes Docker de producción con tamaño reducido (menos de 180 MB para el backend) y arranque de contenedores garantizado en cualquier servidor.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">DevOps<br>(Infraestructura como Código)</td>
+        <td>Entorno local de desarrollo y servicios de soporte.</td>
+        <td>Configuración manual tediosa y propensa a errores de bases de datos PostgreSQL y colas RabbitMQ en máquinas nuevas.</td>
+        <td>Archivo <code>docker-compose.yml</code> que orquesta PostgreSQL con extensiones, broker RabbitMQ con management plugin y variables de entorno parametrizadas.</td>
+        <td>Levantamiento completo del entorno de desarrollo funcional y listo para pruebas con un único comando (<code>docker compose up -d</code>).</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; text-align: center;">DevOps<br>(Observabilidad y Logging)</td>
+        <td>Trazabilidad de eventos distribuidos de venta y reversa.</td>
+        <td>Dificultad para diagnosticar qué paso de una transacción Saga falló cuando intervienen múltiples colas de mensajería asíncrona.</td>
+        <td>Inyección de un identificador único de correlación (<code>correlation_id</code>) en cada mensaje de RabbitMQ y registro estructurado en logs de consola.</td>
+        <td>100 % de los eventos de venta y reversa rastreables de inicio a fin en los logs mediante su identificador único de transacción.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 5. CONCLUSIONES -->
+<div class="page-break"></div>
+<h1>5. Conclusiones generales</h1>
+<p>
+  El análisis desarrollado en esta actividad me permitió comprender que la calidad en la ingeniería de software no es un concepto teórico aislado, sino un engranaje donde interactúan tres niveles indispensables. Los principios SOLID operan en el nivel más cercano al programador: garantizan que la arquitectura interna del código sea limpia, desacoplada y fácil de probar. Por su parte, la norma ISO/IEC 25010 aporta la perspectiva del producto terminado: fija los criterios objetivos para evaluar si el software es seguro, confiable, eficiente y agradable de utilizar para las personas. Finalmente, la cultura y herramientas DevOps cierran la brecha operativa: automatizan las verificaciones de calidad y aseguran que el código probado pase a producción sin depender de procesos manuales propensos a fallos.
+</p>
+<p>
+  Al desarrollar mi proyecto integrador Monchis Café de forma individual, adoptar este enfoque integral de calidad no representa un lujo ni una carga burocrática adicional, sino la única estrategia viable para mantener bajo control un sistema de complejidad considerable. Integrar colas de mensajería asíncrona con RabbitMQ y el patrón Saga para la reversa de cobros, junto con un punto de venta táctil y trazabilidad de café orgánico, sería sumamente riesgoso si el código estuviera fuertemente acoplado o si tuviera que probar manualmente cada pantalla antes de una entrega.
+</p>
+<p>
+  La aplicación práctica demostrada en la Tabla 2 evidencia beneficios inmediatos: la inversión de dependencias y la responsabilidad única de SOLID me permiten escribir pruebas unitarias rápidas con Vitest sin necesidad de tener encendido el broker real de mensajería; las características de seguridad y fiabilidad de la ISO 25010 protegen las ventas concurrentes y las credenciales de caja; y los pipelines de integración continua de DevOps me dan la certeza de que ningún commit introducirá regresiones inadvertidas al monorepo. En conclusión, estas buenas prácticas y estándares constituyen el cimiento técnico que me permite construir una plataforma profesional, mantenible y verdaderamente útil para las operaciones comerciales de Monchis Café.
+</p>
+
+<!-- 6. REFERENCIAS -->
+<div class="page-break"></div>
+<h1>Referencias</h1>
+
+<div class="ref-item">Bass, L., Weber, I., & Zhu, L. (2015). <i>DevOps: A software architect's perspective</i>. Addison-Wesley.</div>
+<div class="ref-item">Humble, J., & Farley, D. (2010). <i>Continuous delivery: Reliable software releases through build, test, and deployment automation</i>. Addison-Wesley.</div>
+<div class="ref-item">International Organization for Standardization, & International Electrotechnical Commission. (2011). <i>Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models</i> (ISO/IEC Standard No. 25010:2011). ISO/IEC.</div>
+<div class="ref-item">Kim, G., Humble, J., Debois, P., & Willis, J. (2016). <i>The DevOps handbook: How to create world-class agility, reliability, and security in technology organizations</i>. IT Revolution Press.</div>
+<div class="ref-item">Liskov, B., & Wing, J. M. (1994). A behavioral notion of subtyping. <i>ACM Transactions on Programming Languages and Systems, 16</i>(6), 1811–1841. https://doi.org/10.1145/197320.197383</div>
+<div class="ref-item">Martin, R. C. (2003). <i>Agile software development: Principles, patterns, and practices</i>. Prentice Hall.</div>
+<div class="ref-item">Martin, R. C. (2018). <i>Clean architecture: A craftsman's guide to software structure and design</i>. Prentice Hall.</div>
+
+</body>
+</html>
+"""
+
+with open(html_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+print(f"HTML generado en: {html_path}")
+
+# Compilación con Google Chrome Headless
+chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+cmd = [
+    chrome_path,
+    "--headless=new",
+    "--disable-gpu",
+    "--no-pdf-header-footer",
+    f"--print-to-pdf={pdf_repo}",
+    html_path
+]
+
+print("Compilando PDF con Chrome...")
+subprocess.run(cmd, check=True)
+print(f"PDF generado en: {pdf_repo}")
+
+shutil.copyfile(pdf_repo, pdf_downloads)
+print(f"PDF copiado a Descargas: {pdf_downloads}")

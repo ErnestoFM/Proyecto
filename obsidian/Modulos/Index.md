@@ -7,4 +7,4 @@ Notas de módulos del sistema:
 - [[Modulos/Sistema_Diseno_Pastel_SEO]] — *Tokens de diseño CSS pastel y estrategia SEO con vite-ssg.*
 - [[Modulos/Planificacion_Sostenibilidad_ODS]] — *Planificación estratégica del proyecto alineada a los ODS (Unidad 1).*
 - [[Modulos/Aspectos_Legales_Contrato_Informatico]] — *Aspectos legales, elementos de existencia/validez y contrato informático (Unidad 3).*
-
+- [[Modulos/Estrategia_Servicios_TI]] — *Diseño de estrategia de servicios TI y ciclo de vida ITIL para Monchis Café.*

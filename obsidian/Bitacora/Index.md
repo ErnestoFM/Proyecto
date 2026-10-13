@@ -4,6 +4,8 @@
 
 Historial cronológico de cambios realizados por el Agente de IA:
 
+- [[Bitacora/2026-10-13]] — *Unidad 3: Actividad 3.4 Buenas Prácticas de Calidad y sus Estándares (SOLID, ISO 25010 y DevOps) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
+- [[Bitacora/2026-10-12]] — *Unidad 3: Actividad 3.3 Análisis Comparativo de Normas y Estándares (PMI, IPMA, CPM, PRINCE2, SCRUM, ISO 21500) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-08]] — *Unidad 3: Actividad 3.2 SCRUM y Estimación COCOMO Intermedio (TechSolutions, 60 KLOC) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-07]] — *Elaboración de Manuales de Usuario y Administrador, Estabilización de Build Next.js y Verificación de Producción.*
 - [[Bitacora/2026-10-06]] — *Auditoría Técnica Integral: Identificación de deuda técnica, mocks en memoria, vulnerabilidades de seguridad y creación de PENDIENTES.md.*

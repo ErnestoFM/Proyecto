@@ -17,7 +17,8 @@ Bienvenido al Vault de Obsidian del proyecto **Monchis Café**. Este vault sirve
 
 ---
 
-## 📅 Últimas Bitácoras
+- [[Bitacora/2026-10-13]] — *Gestión de Servicios TI: Actividad Participación (Estrategia de Servicios TI y ciclo ITIL en PDF/DOCX) y Unidad 3: Actividad 3.4 Buenas Prácticas de Calidad (SOLID, ISO 25010 y DevOps) (Dr. Gabriel Navarro Salcedo).*
+- [[Bitacora/2026-10-12]] — *Unidad 3: Actividad 3.3 Análisis Comparativo de Normas y Estándares (PMI, IPMA, CPM, PRINCE2, SCRUM, ISO 21500) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-08]] — *Unidad 3: Actividad 3.2 SCRUM y Estimación COCOMO Intermedio (TechSolutions, 60 KLOC) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-07]] — *Elaboración de Manuales de Usuario y Administrador, Estabilización de Build Next.js y Verificación de Producción.*
 - [[Bitacora/2026-10-06]] — *Auditoría Técnica Integral, 2FA TOTP, reCAPTCHA estricto, Blacklist de Tokens, PostgreSQL Seed y Suite E2E Playwright.*
