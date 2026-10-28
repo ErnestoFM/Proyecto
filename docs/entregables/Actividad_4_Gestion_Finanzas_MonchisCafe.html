@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Actividad 4: Gestión de Finanzas — Monchis Café</title>
+  <style>
+    @page {
+      size: letter portrait;
+      margin: 1.8cm 1.8cm 1.8cm 1.8cm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      color: #222222;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-size: 13pt;
+      color: #17365D;
+      border-bottom: 2px solid #17365D;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+    h2 {
+      font-size: 11pt;
+      color: #244B7A;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+    p {
+      margin-top: 0;
+      margin-bottom: 8px;
+      text-align: justify;
+    }
+    .header-box {
+      background: linear-gradient(135deg, #17365D 0%, #244B7A 100%);
+      color: #ffffff;
+      padding: 16px 20px;
+      border-radius: 6px;
+      margin-bottom: 14px;
+    }
+    .header-box h1 {
+      color: #ffffff;
+      border-bottom: none;
+      margin: 0 0 4px 0;
+      font-size: 15pt;
+    }
+    .header-box p {
+      margin: 0;
+      color: #D9E2EC;
+      font-size: 9.5pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      font-size: 8pt;
+    }
+    th, td {
+      border: 1px solid #D3D3D3;
+      padding: 5px 7px;
+      vertical-align: middle;
+    }
+    th {
+      background-color: #17365D;
+      color: #ffffff;
+      font-weight: bold;
+      text-align: left;
+    }
+    .bg-alt {
+      background-color: #F0F4F8;
+    }
+    .bg-success {
+      background-color: #E2F0D9;
+      font-weight: bold;
+    }
+    .bg-subhead {
+      background-color: #D9E2EC;
+      font-weight: bold;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .bold {
+      font-weight: bold;
+    }
+    .kpi-card {
+      background: #F8FAFC;
+      border-left: 4px solid #17365D;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 8.5pt;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+    ul {
+      margin-top: 4px;
+      margin-bottom: 8px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-box">
+    <h1>ACTIVIDAD 4: GESTIÓN DE FINANZAS</h1>
+    <p><b>Proyecto Integrador:</b> Monchis Café — Plataforma Web y POS Seguro para Cafetería Orgánica</p>
+    <p><b>Docente:</b> Dr. Gabriel Navarro Salcedo | <b>Estudiante:</b> Ernesto Hatuey Fierro Meléndez (Código: 215487963)</p>
+    <p><b>Fecha de Entrega:</b> 24 de Octubre de 2026 | <b>Ponderación:</b> 4% de la Evaluación Total</p>
+  </div>
+
+  <h1>1. Resumen Ejecutivo de Indicadores Financieros</h1>
+  <p>Consolidado de las variables económicas del proyecto, modeladas dinámicamente en la plantilla oficial y vinculadas a la hoja ESTRATEGIA DE VENTA:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Indicador Financiero Clave</th>
+        <th class="text-right">Valor Proyectado</th>
+        <th class="text-center">% s/ Venta</th>
+        <th>Interpretación y Relevancia Operativa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Costo Base Total (CTB)</td>
+        <td class="text-right bold">$573,160.08</td>
+        <td class="text-center">63.6%</td>
+        <td>Costos empresariales directos, indirectos, nómina y costo financiero.</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Fondo de Contingencia (10%)</td>
+        <td class="text-right bold">$57,316.01</td>
+        <td class="text-center">6.4%</td>
+        <td>Reserva de mitigación ante riesgos técnicos y variaciones de tarifas cloud.</td>
+      </tr>
+      <tr>
+        <td class="bold">COSTO TOTAL DEL PROYECTO (CTP)</td>
+        <td class="text-right bold">$630,476.09</td>
+        <td class="text-center bold">70.0%</td>
+        <td>Inversión neta requerida por la empresa para producir y entregar la solución.</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Margen de Utilidad sobre Ventas</td>
+        <td class="text-right bold">30.0%</td>
+        <td class="text-center">N/A</td>
+        <td>Margen comercial pactado sobre el precio sin impuestos.</td>
+      </tr>
+      <tr class="bg-subhead">
+        <td class="bold">PRECIO DE VENTA SIN IVA (COTIZACIÓN)</td>
+        <td class="text-right bold">$900,680.12</td>
+        <td class="text-center bold">100.0%</td>
+        <td>Cotización base de la solución completa llave en mano: CTP / (1 - Margen).</td>
+      </tr>
+      <tr>
+        <td class="bold">IVA Trasladado (16%)</td>
+        <td class="text-right bold">$144,108.82</td>
+        <td class="text-center">16.0%</td>
+        <td>Impuesto fiscal acreditable para el cliente contra sus débitos de IVA.</td>
+      </tr>
+      <tr class="bg-subhead">
+        <td class="bold">PRECIO TOTAL FACTURADO CON IVA</td>
+        <td class="text-right bold">$1,044,788.94</td>
+        <td class="text-center bold">116.0%</td>
+        <td>Monto total formalizado convenido en la propuesta económica del contrato.</td>
+      </tr>
+      <tr>
+        <td class="bold">UTILIDAD ANTES DE ISR (PROYECTADA)</td>
+        <td class="text-right bold">$270,204.04</td>
+        <td class="text-center bold">30.0%</td>
+        <td>Ganancia empresarial antes de ISR corporativo anual para solvencia e I+D.</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">ISR Corporativo Estimado (30%)</td>
+        <td class="text-right bold">$81,061.21</td>
+        <td class="text-center">9.0%</td>
+        <td>Provisión estimada del impuesto sobre la renta empresarial (LISR art. 9).</td>
+      </tr>
+      <tr class="bg-success">
+        <td class="bold">UTILIDAD ESTIMADA DESPUÉS DE ISR</td>
+        <td class="text-right bold">$189,142.83</td>
+        <td class="text-center bold">21.0%</td>
+        <td>Beneficio neto proyectado disponible tras obligaciones tributarias.</td>
+      </tr>
+      <tr>
+        <td class="bold">Punto de Equilibrio (Soluciones)</td>
+        <td class="text-right bold">1 Solución</td>
+        <td class="text-center">N/A</td>
+        <td>Un único contrato llave en mano cubre la estructura de costos operativos.</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Punto de Equilibrio en Pesos</td>
+        <td class="text-right bold">$602,641.80</td>
+        <td class="text-center">66.9%</td>
+        <td>Facturación mínima sin IVA necesaria para cubrir costos fijos y variables.</td>
+      </tr>
+      <tr>
+        <td class="bold">Margen de Seguridad Comercial</td>
+        <td class="text-right bold">33.1%</td>
+        <td class="text-center">N/A</td>
+        <td>Margen de tolerancia frente a contingencias antes de entrar en pérdidas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h1>2. Cuadro Justificativo Financiero (Pertinencia de Costos - 50%)</h1>
+  <p>Desglose analítico que justifica la pertinencia técnica, operativa y económica de cada partida presupuestal:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Rubro Presupuestal</th>
+        <th class="text-right">Importe (MXN)</th>
+        <th class="text-center">% s/ CTP</th>
+        <th>Criterio Técnico y Justificación Operativa</th>
+        <th>Impacto en Calidad y Mitigación de Riesgos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Nómina y Carga Patronal</td>
+        <td class="text-right">$465,400.00</td>
+        <td class="text-center">73.81%</td>
+        <td>4 perfiles (Scrum Master/DevOps, Frontend Vue 3, Backend Node.js, QA) por 16 semanas. Sueldos brutos de $89.5k/mes más estimación del 30% de carga patronal (IMSS, Infonavit 5%, ISN 3%).</td>
+        <td>Garantiza 8 sprints bajo TDD (>80% cobertura) y reduce el riesgo de rotación técnica mediante compensaciones de mercado.</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Gastos Fijos de Operación</td>
+        <td class="text-right">$60,000.00</td>
+        <td class="text-center">9.52%</td>
+        <td>Coworking ($6k/mes), energía ($1.2k), fibra simétrica con IP fija ($1.5k), despacho contable ($2.5k), herramientas SaaS ($1.8k), gestión comercial ($1k) y suministros ($1k) ($15k/mes).</td>
+        <td>Asegura entorno ininterrumpido para CI/CD, soporte fiscal para timbrado CFDI 4.0 y herramientas de trabajo colaborativo.</td>
+      </tr>
+      <tr>
+        <td class="bold">Costos Directos (10 rubros)</td>
+        <td class="text-right">$26,800.00</td>
+        <td class="text-center">4.25%</td>
+        <td>GCP ($7.2k), GitHub/Sentry ($2.4k), CloudAMQP RabbitMQ ($2.2k), dominio/SSL ($950), dispositivos ($3k), pentesting ($4.5k), viáticos ($3k), papel/cables ($850), SAST ($1.2k) y otros ($1.5k).</td>
+        <td>Sustenta arquitectura orientada a eventos (Saga/DLQ), seguridad de datos de pago y validación física en barra.</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Inversión Inicial Asignada</td>
+        <td class="text-right">$19,638.89</td>
+        <td class="text-center">3.11%</td>
+        <td>Depreciación en 4 meses según vida útil fiscal: 4 laptops (36 meses), mobiliario (60 meses), red (36 meses), licencias IDEs y kit POS ($19.6k de $148.8k).</td>
+        <td>Aplica devengo contable: el proyecto absorbe únicamente el desgaste real de los activos productivos durante su ejecución.</td>
+      </tr>
+      <tr>
+        <td class="bold">Intereses de Financiamiento</td>
+        <td class="text-right">$1,321.19</td>
+        <td class="text-center">0.21%</td>
+        <td>Crédito de $40,000.00 MXN al 18% anual a 24 meses. Interés promedio prorrateado a 4 meses ($1,321.19 MXN) para anticipar compra de activos y absorber desfases del anticipo.</td>
+        <td>Evita demoras operativas en el arranque derivadas de tiempos de dispersión bancaria de la primera transferencia.</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Fondo de Contingencia (10%)</td>
+        <td class="text-right">$57,316.01</td>
+        <td class="text-center">9.09%</td>
+        <td>Reserva estratégica del 10% s/ costo base para fluctuaciones en tarifas cloud en dólares, inflación o retrabajos técnicos menores.</td>
+        <td>Absorbe imprevistos y constituye el único colchón financiero ante la ausencia de roles dedicados de DevOps, DBA o UX.</td>
+      </tr>
+      <tr class="bg-subhead">
+        <td>TOTAL COSTO DEL PROYECTO</td>
+        <td class="text-right">$630,476.09</td>
+        <td class="text-center">100.00%</td>
+        <td colspan="2">Suma integral de factores de costo empresarial necesarios para desarrollar, probar y liberar en producción el software Monchis Café.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <h1>3. Estrategia Comercial de Venta según Costo y Utilidad (35%)</h1>
+
+  <h2>3.1 Modelo de Fijación de Precios: Margen Comercial vs Recargo (Markup)</h2>
+  <p>
+    La cotización comercial se estructuró a partir de la metodología de <b>margen sobre ventas antes de impuestos</b>, evitando la pérdida de rentabilidad derivada de un recargo simple (markup):
+  </p>
+  <div class="kpi-card">
+    <b>Fórmula Financiera de Precio:</b> Precio = CTP / (1 - Margen) = $630,476.09 / (1 - 0.30) = <b>$900,680.12 MXN sin IVA</b><br>
+    <b>Utilidad antes de ISR:</b> $900,680.12 - $630,476.09 = <b>$270,204.04 MXN</b> (30.0% real sobre ventas facturadas).<br>
+    <b>Facturación Final con 16% de IVA:</b> $900,680.12 x 1.16 = <b>$1,044,788.94 MXN</b> (IVA acreditable para el cliente).<br>
+    <b>Utilidad Estimada después de ISR (30%):</b> $270,204.04 - $81,061.21 = <b>$189,142.83 MXN</b> (21.0% neto sobre ventas).
+  </div>
+
+  <h2>3.2 Modelo de Negocio Híbrido: Venta Inicial + Ingresos Recurrentes</h2>
+  <p>
+    <b>1. Venta Inicial Llave en Mano ($900,680.12 MXN + IVA):</b> Licenciamiento y puesta en producción de la plataforma web, POS táctil, broker RabbitMQ y microservicios en GCP.<br>
+    <b>2. Póliza de Soporte, Mantenimiento Evolutivo y SLA ($18,500.00 MXN + IVA/mes a partir del Mes 5):</b> Disponibilidad del 99.5%, respuesta a incidentes de caja &lt; 2 horas en horario operativo, monitoreo de RabbitMQ DLQ y parches de seguridad (ARR de $222,000.00 MXN con 55% de margen).<br>
+    <b>3. Licenciamiento por Franquicia / Sucursal ($45,000.00 MXN cuota única + $3,500.00 MXN/mes de soporte por sucursal):</b> Permite monetizar el crecimiento de Monchis Café si apertura nuevas tiendas.
+  </p>
+
+  <h2>3.3 Propuesta de Valor y Retorno de Inversión (Payback) para Monchis Café</h2>
+  <p>
+    Los beneficios operativos mensuales estimados corresponden a supuestos preliminares sujetos a validación con datos reales del negocio:
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Beneficio Operativo Cuantificable</th>
+        <th>Mecanismo del Sistema</th>
+        <th class="text-right">Impacto Mensual</th>
+        <th class="text-right">Beneficio Anual</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Reducción de Mermas de Café Orgánico (-22%)</td>
+        <td>Control de rotación PEPS y trazabilidad de lotes regionales por finca.</td>
+        <td class="text-right">$14,500.00</td>
+        <td class="text-right">$174,000.00</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Incremento en Ventas y Ticket Promedio (+24%)</td>
+        <td>Programa Monchis Rewards (sellos digitales y bono termo -$5.00 MXN).</td>
+        <td class="text-right">$38,500.00</td>
+        <td class="text-right">$462,000.00</td>
+      </tr>
+      <tr>
+        <td class="bold">Eliminación de Discrepancias en Caja (-98%)</td>
+        <td>Conciliación automática de cobros mixtos (efectivo, tarjeta, SPEI).</td>
+        <td class="text-right">$9,200.00</td>
+        <td class="text-right">$110,400.00</td>
+      </tr>
+      <tr class="bg-alt">
+        <td class="bold">Clientes Nuevos por SEO y Google Maps</td>
+        <td>Prerenderizado vite-ssg, Schema.org LocalBusiness y atribución UTM.</td>
+        <td class="text-right">$16,800.00</td>
+        <td class="text-right">$201,600.00</td>
+      </tr>
+      <tr class="bg-subhead">
+        <td colspan="2">TOTAL BENEFICIO OPERATIVO BRUTO ESTIMADO</td>
+        <td class="text-right">$79,000.00</td>
+        <td class="text-right">$948,000.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="kpi-card">
+    <b>Evaluación del Período de Recuperación (Payback Period):</b><br>
+    1. <b>Payback Bruto:</b> $900,680.12 / $79,000.00 = <b>11.4 meses</b> (sin descontar póliza ni costo de ventas).<br>
+    2. <b>Payback Neto con Póliza SLA:</b> $900,680.12 / ($79,000.00 - $18,500.00) = $900,680.12 / $60,500.00 = <b>14.9 meses</b>.<br>
+    3. <b>Payback Prudente (60% margen de contribución en ventas adicionales):</b> Beneficio neto de $56,880.00/mes ($33,180 margen ventas + $23,700 ahorros). Plazo sin póliza: <b>15.8 meses</b>; plazo neto con póliza ($38,380.00/mes): <b>23.5 meses</b>.
+  </div>
+
+  <h2>3.4 Esquema de Cierre y Financiamiento por 6 Hitos Ágiles</h2>
+  <ul>
+    <li><b>Hito 0 (Firma y Arranque - 20%):</b> $180,136.02 MXN sin IVA (Setup monorepo, Docker Compose, Prisma y compra inicial de licencias).</li>
+    <li><b>Hito 1 (Sprint 2 - Backend & Seguridad - 15%):</b> $135,102.02 MXN (Backend Core, JWT stateless, RBAC y reCAPTCHA en Staging).</li>
+    <li><b>Hito 2 (Sprint 4 - Eventos & Frontend - 15%):</b> $135,102.02 MXN (Broker RabbitMQ CloudAMQP, Patrón Saga y vistas Vue 3 prerenderizadas).</li>
+    <li><b>Hito 3 (Sprint 6 - POS & Trazabilidad - 15%):</b> $135,102.02 MXN (POS mostrador, pagos mixtos y catálogo de café ODS 12).</li>
+    <li><b>Hito 4 (Sprint 8 - Analítica & Testing - 15%):</b> $135,102.02 MXN (Dashboard analítico, atribución UTM y suites Vitest/Playwright).</li>
+    <li><b>Hito 5 (Cierre y Despliegue en GCP - 20%):</b> $180,136.02 MXN (Terraform en GCP, manuales de usuario y entrega de llaves).</li>
+  </ul>
+
+  <h2>3.5 Análisis de Sensibilidad y Escenarios de Rentabilidad</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Escenario Comercial</th>
+        <th class="text-center">Margen</th>
+        <th class="text-right">Precio sin IVA</th>
+        <th class="text-right">Precio con IVA</th>
+        <th class="text-right">Utilidad antes ISR</th>
+        <th>Criterio y Táctica de Negociación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Conservador (Piso Mínimo)</td>
+        <td class="text-center">20.0%</td>
+        <td class="text-right">$788,095.11</td>
+        <td class="text-right">$914,190.33</td>
+        <td class="text-right bold">$157,619.02</td>
+        <td>Piso de negociación que sacrifica margen comercial, no costos de desarrollo. Asegura el contrato ante restricciones presupuestales.</td>
+      </tr>
+      <tr class="bg-success">
+        <td class="bold">Esperado / Base (Recomendado)</td>
+        <td class="text-center bold">30.0%</td>
+        <td class="text-right bold">$900,680.12</td>
+        <td class="text-right bold">$1,044,788.94</td>
+        <td class="text-right bold">$270,204.04</td>
+        <td>Propuesta base óptima. Preserva la rentabilidad del 30.0% necesaria para la viabilidad de la empresa y amortización para el cliente.</td>
+      </tr>
+      <tr>
+        <td class="bold">Premium / Valor Agregado</td>
+        <td class="text-center">35.0%</td>
+        <td class="text-right">$969,963.21</td>
+        <td class="text-right">$1,125,157.32</td>
+        <td class="text-right bold">$339,487.12</td>
+        <td>Paquete con 6 meses de póliza SLA 99.5% ($49,950 MXN costo asumido) y analítica avanzada. Utilidad ajustada post-SLA: $289,537.12 MXN (margen efectivo del 29.9%).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h1>4. Conclusiones y Límites del Modelo</h1>
+  <p>
+    El ejercicio presupuestal confirma que la ingeniería de software y la gestión financiera son disciplinas complementarias. Al aplicar los tabuladores fiscales de 2026, la carga patronal del 30% y una estrategia de precios basada en margen sobre ventas, el proyecto <b>Monchis Café</b> cuenta con bases financieras sólidas. No obstante, se reconocen los límites y supuestos del modelo: la tasa patronal es una estimación técnica sujeta a primas de riesgo definitivas, los beneficios operativos son proyecciones sujetas a validación empírica con la cafetería, y los riesgos cambiarios en servicios cloud en dólares son amortiguados mediante la reserva estratégica de contingencia del 10%.
+  </p>
+
+</body>
+</html>

@@ -61,6 +61,16 @@ export const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, noIndex: true, title: 'Panel — Monchis Café' },
   },
   {
+    path: '/perfil',
+    name: 'Profile',
+    component: () => import('@/views/profile/ProfilePage.vue'),
+    meta: { requiresAuth: true, noIndex: true, title: 'Mi Perfil — Monchis Café' },
+  },
+  {
+    path: '/profile',
+    redirect: '/perfil',
+  },
+  {
     path: '/pos',
     name: 'POS',
     component: () => import('@/views/pos/POSPage.vue'),

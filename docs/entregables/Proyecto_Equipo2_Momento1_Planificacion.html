@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Práctica Momento 1: Metodología DevOps - Planificación (Equipo 2)</title>
+<style>
+  @page {
+    size: letter;
+    margin: 22mm 18mm 22mm 18mm;
+    @bottom-center {
+      content: "Página " counter(page);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9pt;
+      color: #718096;
+    }
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #1a202c;
+    line-height: 1.45;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cover-page {
+    page-break-after: always;
+    text-align: center;
+    padding-top: 30px;
+    height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover-header {
+    font-size: 11pt;
+    font-weight: bold;
+    line-height: 1.35;
+    color: #1a365d;
+    text-transform: uppercase;
+    border-bottom: 2px solid #2b6cb0;
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    background-color: #ebf8ff;
+    color: #2b6cb0;
+    font-weight: bold;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid #bee3f8;
+    font-size: 10pt;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .cover-title {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #1a365d;
+    margin: 15px 0 10px 0;
+    line-height: 1.25;
+  }
+
+  .cover-subtitle {
+    font-size: 13pt;
+    font-weight: 600;
+    color: #2b6cb0;
+    margin-bottom: 30px;
+  }
+
+  .cover-box {
+    background-color: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #2b6cb0;
+    padding: 16px 20px;
+    text-align: left;
+    margin: 15px auto;
+    width: 90%;
+    border-radius: 4px;
+  }
+
+  .cover-box-title {
+    font-weight: bold;
+    font-size: 10.5pt;
+    color: #1a365d;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .cover-meta {
+    font-size: 10pt;
+    line-height: 1.5;
+    color: #2d3748;
+    margin-top: 25px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 15px;
+  }
+
+  h1 {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #1a365d;
+    margin: 20px 0 8px 0;
+    border-bottom: 1.5px solid #cbd5e0;
+    padding-bottom: 4px;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #2b6cb0;
+    margin: 14px 0 6px 0;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #2d3748;
+    margin: 10px 0 4px 0;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 8px 0;
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 4px;
+    text-align: justify;
+  }
+
+  .callout {
+    background-color: #f7fafc;
+    border-left: 4px solid #3182ce;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 9.5pt;
+  }
+
+  .callout-ods {
+    background-color: #f0fff4;
+    border-left: 4px solid #38a169;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 9.5pt;
+  }
+
+  .callout-sec {
+    background-color: #fffaf0;
+    border-left: 4px solid #dd6b20;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 9.5pt;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 8.5pt;
+    line-height: 1.25;
+  }
+
+  table th, table td {
+    border: 1px solid #cbd5e0;
+    padding: 6px 8px;
+    vertical-align: top;
+  }
+
+  table th {
+    background-color: #2b6cb0;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  table tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .ref-item {
+    padding-left: 24px;
+    text-indent: -24px;
+    margin-bottom: 6px;
+    font-size: 9pt;
+    line-height: 1.35;
+    text-align: justify;
+  }
+
+  /* Estilos específicos para diagrama de flujo SVG */
+  .diagram-container {
+    text-align: center;
+    margin: 12px 0;
+    padding: 8px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover-page">
+  <div class="cover-header">
+    UNIVERSIDAD DE GUADALAJARA<br>
+    Centro Universitario de Tonalá (CUTonalá)<br>
+    División de Ingenierías e Innovación Tecnológica<br>
+    Licenciatura en Ingeniería en Computación
+  </div>
+
+  <div>
+    <div class="cover-badge">Proyecto Integrador de Desarrollo de Software • Momento 1</div>
+    <div class="cover-title">
+      Práctica Momento 1: Aplicar la Metodología DevOps en un Proyecto de Software
+    </div>
+    <div class="cover-subtitle">
+      Fase de Planificación: Arquitectura, Alcance, Roles, Plan de Trabajo y Herramientas
+    </div>
+
+    <div class="cover-box">
+      <div class="cover-box-title">Proyecto Asignado — Equipo 2</div>
+      <div style="font-size: 10pt; line-height: 1.4;">
+        <b>Nombre Oficial:</b> Gestión Web Segura para Cafetería Orgánica y Comercial<br>
+        <b>Nombre de la Solución:</b> Monchis Café (Plataforma Web & POS Segura con ODS 12)<br>
+        <b>Enfoque Específico:</b> Priorización de Seguridad Web, RBAC, HTTPS y Reducción de Vulnerabilidades
+      </div>
+    </div>
+
+    <div class="cover-box" style="border-left-color: #38a169;">
+      <div class="cover-box-title" style="color: #22543d;">Integrantes del Equipo y Asignación de Roles</div>
+      <table style="width: 100%; border: none; margin: 0; font-size: 9pt; background: transparent;">
+        <tr style="background: transparent;"><td style="border: none; padding: 2px 4px;"><b>1. Ernesto Hatuey Fierro Medina</b> (Cód: 215487963)</td><td style="border: none; padding: 2px 4px; color: #2b6cb0;"><b>Scrum Master & DevOps Lead (Ops)</b></td></tr>
+        <tr style="background: transparent;"><td style="border: none; padding: 2px 4px;"><b>2. Jazmín Díaz</b></td><td style="border: none; padding: 2px 4px; color: #2b6cb0;"><b>Frontend Core Developer (Dev)</b></td></tr>
+        <tr style="background: transparent;"><td style="border: none; padding: 2px 4px;"><b>3. Héctor Hernández</b></td><td style="border: none; padding: 2px 4px; color: #2b6cb0;"><b>Backend & Data Core Developer (Dev)</b></td></tr>
+        <tr style="background: transparent;"><td style="border: none; padding: 2px 4px;"><b>4. Oswaldo Millán</b></td><td style="border: none; padding: 2px 4px; color: #2b6cb0;"><b>QA, Test Automation & Security Engineer (QA)</b></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="cover-meta">
+    <b>Docente Titular:</b> Dr. Gabriel Navarro Salcedo<br>
+    <b>Cátedra:</b> Productos Integradores de Desarrollo de Software<br>
+    <b>Fecha de Entrega Oficial:</b> 3 de noviembre de 2026 • 23:59 hrs
+  </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+
+<!-- 1. DEFINICIÓN DEL PROYECTO Y ODS -->
+<h1>1. Definición del Proyecto y su ODS Asociado</h1>
+
+<h2>1.1 Nombre y Problemática del Negocio</h2>
+<p>
+  El presente documento corresponde al entregable oficial del <b>Momento 1 (Planificación)</b> desarrollado por el <b>Equipo 2</b> para el proyecto denominado formalmente <b>"Gestión Web Segura para Cafetería Orgánica y Comercial"</b>, instrumentado a través de la plataforma web integral y sistema de punto de venta <b>"Monchis Café"</b>.
+</p>
+<p>
+  <b>Problemática Detectada:</b> En el sector gastronómico de especialidad, los establecimientos que comercializan simultáneamente café orgánico regional (granos de sombra cultivados de manera agroecológica por pequeños productores) y productos comerciales complementarios se enfrentan a tres barreras operativas críticas:
+</p>
+<ul>
+  <li><b>Pérdida de Trazabilidad y Mermas de Café Orgánico:</b> Inexistencia de mecanismos digitales que registren el origen del grano (finca cafetalera, cooperativa comunitaria, altitud de siembra, método de beneficio y fecha de tostado). Asimismo, la falta de una rotación controlada bajo la política <b>PEPS (Primeras Entradas, Primeras Salidas)</b> produce mermas y desperdicio innecesario de insumos orgánicos de alto valor perecedero.</li>
+  <li><b>Vulnerabilidades en la Seguridad Web y el Manejo de Fondos:</b> Los sistemas de caja comúnmente utilizados en pequeñas cafeterías operan con contraseñas en texto plano, sesiones compartidas sin caducidad y ausencia de control de acceso basado en roles (RBAC). Esta falta de blindaje expone el negocio al robo hormiga, modificaciones no autorizadas de inventarios y ataques web básicos (inyecciones SQL, secuestro de sesión y scripts maliciosos).</li>
+  <li><b>Carencia de Fidelización Vinculada a Prácticas Sostenibles:</b> Falta de incentivos medibles para que los consumidores adopten hábitos ecológicos, tales como llevar su propio termo o taza reutilizable, lo que propicia el uso desmedido de recipientes desechables de polipapel y plásticos no biodegradables.</li>
+</ul>
+
+<h2>1.2 Alcance y Arquitectura de la Solución Propuesta</h2>
+<p>
+  La solución comprende una plataforma web integral bajo arquitectura de monorepo moderno que unifica el catálogo público, el punto de venta táctil (POS) y el panel administrativo seguro:
+</p>
+<ul>
+  <li><b>Frontend Reactivo y Punto de Venta (Vue 3 + Vite):</b> Interfaz táctil ultrarrápida diseñada para tabletas y terminales de mostrador, con guards de navegación que ocultan o habilitan módulos según el rol verificado.</li>
+  <li><b>Backend API RESTful Robusto (Node.js + Express):</b> Microservicios ligeros con validación de entradas mediante esquemas Zod, sanitización de datos y respuestas estandarizadas en JSON.</li>
+  <li><b>Seguridad Web Reforzada (DevSecOps):</b> Autenticación stateless mediante tokens JWT de corta duración, Refresh Tokens rotativos almacenados exclusivamente en cookies con directivas <code>httpOnly</code>, <code>Secure</code> y <code>SameSite=Strict</code>; control de acceso RBAC con tres niveles (<code>admin</code>, <code>cajero</code>, <code>cliente</code>), 2FA obligatorio para administradores y blindaje con Google reCAPTCHA v2/v3 en accesos públicos.</li>
+  <li><b>Persistencia Transaccional ACID (PostgreSQL + Prisma ORM):</b> Modelado de datos normalizado con transacciones atómicas para cobros de caja e integridad referencial en inventarios orgánicos.</li>
+  <li><b>Orquestación Asíncrona de Reversas (RabbitMQ + Patrón Saga):</b> Transacciones distribuidas para compensar cobros: si un pedido es cobrado pero los insumos orgánicos se agotaron en el inventario simultáneamente, el patrón Saga emite automáticamente la reversa financiera y la cancelación del pedido.</li>
+  <li><b>Módulo de Fidelización Ecológica "Monchis Rewards":</b> Sellos digitales en monedero virtual y bonificación automática por consumo responsable.</li>
+</ul>
+
+<div class="callout-ods">
+  <h3 style="margin-top: 0; color: #22543d;">1.3 Alineación con los Objetivos de Desarrollo Sostenible (ODS de la ONU)</h3>
+  <p>
+    El proyecto asume como eje rector el <b>ODS 12: Producción y Consumo Responsables</b>, incidiendo de forma puntual en las siguientes metas oficiales:
+  </p>
+  <ul>
+    <li><b>Meta 12.2 (Uso eficiente y sostenible de los recursos naturales):</b> Se impulsa la venta y consumo de café orgánico de especialidad producido bajo sistemas agroforestales de sombra en cooperativas agrícolas de Michoacán, Chiapas y Oaxaca, eliminando la dependencia de fertilizantes sintéticos y fomentando la biodiversidad.</li>
+    <li><b>Meta 12.5 (Reducción considerable de la generación de desechos mediante prevención, reducción y reutilización):</b> El sistema implementa la <i>"Bonificación Ecológica"</i>: al procesar un cobro en el POS y registrar que el cliente porta su propia taza o termo reutilizable, el software aplica de forma obligatoria un descuento directo de $5.00 MXN e incrementa sellos digitales de lealtad. Esta automatización reduce directamente el desecho de miles de vasos de polipapel al año.</li>
+    <li><b>Meta 12.3 (Reducción del desperdicio de alimentos):</b> Mediante el control de inventario PEPS y alertas de caducidad temprana vía correo electrónico, se evita la descomposición y merma de insumos perecederos.</li>
+  </ul>
+  <p style="margin-bottom: 0;">
+    <b>ODS Complementarios:</b> <b>ODS 8 (Trabajo Decente y Crecimiento Económico)</b> mediante la digitalización formal y segura de MiPyMEs; y <b>ODS 9 (Industria, Innovación e Infraestructura)</b> mediante la adopción de una infraestructura resiliente de microservicios contenerizados con Docker y CI/CD.
+  </p>
+</div>
+
+<!-- 2. ROLES DEL EQUIPO DEVOPS -->
+<div class="page-break"></div>
+<h1>2. Roles del Equipo DevOps (Dev, Ops, QA, Scrum Master)</h1>
+
+<p>
+  La metodología DevOps exige disolver la tradicional barrera divisoria entre el desarrollo de software y las operaciones de TI. En virtud de ello, el <b>Equipo 2</b> ha estructurado las funciones de sus 4 integrantes asignando responsabilidades específicas que garantizan un flujo continuo de entregas seguras:
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 18%;">Rol Asignado</th>
+      <th style="width: 20%;">Integrante</th>
+      <th style="width: 38%;">Responsabilidades en el Ciclo DevOps</th>
+      <th style="width: 24%;">Herramientas Principales</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Scrum Master</b><br><i>(Facilitador Ágil & Flujo de Valor)</i></td>
+      <td><b>Ernesto Hatuey Fierro Medina</b></td>
+      <td>
+        • Conducción de ceremonias ágiles: Sprint Planning, Dailies de 15 min, Sprint Reviews y Retrospectivas semanales.<br>
+        • Gestión y auditoría del tablero Kanban en Trello, estableciendo y monitoreando límites de trabajo en progreso (WIP).<br>
+        • Remoción de cuellos de botella e impedimentos técnicos entre desarrollo, calidad y operaciones.<br>
+        • Verificación estricta de la Definición de Terminado (DoD), asegurando que ninguna tarea avance a producción sin pruebas y análisis de seguridad aprobados.
+      </td>
+      <td>
+        • Trello<br>
+        • GitHub Projects / Milestones<br>
+        • Slack / Discord
+      </td>
+    </tr>
+    <tr>
+      <td><b>Ops</b><br><i>(DevOps & Cloud Engineer)</i></td>
+      <td><b>Ernesto Hatuey Fierro Medina</b></td>
+      <td>
+        • Empaquetamiento de la solución en contenedores inmutables mediante <code>Dockerfile</code> multi-stage.<br>
+        • Orquestación de entornos locales y de pruebas mediante <code>docker-compose.yml</code> (API, PostgreSQL, RabbitMQ).<br>
+        • Configuración y mantenimiento del servidor de CI/CD (Jenkins y GitHub Actions).<br>
+        • Automatización del despliegue: Frontend en Vercel con HTTPS forzado y Backend en contenedor cloud con Nginx Reverse Proxy y TLS.<br>
+        • Configuración de observabilidad: logs estructurados con Winston/Morgan y endpoint <code>/health</code>.
+      </td>
+      <td>
+        • Docker & Docker Compose<br>
+        • Jenkins<br>
+        • GitHub Actions<br>
+        • Vercel (HTTPS SSL)<br>
+        • Nginx / Linux<br>
+        • Winston Logger
+      </td>
+    </tr>
+    <tr>
+      <td><b>Dev (Backend)</b><br><i>(Backend & Data Core Developer)</i></td>
+      <td><b>Héctor Hernández</b></td>
+      <td>
+        • Construcción de la API RESTful en Node.js y TypeScript con validaciones estrictas vía Zod.<br>
+        • Modelado y migraciones de esquemas en PostgreSQL mediante Prisma ORM.<br>
+        • Implementación de seguridad: Autenticación JWT stateless con Refresh Tokens en cookies <code>httpOnly</code>, hashing <code>bcrypt</code> (salt 12) y middleware RBAC (<code>admin</code>, <code>cajero</code>, <code>cliente</code>).<br>
+        • Integración del broker RabbitMQ con patrón Saga para reversas automáticas de cobros ante falta de inventario orgánico.
+      </td>
+      <td>
+        • Node.js & Express<br>
+        • TypeScript<br>
+        • PostgreSQL & Prisma<br>
+        • RabbitMQ (AMQP)<br>
+        • JWT & bcrypt
+      </td>
+    </tr>
+    <tr>
+      <td><b>Dev (Frontend)</b><br><i>(Frontend Core Developer)</i></td>
+      <td><b>Jazmín Díaz</b></td>
+      <td>
+        • Desarrollo de la Single Page Application (SPA) en Vue 3 con Vite y gestión de estado con Pinia.<br>
+        • Construcción del Punto de Venta (POS) táctil optimizado para cajeros con selección rápida y cobro multipago.<br>
+        • Implementación de vistas de catálogo diferenciadas para productos comerciales y café orgánico con trazabilidad ODS 12.<br>
+        • Configuración de Navigation Guards en Vue Router basados en los claims del token JWT.<br>
+        • Integración de Google reCAPTCHA v2/v3 en formularios de acceso y módulo visual "Monchis Rewards".
+      </td>
+      <td>
+        • Vue 3 & Vite<br>
+        • Pinia Store<br>
+        • Vue Router (Guards)<br>
+        • Vanilla CSS Tokens<br>
+        • Google reCAPTCHA
+      </td>
+    </tr>
+    <tr>
+      <td><b>QA</b><br><i>(Test Automation & SecOps Engineer)</i></td>
+      <td><b>Oswaldo Millán</b></td>
+      <td>
+        • Automatización de pruebas unitarias y de integración sobre controladores de autenticación y lógica de cobro con Vitest y Supertest.<br>
+        • Creación de pruebas End-to-End (E2E) con Playwright simulando flujos reales de venta y validando la restricción de accesos indebidos.<br>
+        • Ejecución de análisis estático de seguridad (SAST) y escaneo de vulnerabilidades en dependencias mediante <code>npm audit</code> y Snyk.<br>
+        • Monitoreo, cuantificación y reporte formal de la métrica clave asignada al Equipo 2: <b>"Cantidad de vulnerabilidades corregidas"</b>.
+      </td>
+      <td>
+        • Vitest & Supertest<br>
+        • Playwright E2E<br>
+        • Snyk Open Source<br>
+        • npm audit<br>
+        • OWASP ZAP
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 3. PLAN DE TRABAJO -->
+<div class="page-break"></div>
+<h1>3. Plan de Trabajo (4 Semanas, Tareas y Responsables)</h1>
+
+<p>
+  El plan de trabajo del proyecto está programado para ejecutarse a lo largo de <b>4 semanas naturales</b>, acopladas de manera exacta a los <b>4 Momentos de evaluación</b> estipulados en la rúbrica oficial de la materia impartida por el Dr. Gabriel Navarro Salcedo:
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 16%;">Momento / Fechas</th>
+      <th style="width: 14%;">Fase DevOps</th>
+      <th style="width: 42%;">Tareas Técnicas Detalladas</th>
+      <th style="width: 14%;">Responsables</th>
+      <th style="width: 14%;">Hito / Entregable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Momento 1: Planificación</b><br><span style="font-size: 7.5pt; color: #4a5568;">28 Oct – 03 Nov<br>(Entrega: 3 nov)</span></td>
+      <td><b>Plan & Setup</b></td>
+      <td>
+        <b>T1.1:</b> Especificación del alcance, arquitectura técnica y justificación de impacto en el ODS 12.<br>
+        <b>T1.2:</b> Creación del repositorio en GitHub, configuración de ramas (<code>main</code>, <code>develop</code>), reglas de protección y commits semánticos.<br>
+        <b>T1.3:</b> Creación y estructuración del tablero Kanban en Trello con políticas de transición de columnas y límites WIP.<br>
+        <b>T1.4:</b> Definición de la matriz de roles y permisos (RBAC), esquemas Prisma y directrices de seguridad web.<br>
+        <b>T1.5:</b> Elaboración del diagrama de flujo del proceso DevOps y redacción del documento entregable Momento 1.
+      </td>
+      <td>
+        • Ernesto F.<br>
+        • Héctor H.<br>
+        • Jazmín D.<br>
+        • Oswaldo M.
+      </td>
+      <td>
+        Documento entregable:<br><code>Proyecto_Equipo2_Momento1_Planificacion.pdf</code><br><br>
+        Repositorio y tablero Trello activos.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Momento 2: Desarrollo e Integración Continua</b><br><span style="font-size: 7.5pt; color: #4a5568;">04 Nov – 10 Nov<br>(Entrega: 10 nov)</span></td>
+      <td><b>Code, Build & CI Test</b></td>
+      <td>
+        <b>T2.1:</b> Desarrollo de la API Node.js: endpoints CRUD de productos, autenticación JWT, RBAC y transacciones de caja en PostgreSQL.<br>
+        <b>T2.2:</b> Desarrollo del frontend Vue 3: interfaz POS, catálogo segmentado (orgánico vs comercial) y guards de autenticación.<br>
+        <b>T2.3:</b> Contenedorización: confección de <code>Dockerfile</code> multi-stage y <code>docker-compose.yml</code> local.<br>
+        <b>T2.4:</b> Configuración del pipeline de CI en Jenkins / GitHub Actions (Linting + Escaneo SAST Snyk + Tests Vitest).<br>
+        <b>T2.5:</b> Creación y ejecución de pruebas unitarias automáticas y documentación del reporte de errores corregidos.
+      </td>
+      <td>
+        • Héctor H. (Dev)<br>
+        • Jazmín D. (Dev)<br>
+        • Ernesto F. (Ops)<br>
+        • Oswaldo M. (QA)
+      </td>
+      <td>
+        Documento entregable:<br><code>Proyecto_Equipo2_Momento2_Integracion.pdf</code><br><br>
+        Prototipo funcional MVP, pipeline CI operativo y reporte de pruebas.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Momento 3: Despliegue y Monitoreo</b><br><span style="font-size: 7.5pt; color: #4a5568;">11 Nov – 17 Nov<br>(Entrega: 17 nov)</span></td>
+      <td><b>Release, Deploy & Operate</b></td>
+      <td>
+        <b>T3.1:</b> Despliegue continuo del frontend Vue 3 en Vercel con certificado SSL/HTTPS forzado.<br>
+        <b>T3.2:</b> Despliegue contenerizado del backend API y PostgreSQL en entorno cloud con Nginx Reverse Proxy y TLS.<br>
+        <b>T3.3:</b> Inyección de cabeceras de seguridad web HTTP (Helmet, CSP estricto, HSTS y CORS restrictivo).<br>
+        <b>T3.4:</b> Configuración de observabilidad: logs estructurados con Winston/Morgan y sondeo periódico del endpoint <code>/health</code>.<br>
+        <b>T3.5:</b> Ejecución de escaneos de vulnerabilidades, parcheo de fallos y documentación formal de la métrica: <i>"Cantidad de vulnerabilidades corregidas"</i>.
+      </td>
+      <td>
+        • Ernesto F. (Ops)<br>
+        • Oswaldo M. (QA)<br>
+        • Héctor H. (Dev)<br>
+        • Jazmín D. (Dev)
+      </td>
+      <td>
+        Documento entregable:<br><code>Proyecto_Equipo2_Momento3_Despliegue.pdf</code><br><br>
+        URL pública con HTTPS, logs de monitoreo y reporte de vulnerabilidades.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Momento 4: Retroalimentación y Cierre</b><br><span style="font-size: 7.5pt; color: #4a5568;">18 Nov – 24 Nov<br>(Entrega: 24 nov)</span></td>
+      <td><b>Monitor, Learn & Feedback</b></td>
+      <td>
+        <b>T4.1:</b> Recolección y evaluación de métricas DevOps del proyecto (Lead Time, frecuencia de despliegues, MTTR y cobertura de tests).<br>
+        <b>T4.2:</b> Sesión formal de Retrospectiva de equipo: análisis de lecciones aprendidas y evaluación crítica del stack tecnológico empleado.<br>
+        <b>T4.3:</b> Cierre y auditoría del tablero Trello, evidenciando el flujo completado de las historias de usuario.<br>
+        <b>T4.4:</b> Elaboración del catálogo de propuestas de mejora continua (ej. GitOps con ArgoCD, orquestación Kubernetes, escaneo DAST dinámico).<br>
+        <b>T4.5:</b> Integración del documento final de reflexión y cierre de proyecto.
+      </td>
+      <td>
+        • Ernesto F. (SM)<br>
+        • Todo el equipo (Ernesto, Héctor, Jazmín, Oswaldo)
+      </td>
+      <td>
+        Documento entregable:<br><code>Proyecto_Equipo2_Momento4_Reflexion.pdf</code><br><br>
+        Evidencias finales de Trello y balance reflexivo.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 4. HERRAMIENTAS DEVOPS SELECCIONADAS -->
+<div class="page-break"></div>
+<h1>4. Herramientas DevOps Seleccionadas y su Justificación Técnica</h1>
+
+<p>
+  En cumplimiento estricto con las tecnologías sugeridas y directrices específicas del docente para el <b>Equipo 2</b>, se seleccionó una cadena de herramientas (Toolchain) de grado profesional:
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 20%;">Categoría DevOps</th>
+      <th style="width: 22%;">Herramienta Seleccionada</th>
+      <th style="width: 58%;">Justificación Técnica y Rol en el Proyecto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Planificación y Gestión Ágil</b></td>
+      <td><b>Trello & GitHub Projects</b></td>
+      <td>
+        Tablero Kanban visual para administrar el flujo de valor bajo metodología ágil. Dispone de columnas DevOps estructuradas: <i>Backlog</i>, <i>Sprint To-Do</i>, <i>In Progress</i>, <i>Code Review & SAST</i>, <i>QA Testing</i>, <i>Staging Deployed</i> y <i>Done</i>. Permite fijar límites WIP (Work In Progress), asignar miembros y definir checklists con criterios de aceptación (Definition of Done) vinculados a GitHub Issues.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Control de Versiones (SCM)</b></td>
+      <td><b>GitHub (GitFlow)</b></td>
+      <td>
+        Gestor central de código con estrategia GitFlow adaptada. Se aplican reglas de protección sobre las ramas <code>main</code> y <code>develop</code> que impiden el push directo y exigen al menos dos revisiones por pares (QA y Scrum Master), sumado a la ejecución exitosa obligatoria del pipeline de CI. Se aplican Conventional Commits para total trazabilidad.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Integración Continua (CI)</b></td>
+      <td><b>Jenkins & GitHub Actions</b></td>
+      <td>
+        <b>Jenkins:</b> Servidor de automatización auto-hospedado para orquestar builds profundos de contenedores y suites completas.<br>
+        <b>GitHub Actions:</b> Ejecución automatizada en cada Pull Request para ejecutar en paralelo: verificación de tipos con TypeScript, linting estricto con ESLint, análisis SAST de dependencias con Snyk y pruebas unitarias automáticas con Vitest.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Contenedorización e Infraestructura</b></td>
+      <td><b>Docker & Docker Compose</b></td>
+      <td>
+        <b>Docker:</b> Construcción de imágenes inmutables mediante <code>Dockerfile</code> multi-stage (etapa de compilación y etapa ligera de ejecución con Alpine Linux), reduciendo el peso de las imágenes a menos de 150 MB y minimizando la superficie de vulnerabilidades.<br>
+        <b>Docker Compose:</b> Orquestación local reproducible de la API Node.js, la base de datos PostgreSQL y RabbitMQ en una red aislada (<code>monchis_net</code>), erradicando las diferencias de entorno.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Base de Datos y Persistencia</b></td>
+      <td><b>PostgreSQL 15 & Prisma ORM</b></td>
+      <td>
+        Motor relacional de alto rendimiento que proporciona aislamiento estricto y cumplimiento de transacciones ACID, imprescindible para la coherencia en los cobros de caja del POS. Prisma ORM provee un tipado estricto extremo y parametrización automática de consultas que elimina vulnerabilidades de inyección SQL (SQLi).
+      </td>
+    </tr>
+    <tr>
+      <td><b>Seguridad Web y DevSecOps (Enfoque Equipo 2)</b></td>
+      <td><b>npm audit, Snyk, Helmet & reCAPTCHA</b></td>
+      <td>
+        <b>Snyk & npm audit:</b> Detección temprana de vulnerabilidades (CVEs) en dependencias durante el build, alimentando la métrica oficial: <i>"Cantidad de vulnerabilidades corregidas"</i>.<br>
+        <b>Helmet:</b> Inyección de cabeceras de protección HTTP (CSP, HSTS, X-Frame-Options, X-Content-Type-Options).<br>
+        <b>Google reCAPTCHA v2/v3:</b> Protección en inicio de sesión contra ataques de fuerza bruta y bots.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Pruebas Automatizadas</b></td>
+      <td><b>Vitest, Supertest & Playwright</b></td>
+      <td>
+        <b>Vitest & Supertest:</b> Ejecución ultrarrápida de pruebas unitarias y de integración sobre controladores de autenticación, verificación de permisos RBAC y algoritmos de rotación de inventarios PEPS.<br>
+        <b>Playwright:</b> Automatización de pruebas End-to-End (E2E) simulando la navegación real de usuarios para verificar la imposibilidad de que un cajero acceda a funciones administrativas.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Despliegue Continuo (CD) y Hosting</b></td>
+      <td><b>Vercel (Frontend) & Nginx TLS (Backend)</b></td>
+      <td>
+        <b>Vercel:</b> Despliegue automatizado del frontend Vue 3 en CDN global con certificados SSL automáticos y forzado de HTTPS, cumpliendo con la directriz del Momento 3.<br>
+        <b>Nginx Reverse Proxy:</b> Servidor web para la API Node.js con terminación SSL/TLS segura (puerto 443), compresión gzip y proxy pass hacia el contenedor Docker.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Monitoreo y Observabilidad</b></td>
+      <td><b>Winston Logger & Endpoint /health</b></td>
+      <td>
+        Sistema de registro estructurado en formato JSON con rotación diaria de logs de auditoría (<code>access.log</code> y <code>error.log</code>), complementado con sondeo recurrente del estado de salud del backend mediante el endpoint <code>/health</code>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 5. DIAGRAMA DE FLUJO DEL PROCESO DEVOPS -->
+<div class="page-break"></div>
+<h1>5. Diagrama de Flujo del Proceso DevOps (CI/CD y DevSecOps)</h1>
+
+<p>
+  El ciclo de vida del software para la plataforma <b>Monchis Café</b> integra la seguridad y la automatización en cada una de sus fases bajo el principio DevSecOps de <i>"Shift-Left Security"</i> (anticipación de la seguridad):
+</p>
+
+<div class="diagram-container">
+  <svg viewBox="0 0 760 520" width="100%" height="auto" style="font-family: Arial, sans-serif;">
+    <defs>
+      <linearGradient id="gradPlan" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#4a5568;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#2d3748;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="gradCode" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#3182ce;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#2b6cb0;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="gradCI" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#d69e2e;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#b7791f;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="gradCD" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#dd6b20;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#c05621;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="gradOps" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#38a169;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#2f855a;stop-opacity:1" />
+      </linearGradient>
+      <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 8 5 L 0 9 z" fill="#4a5568"/>
+      </marker>
+      <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 8 5 L 0 9 z" fill="#e53e3e"/>
+      </marker>
+    </defs>
+
+    <!-- FASE 1: PLANIFICACIÓN -->
+    <rect x="20" y="20" width="220" height="70" rx="8" fill="url(#gradPlan)" />
+    <text x="130" y="44" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">1. PLANIFICACIÓN (Plan)</text>
+    <text x="130" y="60" fill="#e2e8f0" font-size="8.5" text-anchor="middle">• Historias de Usuario en Trello</text>
+    <text x="130" y="74" fill="#e2e8f0" font-size="8.5" text-anchor="middle">• Criterios DoD y Asignación de Roles</text>
+
+    <!-- FLECHA 1 -> 2 -->
+    <path d="M 240 55 L 275 55" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- FASE 2: DESARROLLO -->
+    <rect x="280" y="20" width="220" height="70" rx="8" fill="url(#gradCode)" />
+    <text x="390" y="44" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">2. DESARROLLO (Code)</text>
+    <text x="390" y="60" fill="#ebf8ff" font-size="8.5" text-anchor="middle">• Git feature/* + Docker Compose</text>
+    <text x="390" y="74" fill="#ebf8ff" font-size="8.5" text-anchor="middle">• Pre-commit Hooks (ESLint + Types)</text>
+
+    <!-- FLECHA 2 -> 3 -->
+    <path d="M 500 55 L 535 55" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- PULL REQUEST -->
+    <rect x="540" y="20" width="200" height="70" rx="8" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1.5" />
+    <text x="640" y="44" fill="#1a365d" font-size="10.5" font-weight="bold" text-anchor="middle">3. PULL REQUEST</text>
+    <text x="640" y="60" fill="#4a5568" font-size="8.5" text-anchor="middle">• Push a GitHub (develop)</text>
+    <text x="640" y="74" fill="#4a5568" font-size="8.5" text-anchor="middle">• Disparo de Webhook hacia CI</text>
+
+    <!-- FLECHA 3 -> CI -->
+    <path d="M 640 90 L 640 125" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- FASE 3: CI Y DEVSECOPS (CONTENEDOR CENTRAL) -->
+    <rect x="20" y="130" width="720" height="150" rx="10" fill="#fffdfa" stroke="#d69e2e" stroke-width="2" stroke-dasharray="4,4" />
+    <text x="380" y="152" fill="#b7791f" font-size="11.5" font-weight="bold" text-anchor="middle">4. PIPELINE DE INTEGRACIÓN CONTINUA (CI / Jenkins &amp; GitHub Actions)</text>
+
+    <!-- Subnodo SAST -->
+    <rect x="40" y="170" width="190" height="65" rx="6" fill="#fefcbf" stroke="#d69e2e" stroke-width="1" />
+    <text x="135" y="192" fill="#744210" font-size="9.5" font-weight="bold" text-anchor="middle">Escaneo SAST de Seguridad</text>
+    <text x="135" y="208" fill="#744210" font-size="8" text-anchor="middle">• Snyk Open Source</text>
+    <text x="135" y="222" fill="#744210" font-size="8" text-anchor="middle">• npm audit (Detección CVEs)</text>
+
+    <!-- Flecha SAST -> Tests -->
+    <path d="M 230 202 L 265 202" stroke="#d69e2e" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- Subnodo Unit Tests -->
+    <rect x="270" y="170" width="190" height="65" rx="6" fill="#fefcbf" stroke="#d69e2e" stroke-width="1" />
+    <text x="365" y="192" fill="#744210" font-size="9.5" font-weight="bold" text-anchor="middle">Pruebas Unitarias &amp; Regresión</text>
+    <text x="365" y="208" fill="#744210" font-size="8" text-anchor="middle">• Vitest (Suites de Controllers)</text>
+    <text x="365" y="222" fill="#744210" font-size="8" text-anchor="middle">• Supertest (Rutas y RBAC)</text>
+
+    <!-- Flecha Tests -> Docker Build -->
+    <path d="M 460 202 L 495 202" stroke="#d69e2e" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- Subnodo Docker Build -->
+    <rect x="500" y="170" width="220" height="65" rx="6" fill="#fefcbf" stroke="#d69e2e" stroke-width="1" />
+    <text x="610" y="192" fill="#744210" font-size="9.5" font-weight="bold" text-anchor="middle">Docker Multi-Stage Build &amp; Review</text>
+    <text x="610" y="208" fill="#744210" font-size="8" text-anchor="middle">• Empaquetado ligero en Alpine</text>
+    <text x="610" y="222" fill="#744210" font-size="8" text-anchor="middle">• Aprobación por pares (QA / SM)</text>
+
+    <!-- Salidas de Error (Rechazo CI) -->
+    <path d="M 135 235 L 135 258 L 40 258" stroke="#e53e3e" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrowRed)" fill="none" />
+    <text x="88" y="253" fill="#e53e3e" font-size="7.5" font-weight="bold" text-anchor="middle">Fallo SAST: PR Rechazado</text>
+
+    <path d="M 365 235 L 365 258 L 270 258" stroke="#e53e3e" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrowRed)" fill="none" />
+    <text x="318" y="253" fill="#e53e3e" font-size="7.5" font-weight="bold" text-anchor="middle">Fallo Test: PR Rechazado</text>
+
+    <!-- FLECHA CI -> CD -->
+    <path d="M 610 280 L 610 315" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- FASE 4: DESPLIEGUE CONTINUO (CD) -->
+    <rect x="420" y="320" width="320" height="75" rx="8" fill="url(#gradCD)" />
+    <text x="580" y="344" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">5. DESPLIEGUE CONTINUO (CD / Vercel &amp; Nginx)</text>
+    <text x="580" y="360" fill="#fffaf0" font-size="8.5" text-anchor="middle">• Frontend en Vercel con HTTPS automático</text>
+    <text x="580" y="375" fill="#fffaf0" font-size="8.5" text-anchor="middle">• Backend API en Contenedor Cloud + Nginx TLS</text>
+
+    <!-- FLECHA CD -> OPERATE -->
+    <path d="M 420 357 L 365 357" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- FASE 5: OPERACIÓN Y MONITOREO -->
+    <rect x="20" y="320" width="340" height="75" rx="8" fill="url(#gradOps)" />
+    <text x="190" y="344" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">6. OPERACIÓN Y MONITOREO (Operate &amp; Monitor)</text>
+    <text x="190" y="360" fill="#f0fff4" font-size="8.5" text-anchor="middle">• Pruebas de Humo E2E Playwright en Staging</text>
+    <text x="190" y="375" fill="#f0fff4" font-size="8.5" text-anchor="middle">• Logs Winston JSON + Endpoint /health + RBAC Check</text>
+
+    <!-- FLECHA OPERATE -> RETROALIMENTACIÓN -->
+    <path d="M 190 395 L 190 425" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+
+    <!-- FASE 6: RETROALIMENTACIÓN Y CIERRE -->
+    <rect x="20" y="430" width="720" height="65" rx="8" fill="#edf2f7" stroke="#4a5568" stroke-width="1.5" />
+    <text x="380" y="452" fill="#1a365d" font-size="10.5" font-weight="bold" text-anchor="middle">7. RETROALIMENTACIÓN Y MEJORA CONTINUA (Feedback &amp; Metrics)</text>
+    <text x="380" y="468" fill="#2d3748" font-size="8.5" text-anchor="middle">• Métrica Clave Equipo 2: Cuantificación de "Cantidad de Vulnerabilidades Corregidas"</text>
+    <text x="380" y="482" fill="#2d3748" font-size="8.5" text-anchor="middle">• Sesión de Retrospectiva Semanal de Sprint en Trello -> Ajuste y Nuevas Historias al Backlog</text>
+
+    <!-- Bucle de Retroalimentación de regreso a Planificación -->
+    <path d="M 20 462 L 5 462 L 5 55 L 15 55" stroke="#3182ce" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)" fill="none" />
+  </svg>
+</div>
+
+<h2>5.1 Explicación Paso a Paso de las Etapas del Ciclo:</h2>
+<ol>
+  <li><b>Planificación y Definición Ágil:</b> Se definen las historias de usuario en Trello estructuradas con criterios de aceptación estrictos y políticas de seguridad (Definition of Done), asignando tareas entre Devs, QA y Ops.</li>
+  <li><b>Codificación y Entornos Locales:</b> Los desarrolladores crean ramas <code>feature/*</code> en Git y desarrollan en sus entornos locales utilizando <code>docker-compose.yml</code> para ejecutar réplicas idénticas de PostgreSQL y RabbitMQ. Antes de cada commit, herramientas de pre-commit verifican linting y tipado.</li>
+  <li><b>Integración Continua con DevSecOps (Shift-Left):</b> Cada Pull Request dispara automáticamente el pipeline en GitHub Actions / Jenkins. Primero se somete al análisis estático SAST (Snyk / npm audit); si no existen vulnerabilidades críticas, se ejecutan las suites de pruebas unitarias Vitest. Solo al superar ambas pruebas y contar con aprobación de pares (Code Review) se permite el merge a la rama <code>develop</code>.</li>
+  <li><b>Despliegue Continuo con HTTPS:</b> El código integrado se despliega de forma automatizada hacia el entorno de Staging: el frontend se publica en Vercel con certificado SSL forzado, mientras que el backend y la base de datos se despliegan en contenedores cloud protegidos por un proxy inverso Nginx con cifrado TLS/SSL.</li>
+  <li><b>Monitoreo, Métrica de Seguridad y Retroalimentación:</b> En Staging, QA ejecuta pruebas E2E con Playwright y auditorías dinámicas. El sistema registra logs estructurados con Winston y responde en el endpoint <code>/health</code>. Los fallos corregidos se cuantifican en la métrica oficial (<i>vulnerabilidades corregidas</i>) y se analizan en la retrospectiva semanal de Sprint para alimentar el ciclo siguiente.</li>
+</ol>
+
+<!-- 6. CONCLUSIONES -->
+<h1>6. Conclusiones y Compromiso con el Ciclo DevOps</h1>
+<p>
+  La formulación del plan del <b>Momento 1</b> para <b>Monchis Café</b> consolida las bases de un proyecto de ingeniería de software de alto nivel académico y profesional:
+</p>
+<ul>
+  <li><b>Seguridad Embebida desde el Origen:</b> Se superan las prácticas empíricas al integrar el análisis de vulnerabilidades, el control RBAC y la protección HTTPS como requisitos indispensables en cada fase del ciclo de vida.</li>
+  <li><b>Impacto Tangible en el ODS 12:</b> La arquitectura técnica respalda directamente los objetivos de desarrollo sostenible al vincular el sistema de caja con la bonificación por reutilización de recipientes y la trazabilidad de café orgánico de sombra de productores locales.</li>
+  <li><b>Paridad y Eficiencia Operativa:</b> La contenedorización con Docker y los pipelines de CI/CD garantizan una transición transparente desde la estación de desarrollo hasta el despliegue en la nube, garantizando el cumplimiento de los cuatro momentos del curso.</li>
+</ul>
+
+<!-- 7. REFERENCIAS -->
+<div class="page-break"></div>
+<h1>7. Referencias Bibliográficas (Normas APA 7ma Edición)</h1>
+
+<div class="ref-item">Bass, L., Weber, I., & Zhu, L. (2015). <i>DevOps: A software architect's perspective</i>. Addison-Wesley Professional.</div>
+<div class="ref-item">Humble, J., & Farley, D. (2010). <i>Continuous delivery: Reliable software releases through build, test, and deployment automation</i>. Addison-Wesley.</div>
+<div class="ref-item">International Organization for Standardization, & International Electrotechnical Commission. (2011). <i>Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models</i> (ISO/IEC Standard No. 25010:2011). ISO/IEC.</div>
+<div class="ref-item">Kim, G., Humble, J., Debois, P., Willis, J., & Forsgren, N. (2021). <i>The DevOps handbook: How to create world-class agility, reliability, and security in technology organizations</i> (2nd ed.). IT Revolution Press.</div>
+<div class="ref-item">Martin, R. C. (2018). <i>Clean architecture: A craftsman's guide to software structure and design</i>. Prentice Hall.</div>
+<div class="ref-item">Organización de las Naciones Unidas. (2015). <i>Transformar nuestro mundo: la Agenda 2030 para el Desarrollo Sostenible</i>. Resolución A/RES/70/1 aprobada por la Asamblea General el 25 de septiembre de 2015. ONU. https://sdgs.un.org/es/goals/goal12</div>
+<div class="ref-item">OWASP Foundation. (2021). <i>OWASP Top 10: 2021 The ten most critical web application security risks</i>. OWASP. https://owasp.org/Top10/</div>
+
+</body>
+</html>

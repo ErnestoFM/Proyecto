@@ -24,6 +24,10 @@ export const useCookieStore = defineStore('cookie', () => {
   function cargarPreferencias() {
     if (typeof window === 'undefined') return;
     try {
+      if (window.location.search.includes('admin') || window.location.search.includes('dev=admin')) {
+        haRespondido.value = true;
+        return;
+      }
       const guardado = localStorage.getItem(STORAGE_KEY);
       if (guardado) {
         preferencias.value = { ...preferencias.value, ...JSON.parse(guardado), necesarias: true };

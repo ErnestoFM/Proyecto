@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 
 const auth = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const email = ref('');
 const password = ref('');
@@ -14,14 +15,16 @@ const totpCode = ref('');
 async function handleLogin() {
   const success = await auth.login(email.value, password.value, recaptchaToken.value);
   if (success && !auth.requires2FA) {
-    router.push('/dashboard');
+    const target = (route.query.redirect as string) || (auth.user?.rol === 'ADMIN' ? '/admin' : auth.user?.rol === 'CAJERO' ? '/pos' : '/dashboard');
+    router.push(target);
   }
 }
 
 async function handleVerify2FA() {
   const success = await auth.verify2FA(totpCode.value);
   if (success) {
-    router.push('/dashboard');
+    const target = (route.query.redirect as string) || (auth.user?.rol === 'ADMIN' ? '/admin' : '/dashboard');
+    router.push(target);
   }
 }
 

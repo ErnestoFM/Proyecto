@@ -158,7 +158,7 @@ function exportarPDF() {
 
       <!-- KPI Summary Cards -->
       <section class="kpi-grid">
-        <div class="kpi-card card" v-motion-slide-visible-bottom :delay="100">
+        <div class="kpi-card card">
           <span class="kpi-icon">💰</span>
           <div class="kpi-info">
             <small>Ingresos Totales</small>
@@ -166,7 +166,7 @@ function exportarPDF() {
           </div>
         </div>
 
-        <div class="kpi-card card" v-motion-slide-visible-bottom :delay="200">
+        <div class="kpi-card card">
           <span class="kpi-icon">☕</span>
           <div class="kpi-info">
             <small>Total de Órdenes</small>
@@ -174,7 +174,7 @@ function exportarPDF() {
           </div>
         </div>
 
-        <div class="kpi-card card" v-motion-slide-visible-bottom :delay="300">
+        <div class="kpi-card card">
           <span class="kpi-icon">🌿</span>
           <div class="kpi-info">
             <small>% Café Orgánico</small>
@@ -182,7 +182,7 @@ function exportarPDF() {
           </div>
         </div>
 
-        <div class="kpi-card card" v-motion-slide-visible-bottom :delay="400">
+        <div class="kpi-card card">
           <span class="kpi-icon">🛡️</span>
           <div class="kpi-info">
             <small>Mensajes en DLQ</small>
@@ -194,7 +194,7 @@ function exportarPDF() {
       <!-- Grid Principal: Tráfico UTM y Top Productos -->
       <div class="admin-main-grid">
         <!-- Panel de Atribución de Tráfico (Google Maps / Instagram / Directo) -->
-        <section class="card traffic-card" v-motion-slide-visible-bottom :delay="200">
+        <section class="card traffic-card">
           <div class="section-title">
             <span class="title-icon">📍</span>
             <div>
@@ -232,7 +232,7 @@ function exportarPDF() {
         </section>
 
         <!-- Productos Más Vendidos -->
-        <section class="card products-card" v-motion-slide-visible-bottom :delay="300">
+        <section class="card products-card">
           <div class="section-title">
             <span class="title-icon">🏆</span>
             <div>
@@ -255,7 +255,7 @@ function exportarPDF() {
       </div>
 
       <!-- Trazabilidad de Lotes de Café Orgánico -->
-      <section class="card batches-card" v-motion-slide-visible-bottom :delay="400">
+      <section class="card batches-card">
         <div class="section-title">
           <span class="title-icon">🌱</span>
           <div>

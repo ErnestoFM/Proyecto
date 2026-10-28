@@ -18,16 +18,16 @@ const auth = useAuthStore();
           <h3>Mis Pedidos</h3>
           <p>Historial y estado de tus órdenes.</p>
         </div>
-        <div class="card" v-motion-slide-visible-bottom :delay="350">
+        <RouterLink to="/rewards" class="card card--link" v-motion-slide-visible-bottom :delay="350">
           <span class="dashboard__icon">🎁</span>
           <h3>Monchis Rewards</h3>
           <p>Sellos, puntos cashback y beneficios activos.</p>
-        </div>
-        <div class="card" v-motion-slide-visible-bottom :delay="500">
+        </RouterLink>
+        <RouterLink to="/perfil" class="card card--link" v-motion-slide-visible-bottom :delay="500">
           <span class="dashboard__icon">👤</span>
           <h3>Mi Perfil</h3>
           <p>Datos personales y configuración de cuenta.</p>
-        </div>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -39,6 +39,19 @@ const auth = useAuthStore();
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   margin-top: 2rem;
+}
+
+.card--link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.card--link:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
 }
 
 .dashboard__icon {

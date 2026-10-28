@@ -2,679 +2,825 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Actividad PARTICIPACIÓN: Diseño de Estrategia de Servicios TI - Monchis Café</title>
+<title>Actividad Participación - Diseño de Estrategia de Servicios TI</title>
 <style>
   @page {
     size: letter;
-    margin: 22mm 20mm 22mm 20mm;
-    @bottom-center {
-      content: counter(page);
+    margin: 2.54cm;
+    @bottom-right {
+      content: "Página " counter(page) " de " counter(pages);
       font-family: Arial, sans-serif;
-      font-size: 10pt;
-      color: #718096;
-    }
-  }
-  @page landscape-section {
-    size: letter landscape;
-    margin: 18mm 15mm 18mm 15mm;
-    @bottom-center {
-      content: counter(page);
-      font-family: Arial, sans-serif;
-      font-size: 10pt;
+      font-size: 9pt;
       color: #718096;
     }
   }
   body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #1a202c;
-    line-height: 1.45;
+    font-family: Arial, sans-serif;
     font-size: 10.5pt;
+    line-height: 1.35;
+    color: #1A202C;
     margin: 0;
     padding: 0;
   }
-  h1 {
-    font-size: 15pt;
-    color: #1a365d;
-    border-bottom: 2px solid #2b4c7e;
-    padding-bottom: 5px;
-    margin-top: 24px;
+  .portada {
+    text-align: center;
+    page-break-after: always;
+    padding-top: 2.5cm;
+  }
+  .portada .inst-main {
+    font-size: 14pt;
+    font-weight: bold;
+    color: #1A365D;
+    margin-bottom: 4px;
+  }
+  .portada .inst-sub {
+    font-size: 12pt;
+    font-weight: bold;
+    color: #2B4C7E;
+    margin-bottom: 4px;
+  }
+  .portada .inst-div {
+    font-size: 10pt;
+    color: #4A5568;
+    margin-bottom: 2cm;
+  }
+  .portada h1 {
+    font-size: 16pt;
+    font-weight: bold;
+    color: #1A365D;
+    line-height: 1.3;
     margin-bottom: 12px;
+  }
+  .portada .subtitulo {
+    font-size: 11pt;
+    font-style: italic;
+    color: #4A5568;
+    margin-bottom: 8px;
+  }
+  .portada .catedra {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #2B4C7E;
+    margin-bottom: 2.5cm;
+  }
+  .portada .meta {
+    font-size: 10.5pt;
+    line-height: 1.6;
+    color: #2D3748;
+  }
+  .page-break {
+    page-break-after: always;
+  }
+  h1 {
+    font-size: 13.5pt;
+    color: #1A365D;
+    border-bottom: 1.5px solid #E2E8F0;
+    padding-bottom: 4px;
+    margin-top: 22px;
+    margin-bottom: 10px;
     page-break-after: avoid;
   }
   h2 {
-    font-size: 12.5pt;
-    color: #2b4c7e;
+    font-size: 12pt;
+    color: #2B4C7E;
     margin-top: 18px;
     margin-bottom: 8px;
     page-break-after: avoid;
   }
   h3 {
     font-size: 11pt;
-    color: #2c5282;
+    color: #3182CE;
     margin-top: 14px;
     margin-bottom: 6px;
     page-break-after: avoid;
   }
   p {
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     text-align: justify;
   }
-  .cover {
-    text-align: center;
-    page-break-after: always;
-    padding-top: 35px;
-  }
-  .cover-inst {
-    font-size: 12.5pt;
-    font-weight: bold;
-    color: #1a202c;
-    line-height: 1.4;
-    margin-bottom: 50px;
-  }
-  .cover-title {
-    font-size: 17pt;
-    font-weight: bold;
-    color: #1a365d;
-    line-height: 1.3;
-    margin-bottom: 25px;
-  }
-  .cover-sub {
-    font-size: 12.5pt;
-    font-weight: bold;
-    color: #744210;
-    background: #fefcbf;
-    display: inline-block;
-    padding: 6px 18px;
-    border-radius: 4px;
-    border: 1px solid #d69e2e;
-    margin-bottom: 60px;
-  }
-  .cover-meta {
-    font-size: 10.5pt;
-    color: #2d3748;
-    line-height: 1.6;
-    max-width: 650px;
-    margin: 0 auto;
-    text-align: left;
-    background: #f7fafc;
-    padding: 20px 30px;
-    border-left: 4px solid #2b4c7e;
-    border-radius: 4px;
-  }
-  .cover-meta strong {
-    color: #1a365d;
-  }
-  .page-break {
-    page-break-after: always;
-  }
-  .toc {
-    background: #f7fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    padding: 18px 24px;
-    margin-bottom: 20px;
-  }
-  .toc-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 7px;
-    font-size: 10.5pt;
-  }
-  .toc-row.main {
-    font-weight: bold;
-    color: #1a365d;
-    margin-top: 8px;
-    border-bottom: 1px dashed #cbd5e0;
-    padding-bottom: 2px;
-  }
-  .toc-row.sub {
+  ul {
+    margin-top: 4px;
+    margin-bottom: 10px;
     padding-left: 20px;
-    color: #4a5568;
-    font-size: 10pt;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  ol {
+    margin-top: 4px;
+    margin-bottom: 10px;
+    padding-left: 22px;
   }
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 12px;
-    margin-bottom: 16px;
-    font-size: 9.5pt;
+    margin-top: 10px;
+    margin-bottom: 14px;
+    font-size: 9pt;
     page-break-inside: avoid;
   }
-  th, td {
-    border: 1px solid #cbd5e0;
-    padding: 8px 10px;
-    text-align: left;
-    vertical-align: top;
-  }
   th {
-    background-color: #2b4c7e;
-    color: #ffffff;
+    background-color: #1A365D;
+    color: #FFFFFF;
     font-weight: bold;
+    padding: 8px 6px;
+    border: 1px solid #CBD5E0;
+    text-align: center;
+  }
+  td {
+    padding: 6px 8px;
+    border: 1px solid #CBD5E0;
+    vertical-align: middle;
+  }
+  tr:nth-child(even) td {
+    background-color: #F8FAFC;
+  }
+  .referencias p {
+    padding-left: 2em;
+    text-indent: -2em;
     font-size: 9.5pt;
+    margin-bottom: 8px;
+    text-align: left;
   }
-  tr:nth-child(even) {
-    background-color: #f7fafc;
-  }
-  .diagram-box {
-    background: #f7fafc;
-    border: 1px solid #cbd5e0;
-    border-left: 4px solid #2b4c7e;
-    padding: 12px 16px;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 9pt;
-    line-height: 1.35;
-    white-space: pre;
-    overflow-x: auto;
-    margin: 14px 0;
-    color: #2d3748;
-    border-radius: 4px;
-  }
-  .highlight-card {
-    background: #ebf8ff;
-    border: 1px solid #bee3f8;
-    border-left: 4px solid #3182ce;
-    padding: 12px 16px;
-    border-radius: 4px;
-    margin: 12px 0;
-  }
-  .highlight-card strong {
-    color: #2b6cb0;
-  }
-  .ref-item {
-    padding-left: 35px;
-    text-indent: -35px;
-    margin-bottom: 10px;
-    font-size: 10pt;
-    text-align: justify;
+  .formula-box {
+    background-color: #F7FAFC;
+    border-left: 3px solid #3182CE;
+    padding: 6px 12px;
+    margin: 8px 0;
+    font-size: 9.5pt;
+    color: #2D3748;
   }
 </style>
 </head>
 <body>
 
-<!-- PORTADA -->
-<div class="cover">
-  <div class="cover-inst">
-    UNIVERSIDAD DE GUADALAJARA<br>
-    Centro Universitario de Tonalá (CUTonalá)<br>
-    División de Ingenierías e Innovación Tecnológica<br>
-    Licenciatura en Ingeniería en Computación
-  </div>
+<div class="portada">
+  <div class="inst-main">UNIVERSIDAD DE GUADALAJARA</div>
+  <div class="inst-sub">CENTRO UNIVERSITARIO DE TONALÁ (CUTonalá)</div>
+  <div class="inst-div">DIVISIÓN DE INGENIERÍAS E INNOVACIÓN TECNOLÓGICA<br>LICENCIATURA EN INGENIERÍA EN COMPUTACIÓN</div>
   
-  <div class="cover-title">
-    ACTIVIDAD PARTICIPACIÓN<br>
-    DISEÑO DE ESTRATEGIA DE SERVICIOS TI
-  </div>
+  <h1>ACTIVIDAD PARTICIPACIÓN:<br>DISEÑO DE ESTRATEGIA DE SERVICIOS TI</h1>
+  <div class="subtitulo">Proyecto Final: Monchis Café — Plataforma Web y Sistema de Gestión para Cafetería de Especialidad</div>
+  <div class="catedra">Cátedra: Gestión de Servicios Informáticos</div>
   
-  <div class="cover-sub">
-    Proyecto Final: Plataforma Web Integral y Sistema de Gestión de Servicios "Monchis Café"
-  </div>
-  
-  <div class="cover-meta">
-    <p style="margin: 4px 0;"><strong>Cátedra:</strong> Gestión de Servicios Informáticos</p>
-    <p style="margin: 4px 0;"><strong>Docente:</strong> Dr. Gabriel Navarro Salcedo</p>
-    <p style="margin: 12px 0 4px 0;"><strong>Equipo de Proyecto:</strong></p>
-    <p style="margin: 2px 0 2px 15px;">• <strong>Ernesto Hatuey Fierro Medina</strong> (Código: 215487963) — <em>Líder y Arquitecto de Servicios TI</em></p>
-    <p style="margin: 2px 0 2px 15px;">• <strong>Jazmín Díaz</strong> — <em>Diseño de Servicios y Requerimientos</em></p>
-    <p style="margin: 2px 0 2px 15px;">• <strong>Héctor Hernández</strong> — <em>Especialista en Infraestructura y Operación TI</em></p>
-    <p style="margin: 2px 0 2px 15px;">• <strong>Oswaldo Millán</strong> — <em>Especialista en Transición y Calidad de Software</em></p>
-    <p style="margin: 12px 0 4px 0;"><strong>Fecha de Entrega:</strong> 17 de octubre de 2026 | <strong>Ciclo Escolar:</strong> 2026-B</p>
+  <div class="meta">
+    <strong>Docente:</strong> Dr. Gabriel Navarro Salcedo<br>
+    <strong>Estudiante:</strong> Ernesto Hatuey Fierro Medina (Código: 215487963)<br>
+    <strong>Rol:</strong> Desarrollador y Gestor de Servicios TI<br>
+    <strong>Fecha de Entrega:</strong> 17 de octubre de 2026<br>
+    <strong>Ciclo Escolar:</strong> 2026-B
   </div>
 </div>
-
-<!-- ÍNDICE -->
-<h1>Índice General</h1>
-<div class="toc">
-  <div class="toc-row main"><span>1. Introducción y Marco de Gestión de Servicios TI</span><span>3</span></div>
-  <div class="toc-row main"><span>2. Desarrollo de la Estrategia de Servicios TI</span><span>4</span></div>
-  <div class="toc-row sub"><span>2.1. ¿Qué servicios debemos ofrecer? (Portafolio y Catálogo de Servicios)</span><span>4</span></div>
-  <div class="toc-row sub"><span>2.2. ¿Cuál es su valor? (Definición de Valor: Utilidad y Garantía)</span><span>6</span></div>
-  <div class="toc-row sub"><span>2.3. ¿Cuáles son los resultados esperados? (Metas Cualitativas y Cuantitativas)</span><span>7</span></div>
-  <div class="toc-row sub"><span>2.4. ¿Cuáles son nuestros clientes potenciales? (Segmentación y Perfiles de Mercado)</span><span>8</span></div>
-  <div class="toc-row sub"><span>2.5. ¿Qué servicios son prioritarios? (Matriz de Priorización Estratégica)</span><span>9</span></div>
-  <div class="toc-row sub"><span>2.6. ¿Qué inversiones son necesarias? (Presupuesto y Recursos Financieros)</span><span>10</span></div>
-  <div class="toc-row sub"><span>2.7. ¿Qué servicios existen en el mercado que representen competencia directa? (Benchmarking)</span><span>11</span></div>
-  <div class="toc-row sub"><span>2.8. ¿Cómo podemos diferenciarnos de la competencia? (Propuesta de Valor Única)</span><span>12</span></div>
-  <div class="toc-row main"><span>3. Articulación de la Estrategia en las Fases del Ciclo de Vida del Servicio TI (ITIL)</span><span>13</span></div>
-  <div class="toc-row sub"><span>3.1. Estrategia del Servicio (Service Strategy)</span><span>13</span></div>
-  <div class="toc-row sub"><span>3.2. Diseño del Servicio (Service Design)</span><span>13</span></div>
-  <div class="toc-row sub"><span>3.3. Transición del Servicio (Service Transition)</span><span>14</span></div>
-  <div class="toc-row sub"><span>3.4. Operación del Servicio (Service Operation)</span><span>14</span></div>
-  <div class="toc-row sub"><span>3.5. Mejora Continua del Servicio (Continual Service Improvement)</span><span>15</span></div>
-  <div class="toc-row main"><span>4. Conclusiones Generales</span><span>16</span></div>
-  <div class="toc-row main"><span>5. Referencias Bibliográficas (APA 7.ª edición)</span><span>17</span></div>
-</div>
-
-<div class="page-break"></div>
-
-<!-- 1. INTRODUCCIÓN -->
-<h1>1. Introducción y Marco de Gestión de Servicios TI</h1>
-<p>
-  En la actualidad, las tecnologías de información han dejado de ser meras herramientas de soporte administrativo para convertirse en el núcleo estratégico que habilita, transforma y potencia los modelos de negocio. Bajo los principios de la Gestión de Servicios de Tecnologías de la Información (ITSM), formalizados en marcos de referencia reconocidos globalmente como <strong>ITIL (Information Technology Infrastructure Library)</strong> y el estándar internacional <strong>ISO/IEC 20000-1:2018</strong>, un servicio de TI se define como un medio para entregar valor a los clientes facilitando los resultados que ellos desean alcanzar, sin que estos deban asumir de forma directa la propiedad de costos y riesgos específicos (AXELOS, 2019; ISO/IEC, 2018).
-</p>
-<p>
-  El presente documento expone la <strong>Estrategia Integral de Servicios TI</strong> diseñada por el equipo de proyecto para <strong>Monchis Café</strong>, una empresa gastronómica regional especializada en café orgánico de cooperativas campesinas y productos comerciales complementarios. La estrategia no se limita a describir un paquete de software aislado; por el contrario, estructura un <strong>ecosistema de servicios gestionados</strong> que articula las cinco fases del ciclo de vida de los servicios TI (Estrategia, Diseño, Transición, Operación y Mejora Continua). Con ello, se garantiza que la inversión tecnológica responda directamente a las necesidades del negocio en barra, a la sostenibilidad ecológica (alineada a los Objetivos de Desarrollo Sostenible de la ONU: ODS 8, 9, 12 y 16) y a una experiencia omnicanal superior para el comensal contemporáneo.
-</p>
-
-<!-- 2. DESARROLLO DE LA ESTRATEGIA -->
-<h1>2. Desarrollo de la Estrategia de Servicios TI</h1>
-
-<h2>2.1. ¿Qué servicios debemos ofrecer? (Portafolio y Catálogo de Servicios)</h2>
-<p>
-  Para estructurar la oferta tecnológica, adoptamos la metodología de catálogo de servicios de ITIL v3 e ITIL 4, clasificando los servicios en tres niveles complementarios: <strong>Servicios Principales (Core)</strong>, <strong>Servicios Habilitadores (Enabling)</strong> y <strong>Servicios de Soporte y Garantía (Support & Enhancing)</strong>. Esta taxonomía permite visibilizar con claridad qué percibe el cliente final y qué capas de infraestructura, mensajería y seguridad sustentan la operación ininterrumpida de la cafetería.
-</p>
-
-<div class="diagram-box">
-                    ┌────────────────────────────────────────────────────────┐
-                    │               CATÁLOGO DE SERVICIOS TI                 │
-                    │                    "MONCHIS CAFÉ"                      │
-                    └────────────────────────────────────────────────────────┘
-                                                 │
-         ┌───────────────────────────────────────┼──────────────────────────────────────┐
-         ▼                                       ▼                                      ▼
-┌─────────────────────────────┐   ┌─────────────────────────────┐   ┌─────────────────────────────┐
-│    SERVICIOS PRINCIPALES    │   │    SERVICIOS HABILITADORES  │   │    SERVICIOS DE SOPORTE     │
-│           (CORE)            │   │         (ENABLING)          │   │         (SUPPORT)           │
-├─────────────────────────────┤   ├─────────────────────────────┤   ├─────────────────────────────┤
-│ 1. Punto de Venta Táctil    │   │ 4. Plataforma Cloud &       │   │ 7. Mesa de Ayuda y Soporte  │
-│    (POS) Omnicanal          │   │    Mensajería RabbitMQ      │   │    Técnico en Sitio/Remoto  │
-│ 2. Trazabilidad de Café     │   │ 5. Gestión de Datos y       │   │ 8. Continuidad y Copias de  │
-│    Orgánico y Lotes         │   │    Almacenamiento Seguro    │   │    Seguridad Automatizadas  │
-│ 3. Fidelización y Monedero  │   │ 6. Seguridad Perimetral,    │   │ 9. Monitoreo Proactivo y    │
-│    Digital (Monchis Rewards)│   │    Auth Stateless & 2FA     │   │    Alertamiento en Tiempo R.│
-└─────────────────────────────┘   └─────────────────────────────┘   └─────────────────────────────┘
-</div>
-
-<p><strong>A. Servicios Principales (Core Services):</strong></p>
-<p>
-  <strong>1. Servicio de Punto de Venta Táctil (POS) Omnicanal y Procesamiento Multimodal de Pagos:</strong> Interfaz interactiva de alta velocidad optimizada para tabletas de barra (Vue 3 SPA). Facilita el registro inmediato de comandas, cobro mixto (efectivo con cálculo automatizado de cambio, tarjetas mediante pasarelas Stripe/Clip/Mercado Pago, transferencias electrónicas SPEI con clave de rastreo bancaria) y emisión de tickets térmicos de 80 mm y recibos digitales.<br>
-  <em>Justificación:</em> Constituye el motor generador de ingresos de la cafetería. Una demora en caja destruye la experiencia del cliente y provoca pérdidas de venta directa.
-</p>
-<p>
-  <strong>2. Servicio de Trazabilidad Integral de Café Orgánico y Gestión PEPS de Almacén:</strong> Registro granular de cada lote de café en grano recibido desde cooperativas productoras (origen geográfico, finca, altitud, perfil de tueste, fecha de tostado y caducidad). Implementa rotación estricta PEPS (Primeras Entradas, Primeras Salidas) y genera códigos QR para que los comensales consulten en su smartphone el origen del grano servido en su taza.<br>
-  <em>Justificación:</em> La propuesta de valor de Monchis Café radica en el café orgánico de especialidad. Sin trazabilidad digitalizada, existe el riesgo de vender grano envejecido o perder la certificación de procedencia.
-</p>
-<p>
-  <strong>3. Servicio de Fidelización y Monedero Digital ("Monchis Rewards"):</strong> Tarjeta digital de sellos (8.ª bebida gratis tras 7 consumos acumulados), monedero de cashback (1 punto por cada $10 MXN gastados) y bonificación ecológica directa de $5.00 MXN al cliente que lleve termo o taza reutilizable (alineado al ODS 12).<br>
-  <em>Justificación:</em> Retener a un cliente cuesta una fracción de lo que cuesta adquirir uno nuevo. En el rubro gastronómico local, la fidelización digital gamificada crea barreras contra la competencia directa.
-</p>
-
-<p><strong>B. Servicios Habilitadores e Infraestructura (Enabling Services):</strong></p>
-<p>
-  <strong>4. Servicio de Plataforma Cloud y Orquestación Asíncrona (RabbitMQ + Patrón Saga):</strong> Infraestructura contenerizada bajo Docker y orquestación de transacciones distribuidas. Cuando una venta concurrente se procesa en barra y el inventario de un insumo se agota, el broker ejecuta transacciones compensatorias automáticas (reversas inmediatas) y desvía fallos a la Dead Letter Queue (DLQ) con alerta administrativa por SMTP.<br>
-  <em>Justificación:</em> Previene ventas de insumos no disponibles y garantiza consistencia transaccional aun durante picos de demanda en horas punta matutinas.
-</p>
-<p>
-  <strong>5. Servicio de Almacenamiento Seguro y Persistencia Transaccional (PostgreSQL + Prisma):</strong> Almacenamiento relacional estructurado con integridad referencial estricta, consultas parametrizadas contra inyecciones SQL y particionamiento lógico de catálogos comerciales frente a insumos de especialidad.<br>
-  <em>Justificación:</em> Garantiza confidencialidad, no repudio y precisión matemática en los registros contables y fiscales del negocio.
-</p>
-<p>
-  <strong>6. Servicio de Seguridad Perimetral, Autenticación Stateless y Control de Acceso (RBAC):</strong> Autenticación basada en JWT rotativos con Refresh Token en cookies <code>httpOnly + Secure + SameSite=Strict</code>, validación anti-bots con Google reCAPTCHA v2/v3, doble factor de autenticación (2FA) para roles gerenciales y auditoría de accesos.<br>
-  <em>Justificación:</em> Protege los fondos de caja, los datos personales de clientes (LFPDPPP) y previene accesos indebidos desde terminales no autorizadas.
-</p>
-
-<p><strong>C. Servicios de Soporte y Operación (Support Services):</strong></p>
-<p>
-  <strong>7. Mesa de Ayuda (Service Desk) y Soporte Técnico Continuo (Nivel 1 y 2):</strong> Canal de asistencia remota e inmediata para cajeros y administradores ante incidencias de periféricos (impresoras trabadas, escáneres ópticos) o bloqueos del software bajo acuerdo de nivel de servicio (SLA).<br>
-  <strong>8. Respaldo Automatizado y Recuperación ante Desastres (Disaster Recovery):</strong> Respaldos incrementales automatizados diarios y volcados completos semanales cifrados en la nube, con tiempo objetivo de recuperación (RTO) menor a 60 minutos.<br>
-  <strong>9. Monitoreo Proactivo de Salud y Telemetría:</strong> Vigilancia continua del estado del servidor (/api/health), latencia de base de datos y colas muertas de mensajería (DLQ), disparando alertas SMTP antes de que un fallo impacte al comensal.
-</p>
-
-<h2>2.2. ¿Cuál es su valor? (Definición de Valor: Utilidad y Garantía)</h2>
-<p>
-  Siguiendo el principio fundamental de ITIL, <strong>el valor no reside en la tecnología misma, sino en la percepción de los resultados habilitados para el cliente</strong>. El valor se compone de dos factores inseparables: <strong>Utilidad (<em>Fit for Purpose</em>)</strong> —lo que el servicio hace para eliminar restricciones y mejorar el rendimiento— y <strong>Garantía (<em>Fit for Use</em>)</strong> —la certeza de que el servicio estará disponible, tendrá la capacidad adecuada, será continuo y mantendrá la seguridad— (AXELOS, 2019; Steinberg, 2011).
-</p>
-
-<div class="diagram-box">
-                      ┌────────────────────────────────────────┐
-                      │          CREACIÓN DE VALOR TI          │
-                      │             (VALOR TOTAL)              │
-                      └────────────────────────────────────────┘
-                                           │
-                ┌──────────────────────────┴──────────────────────────┐
-                ▼                                                     ▼
-    ┌─────────────────────────┐                           ┌─────────────────────────┐
-    │  UTILIDAD DEL SERVICIO  │                           │  GARANTÍA DEL SERVICIO  │
-    │   ("Fit for Purpose")   │                           │     ("Fit for Use")     │
-    ├─────────────────────────┤                           ├─────────────────────────┤
-    │ • Elimina cuellos de    │                           │ • Disponibilidad 99.9%  │
-    │   botella en caja.      │                           │ • Transacciones seguras │
-    │ • Trazabilidad de café  │                           │   (Stateless JWT + 2FA) │
-    │   orgánico certificable.│                           │ • Resiliencia con Saga  │
-    │ • Fidelización activa   │                           │   (Reversas automáticas)│
-    │   y monetizable.        │                           │ • Recuperación RTO < 1h │
-    └─────────────────────────┘                           └─────────────────────────┘
-</div>
-
-<p>
-  <strong>Aportes Concretos a la Productividad:</strong> La interfaz táctil con pre-cálculo de cambio e integración de lectores ópticos reduce el tiempo promedio de atención por cliente de 2.5 minutos a menos de 45 segundos, permitiendo atender hasta un 60 % más de clientes en horas pico matutinas sin aumentar el personal de mostrador. Asimismo, el corte de caja automatizado elimina entre 40 y 60 minutos diarios de conteo manual, garantizando precisión contable absoluta.<br>
-  <strong>Reducción de Costos y Mermas:</strong> Al desplegar un sistema modular contenerizado en la nube en lugar de pagar licencias privativas por cada terminal de trabajo, se ahorran más de $36,000 MXN anuales en suscripciones de software cerrado. Además, el control PEPS de insumos orgánicos previene la pérdida de grano por envejecimiento, reduciendo el desperdicio en un 85 %.<br>
-  <strong>Diferenciación y Fidelización Sostenible:</strong> La bonificación directa por termo reusable atrae al público ecoconsciente y reduce el gasto en vasos desechables, mientras que la atribución de tráfico UTM permite a la gerencia comprobar si sus clientes provienen de recomendaciones en Google Maps o de anuncios en Instagram, optimizando la inversión en marketing.
-</p>
-
-<h2>2.3. ¿Cuáles son los resultados esperados? (Metas Cualitativas y Cuantitativas)</h2>
-<p>
-  Para asegurar que la estrategia sea evaluable conforme a la fase de Mejora Continua de ITIL, establecemos metas cualitativas y cuantitativas vinculadas a Factores Críticos de Éxito (CSFs) e Indicadores Clave de Desempeño (KPIs):
-</p>
-
+<h1>ÍNDICE GENERAL</h1>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>1.</strong> Introducción y Marco de Gestión de Servicios TI</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>2.</strong> Desarrollo de la Estrategia de Servicios TI</p>
+<p>* 2.1. ¿Qué servicios debemos ofrecer? (Portafolio y Catálogo de Servicios)</p>
+<p>* 2.2. ¿Cuál es su valor? (Definición de Valor: Utilidad y Garantía)</p>
+<p>* 2.3. ¿Cuáles son los resultados esperados? (Metas Cualitativas y Cuantitativas)</p>
+<p>* 2.4. ¿Cuáles son nuestros clientes potenciales? (Segmentación y Perfiles de Mercado)</p>
+<p>* 2.5. ¿Qué servicios son prioritarios? (Matriz de Priorización Estratégica)</p>
+<p>* 2.6. ¿Qué inversiones son necesarias? (Presupuesto y Análisis de Costo Total de Propiedad)</p>
+<p>* 2.7. ¿Qué servicios existen en el mercado que representen competencia directa? (Benchmarking)</p>
+<p>* 2.8. ¿Cómo podemos diferenciarnos de la competencia? (Propuesta de Valor)</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>3.</strong> Articulación de la Estrategia en las Fases del Ciclo de Vida del Servicio TI (ITIL)</p>
+<p>* 3.1. Estrategia del Servicio (Service Strategy)</p>
+<p>* 3.2. Diseño del Servicio (Service Design)</p>
+<p>* 3.3. Transición del Servicio (Service Transition)</p>
+<p>* 3.4. Operación del Servicio (Service Operation)</p>
+<p>* 3.5. Mejora Continua del Servicio (Continual Service Improvement)</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>4.</strong> Conclusiones Generales</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>5.</strong> Referencias Bibliográficas</p>
+<h1>1. INTRODUCCIÓN Y MARCO DE GESTIÓN DE SERVICIOS TI</h1>
+<p>En las organizaciones contemporáneas, las tecnologías de información constituyen el medio fundamental para habilitar operaciones y generar valor. La Gestión de Servicios de Tecnologías de la Información (ITSM) define un marco para alinear la infraestructura y el software con las metas del negocio. La norma internacional ISO/IEC 20000-1 establece los requisitos de un sistema de gestión de servicios (International Organization for Standardization & International Electrotechnical Commission [ISO/IEC], 2018). Por su parte, la biblioteca ITIL en su edición 2011 estructura este enfoque a través de un ciclo de vida de cinco fases: Estrategia, Diseño, Transición, Operación y Mejora Continua del Servicio (Cabinet Office, 2011a–e). Es pertinente señalar que ITIL 4 evolucionó este modelo hacia el Sistema de Valor del Servicio (AXELOS, 2019); no obstante, para fines analíticos de este documento se adopta la estructura clásica por fases de ITIL 2011.</p>
+<p>Este trabajo presenta la estrategia de servicios TI para Monchis Café. El proyecto corresponde a un escenario académico que modela una cafetería orientada al café de especialidad y al consumo sustentable. El sistema no se concibe como un software aislado, sino como un conjunto de servicios tecnológicos coordinados. Cada servicio busca facilitar la atención en mostrador, registrar la procedencia del grano y respaldar la sostenibilidad según los Objetivos de Desarrollo Sostenible (Organización de las Naciones Unidas [ONU], 2015). Dado que el establecimiento se encuentra en fase de desarrollo y no cuenta con métricas históricas de ventas ni tiempos de cobro en producción, los valores aquí expuestos se formulan como hipótesis técnicas y metas operativas preliminares.</p>
+<h1>2. DESARROLLO DE LA ESTRATEGIA DE SERVICIOS TI</h1>
+<p>A continuación se da respuesta a las ocho preguntas directrices para la formulación de la estrategia de servicios.</p>
+<h2>2.1. ¿QUÉ SERVICIOS DEBEMOS OFRECER?</h2>
+<p>Siguiendo el marco de catálogo de servicios de ITIL (Cabinet Office, 2011b) y la tipología de servicios (Cabinet Office, 2011d), la oferta se organiza en tres niveles: servicios principales (Core), servicios habilitadores (Enabling) y servicios de realce o soporte (Enhancing / Support). Esta división permite distinguir los componentes que interactúan con el usuario de aquellos que operan en segundo plano para garantizar la seguridad, resiliencia y continuidad operativa.</p>
+<h3>Tabla 1. Catálogo de Servicios TI para Monchis Café</h3>
 <table>
-  <thead>
-    <tr>
-      <th style="width: 18%;">Dimensión</th>
-      <th style="width: 25%;">Factor Crítico de Éxito (CSF)</th>
-      <th style="width: 27%;">Métrica / Indicador Clave (KPI)</th>
-      <th style="width: 15%;">Meta Cuantitativa</th>
-      <th style="width: 15%;">Meta Cualitativa</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Operación en Barra</strong></td>
-      <td>Velocidad y fluidez en cobro</td>
-      <td>Tiempo Medio de Atención en Caja (<em>Service Time</em>)</td>
-      <td><strong>&le; 45 seg</strong> / cliente</td>
-      <td>Servicio sin filas; imagen ágil y moderna.</td>
-    </tr>
-    <tr>
-      <td><strong>Desempeño Técnico</strong></td>
-      <td>Rapidez de respuesta del sistema</td>
-      <td>Latencia de endpoints POS (Percentil 95)</td>
-      <td><strong>&le; 400 ms</strong></td>
-      <td>Sensación de inmediatez táctil en pantalla.</td>
-    </tr>
-    <tr>
-      <td><strong>Disponibilidad</strong></td>
-      <td>Continuidad en horario comercial</td>
-      <td>Tiempo de Actividad (<em>System Uptime</em>)</td>
-      <td><strong>&ge; 99.9 %</strong></td>
-      <td>Confianza total: la caja nunca se "cae".</td>
-    </tr>
-    <tr>
-      <td><strong>Fiabilidad Transaccional</strong></td>
-      <td>Consistencia de cobro e inventario</td>
-      <td>Tasa de inconsistencias transaccionales</td>
-      <td><strong>0.0 %</strong> (Saga/DLQ)</td>
-      <td>Cero disputas por cobros de insumos agotados.</td>
-    </tr>
-    <tr>
-      <td><strong>Fidelización</strong></td>
-      <td>Retención y recompra</td>
-      <td>Adopción de Monchis Rewards</td>
-      <td><strong>&ge; 40 %</strong> de frecuentes</td>
-      <td>Sentido de recompensa y pertenencia a la marca.</td>
-    </tr>
-    <tr>
-      <td><strong>Sostenibilidad</strong></td>
-      <td>Reducción de residuos (ODS 12)</td>
-      <td>Pedidos servidos en termo/taza reusable</td>
-      <td><strong>&ge; 25 %</strong> del volumen</td>
-      <td>Reputación de Monchis Café como líder ecológico.</td>
-    </tr>
-    <tr>
-      <td><strong>Soporte TI</strong></td>
-      <td>Resolución expedita de fallos</td>
-      <td>Tiempo Medio de Resolución (<em>MTTR</em>)</td>
-      <td><strong>&le; 60 min</strong></td>
-      <td>Tranquilidad operativa del personal de barra.</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+  <th>Nivel de Servicio</th>
+  <th>Nombre del Servicio</th>
+  <th>Descripción Funcional Breve</th>
+  <th>Componente Técnico Base</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align: center;"><strong>Principal (Core)</strong></td>
+  <td>Punto de Venta en Barra (POS)</td>
+  <td>Registro rápido de comandas, cobro mixto (efectivo, tarjeta bancaria y SPEI) y emisión de comprobantes.</td>
+  <td>Aplicación web en Vue 3, API en Node.js y lectores térmicos.</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Principal (Core)</strong></td>
+  <td>Trazabilidad de Café y Control PEPS</td>
+  <td>Registro de lotes de café (finca, altitud, tueste y caducidad) con rotación de primeras entradas y primeras salidas.</td>
+  <td>Modelos de datos en PostgreSQL mediante Prisma ORM y códigos QR.</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Principal (Core)</strong></td>
+  <td>Fidelización "Monchis Rewards"</td>
+  <td>Registro digital de consumos para otorgar bebidas de cortesía por acumulación (una bebida de cortesía al acumular 10 consumos registrados) y bonificaciones por uso de recipientes reusables.</td>
+  <td>Módulo de cliente en aplicación web y persistencia de saldos en base de datos.</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Habilitador (Enabling)</strong></td>
+  <td>Plataforma Cloud y Mensajería</td>
+  <td>Comunicación asíncrona de eventos de venta e inventario; transporte de mensajes para transacciones compensatorias.</td>
+  <td>Servidor en Google Cloud Platform (Compute Engine e2-medium, 4 GB RAM) y broker RabbitMQ.</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Habilitador (Enabling)</strong></td>
+  <td>Persistencia Transaccional</td>
+  <td>Almacenamiento relacional de compras, catálogo de insumos y auditoría de cambios de inventario.</td>
+  <td>Base de datos relacional PostgreSQL con restricciones de integridad referencial.</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Habilitador (Enabling)</strong></td>
+  <td>Seguridad de Acceso y Autenticación</td>
+  <td>Control de sesiones mediante tokens web, validación de formularios y segregación de perfiles por rol.</td>
+  <td>JSON Web Tokens (JWT) en cookies seguras, Google reCAPTCHA v3 y control RBAC alineado con los controles de acceso de ISO/IEC 27001 (ISO/IEC, 2022).</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Soporte (Support / Enhancing)</strong></td>
+  <td>Mesa de Ayuda Técnica</td>
+  <td>Atención y diagnóstico de fallas en terminales de cobro, lectores de códigos e impresoras.</td>
+  <td>Canal de reporte técnico con atención en sitio y asistencia remota para el personal.</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Soporte (Support / Enhancing)</strong></td>
+  <td>Continuidad y Respaldos</td>
+  <td>Copias periódicas de seguridad de la base de datos y procedimiento documentado de restauración.</td>
+  <td>Tareas programadas de volcado de datos con almacenamiento externo en la nube.</td>
+</tr>
+<tr>
+  <td style="text-align: center;"><strong>Soporte (Support / Enhancing)</strong></td>
+  <td>Monitoreo de Disponibilidad</td>
+  <td>Supervisión de rutas de verificación (/api/health) y estado de colas de mensajería pendientes.</td>
+  <td>Scripts de sondeo de estado con notificaciones de alerta técnica vía SMTP.</td>
+</tr>
+</tbody>
 </table>
-
-<div class="page-break"></div>
-
-<h2>2.4. ¿Cuáles son nuestros clientes potenciales? (Segmentación y Perfiles de Mercado)</h2>
-<p>
-  La estrategia contempla una segmentación dual que atiende tanto al cliente final que consume en barra como al personal operativo interno y a potenciales microempresas del sector gastronómico interesadas en adoptar este modelo de servicios:
-</p>
-<p>
-  • <strong>Consumidores de Café de Especialidad y Profesionales Locales (Segmento Externo):</strong> Comensales de 22 a 55 años con afinidad por el café artesanal y el trabajo remoto. Demandan rapidez de pago (contactless, SPEI), menús interactivos donde consultar notas de cata y origen del café, y un sistema de sellos digitales sin plásticos contaminantes.<br>
-  • <strong>Productores y Cooperativas Campesinas Regionales (Socios de Valor):</strong> Pequeños productores que buscan un trato justo y visibilidad comercial. Valoran que su finca, altitud y método de cultivo sean destacados ante el comensal mediante códigos QR en cada orden.<br>
-  • <strong>Personal Operativo y Gerencia de Monchis Café (Clientes Internos):</strong> Cajeros y baristas que requieren una herramienta táctil a prueba de errores humanos, y administradores que necesitan auditorías claras de flujo de caja, control de mermas y métricas de retorno de inversión de marketing.<br>
-  • <strong>Micro y Pequeñas Cafeterías Independientes (Potencial Expansión SaaS):</strong> Establecimientos de 1 a 3 sucursales en ciudades intermedias desatendidos por el software ERP masivo (demasiado costoso) y frustrados por terminales bancarias básicas que no controlan insumos ni trazabilidad orgánica.
-</p>
-
-<h2>2.5. ¿Qué servicios son prioritarios? (Matriz de Priorización Estratégica)</h2>
-<p>
-  Aplicando criterios de impacto en la continuidad operativa y viabilidad técnica, se estructuró la siguiente matriz de priorización:
-</p>
-
+<p><em>Criterios de selección:</em></p>
+<ul><li>El <strong>Punto de Venta</strong> es el servicio crítico para el negocio. Su diseño responde a la necesidad de no retrasar la fila de pedidos matutinos.</li></ul>
+<ul><li>La <strong>Trazabilidad de Café</strong> materializa la propuesta de valor del negocio. Permite verificar ante el cliente que el grano proviene de cooperativas regionales.</li></ul>
+<ul><li>La <strong>Fidelización</strong> estimula la retención de comensales frecuentes (Reichheld & Sasser, 1990) y apoya la reducción de vasos desechables (ONU, 2015, ODS 12).</li></ul>
+<ul><li>La <strong>Plataforma Cloud y Mensajería</strong> aísla tareas asíncronas pesadas. Cuando ocurre un pedido simultáneo y se detecta agotamiento de insumo, el orquestador de la Saga ejecuta transacciones compensatorias mientras RabbitMQ transporta los mensajes correspondientes. La selección de la máquina virtual e2-medium (4 GB de RAM) responde a los requerimientos oficiales de RabbitMQ para producción (RabbitMQ, 2026), garantizando margen suficiente para el runtime de Erlang y la API de Node.js.</li></ul>
+<ul><li>La <strong>Persistencia</strong> y la <strong>Seguridad de Acceso</strong> protegen la información transaccional y los datos personales alineados con los controles de ISO/IEC 27001 (ISO/IEC, 2022) y conforme a la legislación aplicable (Cámara de Diputados del H. Congreso de la Unión, 2025).</li></ul>
+<ul><li>La <strong>Mesa de Ayuda</strong>, los <strong>Respaldos</strong> y el <strong>Monitoreo</strong> conforman la red de protección operativa que previene interrupciones prolongadas en las jornadas de venta.</li></ul>
+<h2>2.2. ¿CUÁL ES SU VALOR?</h2>
+<p>En el marco ITIL, el valor se define como el conjunto de beneficios percibidos por el cliente al alcanzar sus objetivos. Este valor se compone de dos elementos indispensables: la Utilidad (<em>Fit for Purpose</em>, adecuación para el propósito) y la Garantía (<em>Fit for Use</em>, adecuación para el uso) (Cabinet Office, 2011d). Ningún servicio genera valor real si ofrece utilidad sin garantía, o si cuenta con garantías técnicas pero carece de utilidad práctica para el negocio.</p>
+<h3>Tabla 2. Desglose de Valor: Utilidad frente a Garantía</h3>
 <table>
-  <thead>
-    <tr>
-      <th style="width: 15%;">Prioridad</th>
-      <th style="width: 25%;">Servicio TI</th>
-      <th style="width: 35%;">Justificación Estratégica</th>
-      <th style="width: 25%;">Despliegue</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>P1 (Crítica)</strong></td>
-      <td>POS Táctil & Procesamiento de Pagos</td>
-      <td>Núcleo vital generador de ingresos. Sin él no es posible cobrar ni operar legalmente.</td>
-      <td>Fase 1 (Semanas 1–3)</td>
-    </tr>
-    <tr>
-      <td><strong>P1 (Crítica)</strong></td>
-      <td>Seguridad Stateless & Autenticación RBAC</td>
-      <td>Protege las transacciones financieras y restringe accesos administrativos desde el arranque.</td>
-      <td>Fase 1 (Semanas 2–4)</td>
-    </tr>
-    <tr>
-      <td><strong>P2 (Alta)</strong></td>
-      <td>Trazabilidad de Café Orgánico y PEPS</td>
-      <td>Sustenta la propuesta de valor del café de especialidad y previene pérdidas por caducidad.</td>
-      <td>Fase 2 (Semanas 5–7)</td>
-    </tr>
-    <tr>
-      <td><strong>P2 (Alta)</strong></td>
-      <td>Infraestructura Resiliente (RabbitMQ Saga)</td>
-      <td>Blinda las transacciones concurrentes evitando desajustes entre cobro e inventario.</td>
-      <td>Fase 2 (Semanas 6–8)</td>
-    </tr>
-    <tr>
-      <td><strong>P3 (Media)</strong></td>
-      <td>Fidelización Monchis Rewards (ODS 12)</td>
-      <td>Impulsa la retención y la comunidad ecológica una vez estabilizado el flujo transaccional.</td>
-      <td>Fase 3 (Semanas 9–11)</td>
-    </tr>
-    <tr>
-      <td><strong>P3 (Media)</strong></td>
-      <td>Panel Analítico & Atribución UTM</td>
-      <td>Permite a la gerencia optimizar el gasto publicitario en Google Maps e Instagram.</td>
-      <td>Fase 3 (Semanas 10–12)</td>
-    </tr>
-    <tr>
-      <td><strong>P4 (Soporte)</strong></td>
-      <td>Mesa de Ayuda, Monitoreo y Backups</td>
-      <td>Garantiza la continuidad operativa, soporte a usuarios y recuperación ante desastres.</td>
-      <td>Fase 4 (Transversal)</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+  <th>Dimensión de Valor</th>
+  <th>Concepto ITIL</th>
+  <th>Aplicación Concreta en Monchis Café</th>
+  <th>Beneficio Operativo Esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Utilidad</strong> (*Fit for Purpose*)</td>
+  <td>Qué hace el servicio; eliminación de restricciones operativas.</td>
+  <td>Captura táctil de pedidos con cálculo inmediato de cambio y cobro integrado.</td>
+  <td>Reduce tiempos de espera en mostrador y simplifica el registro de comandas para los baristas.</td>
+</tr>
+<tr>
+  <td><strong>Utilidad</strong> (*Fit for Purpose*)</td>
+  <td>Soporte al desempeño del negocio.</td>
+  <td>Control estricto de rotación PEPS (primeras entradas, primeras salidas) de café en grano.</td>
+  <td>Se propone como meta evitar que los lotes de café de especialidad pierdan frescura o caduquen en bodega.</td>
+</tr>
+<tr>
+  <td><strong>Utilidad</strong> (*Fit for Purpose*)</td>
+  <td>Fidelización y sustentabilidad activa.</td>
+  <td>Registro digital de visitas y bonificación fija por traer termo reutilizable.</td>
+  <td>Estimula la recompra regular y apoya el consumo responsable de acuerdo con el ODS 12 (ONU, 2015).</td>
+</tr>
+<tr>
+  <td><strong>Garantía</strong> (*Fit for Use*)</td>
+  <td>Disponibilidad del servicio.</td>
+  <td>Arquitectura contenerizada sobre máquina virtual con respaldos diarios.</td>
+  <td>Meta de disponibilidad de 99.5 % durante el horario de atención comercial (lunes a sábado).</td>
+</tr>
+<tr>
+  <td><strong>Garantía</strong> (*Fit for Use*)</td>
+  <td>Capacidad y desempeño.</td>
+  <td>Peticiones optimizadas en monorepo web y separación de colas de mensajes.</td>
+  <td>Tiempo de respuesta en pantalla ≤ 450 ms (P95) en red local bajo carga típica del POS.</td>
+</tr>
+<tr>
+  <td><strong>Garantía</strong> (*Fit for Use*)</td>
+  <td>Continuidad operativa.</td>
+  <td>Respaldos diarios programados de la base de datos relacional.</td>
+  <td>Objetivo de Tiempo de Recuperación (RTO) ≤ 45 minutos; Objetivo de Punto de Recuperación (RPO) ≤ 24 horas, delimitando el volumen máximo de datos transaccionales en riesgo.</td>
+</tr>
+<tr>
+  <td><strong>Garantía</strong> (*Fit for Use*)</td>
+  <td>Seguridad de la información.</td>
+  <td>Autenticación stateless con JWT, cookies seguras httpOnly y roles RBAC alineado con los controles de acceso de ISO/IEC 27001 (ISO/IEC, 2022).</td>
+  <td>Previene modificaciones no autorizadas en precios, cortes de caja o datos personales de clientes (Cámara de Diputados del H. Congreso de la Unión, 2025).</td>
+</tr>
+</tbody>
 </table>
-
-<h2>2.6. ¿Qué inversiones son necesarias? (Presupuesto y Recursos Financieros)</h2>
-<p>
-  La implementación y operación de la estrategia demanda una inversión inicial en activos (CAPEX) de <strong>$28,480 MXN</strong> y un gasto operativo mensual (OPEX) de <strong>$4,850 MXN</strong>, logrando un balance financiero altamente rentable:
-</p>
-
+<p><em>Aportes esperados a la operación:</em></p>
+<p>El valor de la utilidad se refleja en la fluidez del mostrador. Se establece como supuesto operativo de partida un tiempo estimado de cobro actual de 120 segundos, proyectando reducirlo a ≤ 75 segundos con la interfaz táctil. Esto habilitaría un incremento potencial de hasta 60 % en la capacidad teórica de despacho en horas de mayor afluencia. En cuanto a la continuidad, es indispensable diferenciar entre RTO y RPO: el RTO define el tiempo máximo para restaurar el servicio tras una caída (≤ 45 minutos), mientras que el RPO delimita la antigüedad máxima de los datos que se perderían ante un fallo crítico (≤ 24 horas mediante copias diarias).</p>
+<h2>2.3. ¿CUÁLES SON LOS RESULTADOS ESPERADOS?</h2>
+<p>Para que la estrategia sea verificable conforme a los principios de mejora continua (Cabinet Office, 2011a), se definen metas cuantitativas y cualitativas vinculadas a Factores Críticos de Éxito (CSF) e Indicadores Clave de Desempeño (KPI). Puesto que el proyecto se encuentra en etapa de diseño académico, estos valores representan metas operativas formuladas por el autor y sujetas a validación empírica en pruebas de campo.</p>
+<h3>Tabla 3. Matriz de Resultados y Metas Operativas Propuestas</h3>
 <table>
-  <thead>
-    <tr>
-      <th style="width: 22%;">Rubro de Inversión</th>
-      <th style="width: 38%;">Componente y Especificación</th>
-      <th style="width: 12%;">Tipo</th>
-      <th style="width: 14%;">Inversión Inicial</th>
-      <th style="width: 14%;">Gasto Mensual</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Hardware en Barra</strong></td>
-      <td>2 Tabletas industriales táctiles 10.5" Android con soporte de seguridad</td>
-      <td>CAPEX</td>
-      <td>$12,500 MXN</td>
-      <td>$0 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Hardware Periférico</strong></td>
-      <td>2 Impresoras térmicas 80 mm + 2 Lectores de código 1D/2D</td>
-      <td>CAPEX</td>
-      <td>$7,800 MXN</td>
-      <td>$0 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Infraestructura Cloud</strong></td>
-      <td>Servidor Virtual en GCP / Cloud Run para Backend y RabbitMQ</td>
-      <td>OPEX</td>
-      <td>$0 MXN</td>
-      <td>$650 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Base de Datos Cloud</strong></td>
-      <td>Instancia administrada PostgreSQL con backups diarios cifrados</td>
-      <td>OPEX</td>
-      <td>$0 MXN</td>
-      <td>$450 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Dominio y Red (CDN)</strong></td>
-      <td>Dominio .com.mx, SSL/TLS Let's Encrypt y Cloudflare CDN seguro</td>
-      <td>CAPEX / OPEX</td>
-      <td>$680 MXN (anual)</td>
-      <td>$0 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Servicio SMTP / DLQ</strong></td>
-      <td>Pasarela de correo transaccional para alertas Saga y DLQ</td>
-      <td>OPEX</td>
-      <td>$0 MXN</td>
-      <td>$250 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Capacitación Operativa</strong></td>
-      <td>Talleres prácticos para cajeros y baristas en barra (Nivel 0)</td>
-      <td>CAPEX</td>
-      <td>$3,500 MXN</td>
-      <td>$0 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Soporte y Operación</strong></td>
-      <td>Mesa de ayuda remota Nivel 1/2, monitoreo y mantenimiento mensual</td>
-      <td>OPEX</td>
-      <td>$0 MXN</td>
-      <td>$3,500 MXN</td>
-    </tr>
-    <tr>
-      <td><strong>Fondo Contingencia</strong></td>
-      <td>Reserva financiera para refacciones de conectividad y hardware</td>
-      <td>CAPEX</td>
-      <td>$4,000 MXN</td>
-      <td>$0 MXN</td>
-    </tr>
-    <tr style="font-weight: bold; background-color: #e2e8f0;">
-      <td colspan="3">TOTALES CONSOLIDADOS (INVERSIÓN INICIAL Y COSTO OPERATIVO MENSUAL)</td>
-      <td>$28,480 MXN</td>
-      <td>$4,850 MXN / mes</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+  <th>Dimensión de Servicio</th>
+  <th>Factor Crítico de Éxito (CSF)</th>
+  <th>Indicador Clave de Desempeño (KPI)</th>
+  <th>Meta Cuantitativa Propuesta</th>
+  <th>Meta Cualitativa Esperada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Atención en Barra</strong></td>
+  <td>Agilidad en el registro de la orden.</td>
+  <td>Tiempo promedio de captura y cobro por pedido en mostrador.</td>
+  <td>Meta: ≤ 75 segundos por cliente en pedidos estándar.</td>
+  <td>Sensación de fluidez en el servicio; disminución del estrés para el cajero.</td>
+</tr>
+<tr>
+  <td><strong>Desempeño Técnico</strong></td>
+  <td>Rapidez de respuesta de la aplicación web.</td>
+  <td>Latencia de respuesta en endpoints del POS (percentil 95).</td>
+  <td>Meta: ≤ 450 ms (P95) en red local bajo carga típica del POS.</td>
+  <td>Interacción táctil ágil sin bloqueos perceptibles en la pantalla.</td>
+</tr>
+<tr>
+  <td><strong>Disponibilidad</strong></td>
+  <td>Continuidad durante el horario de servicio.</td>
+  <td>Porcentaje de tiempo operativo en horario comercial (08:00 a 20:00).</td>
+  <td>Meta: ≥ 99.5 % mensual (≈ 94 minutos máximos de interrupción tolerados al mes).</td>
+  <td>Confianza del personal de que la terminal responderá en turnos clave.</td>
+</tr>
+<tr>
+  <td><strong>Fiabilidad Transaccional</strong></td>
+  <td>Consistencia entre inventario y ventas.</td>
+  <td>Tasa de órdenes con discrepancia no compensada tras corte mensual.</td>
+  <td>Meta: < 0.1 % de transacciones del periodo evaluado.</td>
+  <td>Disminución de quejas por cobro de bebidas con ingredientes agotados.</td>
+</tr>
+<tr>
+  <td><strong>Fidelización</strong></td>
+  <td>Participación en el programa de lealtad.</td>
+  <td>Proporción de clientes frecuentes registrados en Monchis Rewards.</td>
+  <td>Meta: ≥ 30 % de comensales recurrentes en 3 meses.</td>
+  <td>Vínculo de identidad con el establecimiento y sentido de trato preferencial.</td>
+</tr>
+<tr>
+  <td><strong>Sostenibilidad</strong></td>
+  <td>Reducción de envases de un solo uso (ODS 12).</td>
+  <td>Porcentaje de cafés servidos en taza de loza o termo del cliente.</td>
+  <td>Meta inicial: ≥ 20 % del total de bebidas preparadas.</td>
+  <td>Percepción de Monchis Café como un proyecto con responsabilidad ambiental.</td>
+</tr>
+<tr>
+  <td><strong>Soporte Técnico</strong></td>
+  <td>Restablecimiento ante fallas de hardware local.</td>
+  <td>Tiempo medio de reparación ante incidentes en mostrador (MTTR).</td>
+  <td>Meta: ≤ 45 minutos en promedio durante el horario comercial.</td>
+  <td>Respuesta organizada ante atascos de impresión o pérdida de red, coherente con el RTO ≤ 45 min definido en continuidad.</td>
+</tr>
+</tbody>
 </table>
-
-<div class="page-break"></div>
-
-<h2>2.7. ¿Qué servicios existen en el mercado que representen competencia directa? (Benchmarking)</h2>
-<p>
-  Para dimensionar la competitividad de Monchis Café, realizamos una comparación directa frente a las tres alternativas más utilizadas en el sector restaurantero mexicano:
-</p>
-
+<p><em>Traducción de disponibilidad operativa:</em></p>
+<p>La meta de 99.5 % de disponibilidad en horario comercial (lunes a sábado de 08:00 a 20:00, 12 horas diarias por 26 días laborables al mes = 312 horas comerciales) se traduce en un margen máximo de indisponibilidad tolerada de aproximadamente 94 minutos al mes:</p>
+<p>$$\text{Minutos tolerados} = (1 - 0.995) \times 312 \text{ h} \times 60 \text{ min/h} = 0.005 \times 18{,}720 \text{ min} = 93.6 \approx 94 \text{ min/mes}$$</p>
+<p>Considerando un MTTR ≤ 45 minutos, este indicador tolera como máximo dos incidentes de severidad alta durante el mes sin incumplir el nivel de servicio acordado.</p>
+<h2>2.4. ¿CUÁLES SON NUESTROS CLIENTES POTENCIALES?</h2>
+<p>La estrategia de servicios distingue a los usuarios finales y a los beneficiarios directos del sistema en cuatro segmentos principales, formulados como hipótesis del autor sujetas a confirmación comercial:</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>1.</strong> <strong>Comensales de café de especialidad y profesionales independientes (Clientes externos):</strong></p>
+<p>Personas con interés en el café artesanal, estudiantes universitarios y trabajadores remotos. Se formula la hipótesis de que el grupo principal de usuarios oscilará entre los 20 y los 50 años de edad. Demandan métodos de pago flexibles (tarjeta física o digital, transferencias bancarias), rapidez en la entrega del ticket y acceso transparente a la ficha del café (origen, cooperativa y fecha de tueste) mediante lectura de código QR.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>2.</strong> <strong>Aliados y proveedores: cooperativas cafetaleras y productores locales (Socios de la cadena de suministro):</strong></p>
+<p>Pequeños productores y organizaciones agrícolas regionales que suministran café en grano sustentable. Requieren que el sistema preserve los datos de origen de su grano para evitar que su identidad de marca se diluya en mezclas genéricas.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>3.</strong> <strong>Personal operativo de barra y administración (Clientes internos):</strong></p>
+<p>Baristas y personal de caja responsables de tomar órdenes y preparar bebidas. Precisan una interfaz limpia, botones de gran tamaño para evitar errores de selección, confirmaciones visuales claras de cobro y cuadres de turno automatizados.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>4.</strong> <strong>Pequeñas cafeterías independientes (Potencial de transferencia tecnológica):</strong></p>
+<p>Micronegocios del ramo de alimentos y bebidas de una o dos sucursales en ciudades intermedias que podrían estar limitados por las cuotas o la rigidez de sistemas comerciales cerrados. Buscan una solución tecnológica modular y accesible que no imponga comisiones excesivas ni módulos innecesarios para su escala de operación.</p>
+<h2>2.5. ¿QUÉ SERVICIOS SON PRIORITARIOS?</h2>
+<p>Para ordenar el desarrollo e implantación de los servicios, se elaboró una matriz de priorización cuantitativa. Cada servicio propuesto se evaluó en una escala de 1 a 5 en cuatro criterios ponderados: <strong>Impacto en el Negocio</strong> (peso 35 %), <strong>Urgencia Operativa</strong> (peso 25 %), <strong>Viabilidad Técnica</strong> (peso 25 %) y <strong>Menor Riesgo</strong> (peso 15 %, donde 5 representa menor riesgo percibido y 1 riesgo alto).</p>
+<p>Fórmula de ponderación: Puntaje Total = (Impacto × 0.35) + (Urgencia × 0.25) + (Viabilidad × 0.25) + (Menor Riesgo × 0.15)</p>
+<p><strong>Umbrales de clasificación estratégica:</strong></p>
+<ul><li><strong>P1 (Crítica):</strong> Puntaje Total ≥ 4.50</li></ul>
+<ul><li><strong>P2 (Alta):</strong> Puntaje Total de 3.90 a 4.49</li></ul>
+<ul><li><strong>P3 (Media):</strong> Puntaje Total de 3.75 a 3.89</li></ul>
+<ul><li><strong>P4 (Soporte):</strong> Puntaje Total < 3.75</li></ul>
+<h3>Tabla 4. Matriz de Priorización Cuantitativa de Servicios TI</h3>
+<p><em>(Filas ordenadas de mayor a menor puntaje ponderado)</em></p>
 <table>
-  <thead>
-    <tr>
-      <th style="width: 20%;">Parámetro</th>
-      <th style="width: 25%;">Soft Restaurant (Nacional)</th>
-      <th style="width: 25%;">Toast POS / Square (Global)</th>
-      <th style="width: 30%;">Estrategia "Monchis Café"</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Modelo de Costos</strong></td>
-      <td>Licencia tradicional costosa (desde $14,000 MXN) + cobro por póliza de soporte.</td>
-      <td>Renta mensual elevada ($69–$165 USD/mes) + comisiones bancarias cautivas.</td>
-      <td><strong>Bajo OPEX ($4,850 MXN infra total), sin rentas de software por asiento ni ataduras comerciales.</strong></td>
-    </tr>
-    <tr>
-      <td><strong>Trazabilidad de Café</strong></td>
-      <td>Nula o muy genérica (solo descuento simple de insumos generales).</td>
-      <td>Inexistente (inventario genérico de platillos sin procedencia campesina).</td>
-      <td><strong>Nativa: Finca, altitud, lote, perfil de tueste, rotación PEPS y código QR al comensal.</strong></td>
-    </tr>
-    <tr>
-      <td><strong>Resiliencia Técnica</strong></td>
-      <td>Bloqueos de base de datos local y descuadres ante caídas de red.</td>
-      <td>Dependencia absoluta de conexión a la nube del proveedor externo.</td>
-      <td><strong>Avanzada: Patrón Saga con RabbitMQ, reversas automáticas y Dead Letter Queue auditada.</strong></td>
-    </tr>
-    <tr>
-      <td><strong>Sostenibilidad (ODS)</strong></td>
-      <td>Nula vinculación ambiental.</td>
-      <td>Puntos genéricos por consumo con tarjeta.</td>
-      <td><strong>Nativa: Bonificación de $5 MXN por termo/taza reusable y sellos digitales sin plásticos (ODS 12).</strong></td>
-    </tr>
-    <tr>
-      <td><strong>SEO y Atribución</strong></td>
-      <td>Inexistente; no conecta con la presencia web del negocio.</td>
-      <td>Integración básica con módulos de pedidos propios.</td>
-      <td><strong>Nativa: Captura de parámetros UTM (Google Maps vs Instagram) y frontend prerenderizado SEO (vite-ssg).</strong></td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+  <th>Servicio Evaluado</th>
+  <th>Impacto (1–5)</th>
+  <th>Urgencia (1–5)</th>
+  <th>Viabilidad (1–5)</th>
+  <th>Menor Riesgo (1–5)</th>
+  <th>Puntaje Total</th>
+  <th>Cálculo Ponderado Detallado</th>
+  <th>Nivel de Prioridad</th>
+  <th>Fase / Sprints / Semanas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Punto de Venta en Barra (POS)</strong></td>
+  <td style="text-align: center;">5.0</td>
+  <td style="text-align: center;">5.0</td>
+  <td style="text-align: center;">4.5</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;"><strong>4.73</strong></td>
+  <td>$(5.0 	imes 0.35) + (5.0 	imes 0.25) + (4.5 	imes 0.25) + (4.0 	imes 0.15) = 1.75 + 1.25 + 1.125 + 0.60 = 4.725$</td>
+  <td style="text-align: center;"><strong>P1 (Crítica)</strong></td>
+  <td>Fase 1 / Sprints 1–2 / Sem. 1–4</td>
+</tr>
+<tr>
+  <td><strong>Persistencia Transaccional</strong></td>
+  <td style="text-align: center;">5.0</td>
+  <td style="text-align: center;">5.0</td>
+  <td style="text-align: center;">4.5</td>
+  <td style="text-align: center;">3.5</td>
+  <td style="text-align: center;"><strong>4.65</strong></td>
+  <td>$(5.0 	imes 0.35) + (5.0 	imes 0.25) + (4.5 	imes 0.25) + (3.5 	imes 0.15) = 1.75 + 1.25 + 1.125 + 0.525 = 4.650$</td>
+  <td style="text-align: center;"><strong>P1 (Crítica)</strong></td>
+  <td>Fase 1 / Sprints 1–2 / Sem. 1–3</td>
+</tr>
+<tr>
+  <td><strong>Seguridad de Acceso y Autenticación</strong></td>
+  <td style="text-align: center;">5.0</td>
+  <td style="text-align: center;">4.5</td>
+  <td style="text-align: center;">4.5</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;"><strong>4.60</strong></td>
+  <td>$(5.0 	imes 0.35) + (4.5 	imes 0.25) + (4.5 	imes 0.25) + (4.0 	imes 0.15) = 1.75 + 1.125 + 1.125 + 0.60 = 4.600$</td>
+  <td style="text-align: center;"><strong>P1 (Crítica)</strong></td>
+  <td>Fase 1 / Sprints 1–2 / Sem. 2–4</td>
+</tr>
+<tr>
+  <td><strong>Trazabilidad de Café y Control PEPS</strong></td>
+  <td style="text-align: center;">4.5</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">3.5</td>
+  <td style="text-align: center;"><strong>4.10</strong></td>
+  <td>$(4.5 	imes 0.35) + (4.0 	imes 0.25) + (4.0 	imes 0.25) + (3.5 	imes 0.15) = 1.575 + 1.00 + 1.00 + 0.525 = 4.100$</td>
+  <td style="text-align: center;"><strong>P2 (Alta)</strong></td>
+  <td>Fase 2 / Sprints 3–4 / Sem. 5–8</td>
+</tr>
+<tr>
+  <td><strong>Fidelización "Monchis Rewards"</strong></td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">3.0</td>
+  <td style="text-align: center;">4.5</td>
+  <td style="text-align: center;">4.5</td>
+  <td style="text-align: center;"><strong>3.95</strong></td>
+  <td>$(4.0 	imes 0.35) + (3.0 	imes 0.25) + (4.5 	imes 0.25) + (4.5 	imes 0.15) = 1.40 + 0.75 + 1.125 + 0.675 = 3.950$</td>
+  <td style="text-align: center;"><strong>P2 (Alta)</strong></td>
+  <td>Fase 2 / Sprints 3–4 / Sem. 7–8*</td>
+</tr>
+<tr>
+  <td><strong>Plataforma Cloud y Mensajería</strong></td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">3.5</td>
+  <td style="text-align: center;"><strong>3.93</strong></td>
+  <td>$(4.0 	imes 0.35) + (4.0 	imes 0.25) + (4.0 	imes 0.25) + (3.5 	imes 0.15) = 1.40 + 1.00 + 1.00 + 0.525 = 3.925$</td>
+  <td style="text-align: center;"><strong>P2 (Alta)</strong></td>
+  <td>Fase 2 / Sprints 3–4 / Sem. 5–7</td>
+</tr>
+<tr>
+  <td><strong>Continuidad y Respaldos</strong></td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">3.5</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;"><strong>3.88</strong></td>
+  <td>$(4.0 	imes 0.35) + (3.5 	imes 0.25) + (4.0 	imes 0.25) + (4.0 	imes 0.15) = 1.40 + 0.875 + 1.00 + 0.60 = 3.875$</td>
+  <td style="text-align: center;"><strong>P3 (Media)</strong></td>
+  <td>Fase 3 / Sprints 5–6 / Sem. 9–11</td>
+</tr>
+<tr>
+  <td><strong>Mesa de Ayuda Técnica</strong></td>
+  <td style="text-align: center;">3.5</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;"><strong>3.83</strong></td>
+  <td>$(3.5 	imes 0.35) + (4.0 	imes 0.25) + (4.0 	imes 0.25) + (4.0 	imes 0.15) = 1.225 + 1.00 + 1.00 + 0.60 = 3.825$</td>
+  <td style="text-align: center;"><strong>P3 (Media)</strong></td>
+  <td>Fase 3 / Sprints 5–6 / Sem. 10–12</td>
+</tr>
+<tr>
+  <td><strong>Monitoreo de Disponibilidad</strong></td>
+  <td style="text-align: center;">3.5</td>
+  <td style="text-align: center;">3.5</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;">4.0</td>
+  <td style="text-align: center;"><strong>3.70</strong></td>
+  <td>$(3.5 	imes 0.35) + (3.5 	imes 0.25) + (4.0 	imes 0.25) + (4.0 	imes 0.15) = 1.225 + 0.875 + 1.00 + 0.60 = 3.700$</td>
+  <td style="text-align: center;"><strong>P4 (Soporte)</strong></td>
+  <td>Fase 4 / Sprints 7–8 / Sem. 13–16</td>
+</tr>
+</tbody>
 </table>
-
-<h2>2.8. ¿Cómo podemos diferenciarnos de la competencia? (Propuesta de Valor Única)</h2>
-<p>
-  La diferenciación de Monchis Café se fundamenta en cinco pilares que ninguna solución genérica del mercado ofrece de forma conjunta:
-</p>
-<div class="highlight-card">
-  <strong>1. Especialización en Café de Especialidad y Sostenibilidad (ODS 12):</strong> A diferencia de los sistemas tradicionales que tratan el café como una mercancía genérica, nuestra plataforma modela el ciclo de vida del grano (origen cooperativo, altitud, fecha de tueste) y recompensa activamente al comensal ecológico.<br><br>
-  <strong>2. Resiliencia Transaccional con Patrón Saga:</strong> Implementamos microservicios asíncronos en RabbitMQ. Si una bebida se cobra en caja pero se agota el café orgánico en almacén, el sistema ejecuta una transacción compensatoria inmediata, evitando discusiones y descuadres.<br><br>
-  <strong>3. Conexión Directa entre Marketing Digital (SEO) y Caja:</strong> La plataforma prerenderizada (<code>vite-ssg</code>) posiciona la cafetería en búsquedas locales y transfiere los parámetros UTM a la cuenta del comensal para saber exactamente qué campañas de redes generan ventas en barra.<br><br>
-  <strong>4. Cero Rentas Prohibitivas de Licencia:</strong> Arquitectura moderna basada en estándares abiertos que ahorra más de $36,000 MXN anuales frente al software privativo.<br><br>
-  <strong>5. Soporte Técnico Hiperlocal y Calidez Humana:</strong> Asistencia técnica inmediata brindada por el equipo de ingeniería con tiempos de respuesta menores a 15 minutos en horarios críticos.
+<p><em>Dependencias técnicas del orden de despliegue:</em></p>
+<p>Aunque el módulo de Fidelización (3.95) obtiene un puntaje cuantitativo ligeramente superior a Plataforma Cloud y Mensajería (3.93), el programa Rewards requiere que la mensajería asíncrona y la orquestación de transacciones de la Saga se encuentren previamente operativas para registrar bonificaciones sin inconsistencias. Por tal motivo, la Plataforma Cloud se implementa con antelación dentro de la Fase 2. Del mismo modo, la Persistencia Transaccional (4.65) se programa en la Fase 1 (Semanas 1–3) por constituir la base de datos relacional requerida por el Punto de Venta, mientras que Continuidad y Respaldos (3.88) se ubica en la Fase 3 una vez estabilizada la persistencia de datos.</p>
+<p><em>Criterio de puntajes extremos:</em></p>
+<p>El Punto de Venta en Barra obtuvo el puntaje más alto (4.73, P1) debido a que sin él resulta imposible procesar cobros y operar comercialmente. Por el contrario, el Monitoreo de Disponibilidad obtuvo la calificación más baja (3.70, P4) por constituir una disciplina de maduración técnica transversal cuya configuración fina se consolida de manera incremental tras el despliegue de los servicios sustantivos.</p>
+<p><em>Estructura del calendario en 16 semanas y 8 sprints:</em></p>
+<p>El cronograma de 16 semanas se organiza en 8 sprints de dos semanas de duración:</p>
+<ul><li><strong>Fase 1 (Sprints 1–2, Semanas 1–4):</strong> Servicios críticos P1 (Persistencia Transaccional, POS en Barra y Seguridad de Acceso y Autenticación).</li></ul>
+<ul><li><strong>Fase 2 (Sprints 3–4, Semanas 5–8):</strong> Servicios P2 (Plataforma Cloud y Mensajería, Trazabilidad de Café y Control PEPS, y Fidelización "Monchis Rewards").</li></ul>
+<ul><li><strong>Fase 3 (Sprints 5–6, Semanas 9–12):</strong> Servicios P3 (Continuidad y Respaldos, y Mesa de Ayuda Técnica).</li></ul>
+<ul><li><strong>Fase 4 (Sprints 7–8, Semanas 13–16):</strong> Pruebas integrales en sitio, capacitación formal, Monitoreo de Disponibilidad (P4) y protocolos de contingencia.</li></ul>
+<h2>2.6. ¿QUÉ INVERSIONES SON NECESARIAS?</h2>
+<p>La infraestructura tecnológica para habilitar los servicios requiere recursos financieros divididos en inversión inicial de capital (CAPEX) y costos de operación recurrente (OPEX). El presupuesto considera dos estaciones de trabajo (caja y preparación de comandas) para la operación en producción.</p>
+<h3>Tabla 5. Presupuesto Detallado de Inversión Inicial (CAPEX) y Operación Mensual (OPEX)</h3>
+<p><em>(Precios estimados a octubre de 2026; tipo de cambio de referencia: $20.00 MXN/USD)</em></p>
+<table>
+<thead>
+<tr>
+  <th>Rubro de Inversión</th>
+  <th>Descripción del Bien o Servicio</th>
+  <th>Tipo</th>
+  <th>Costo Inicial (CAPEX)</th>
+  <th>Costo Mensual (OPEX)</th>
+  <th>Justificación Técnica y Fuentes de Consulta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Hardware de Barra</strong></td>
+  <td>2 tabletas Samsung Galaxy Tab A9+ (11.0", 8 GB RAM) con base fija de seguridad</td>
+  <td style="text-align: center;">CAPEX</td>
+  <td>$11,600 MXN*</td>
+  <td>$0 MXN</td>
+  <td>Terminales táctiles de mostrador para caja y comanderas de baristas: 2 tabletas de ~$4,200 MXN* c/u ($8,400 MXN*) + 2 bases metálicas de mostrador de ~$1,600 MXN* c/u ($3,200 MXN*). Fichas en retailers México (Walmart/Mercado Libre), octubre de 2026.</td>
+</tr>
+<tr>
+  <td><strong>Periféricos de Cobro</strong></td>
+  <td>2 impresoras térmicas de 80 mm (USB/Ethernet) y 2 lectores ópticos de códigos 2D con base</td>
+  <td style="text-align: center;">CAPEX</td>
+  <td>$7,400 MXN*</td>
+  <td>$0 MXN</td>
+  <td>Emisión de tickets y escaneo de códigos QR de lotes: ~$2,200 MXN* por impresora + ~$1,500 MXN* por lector. Precios de mercado de cómputo en México, octubre de 2026.</td>
+</tr>
+<tr>
+  <td><strong>Infraestructura Cloud</strong></td>
+  <td>Máquina virtual Google Compute Engine e2-medium (2 vCPU compartidas, 4 GB RAM, 20 GB SSD)</td>
+  <td style="text-align: center;">OPEX</td>
+  <td>$0 MXN</td>
+  <td>$600 MXN* (~$30 USD/mes)</td>
+  <td>Aloja la API y RabbitMQ. La guía oficial de RabbitMQ recomienda un mínimo de 4 GiB de RAM por nodo para producción (RabbitMQ, 2026). La instancia e2-medium se adopta como configuración mínima para carga piloto (dos estaciones, un solo nodo, sin clúster), limitando la memoria de RabbitMQ y supervisando su consumo junto a la API. Calculadora oficial GCP (Google Cloud, 2026).</td>
+</tr>
+<tr>
+  <td><strong>Base de Datos Cloud</strong></td>
+  <td>Instancia PostgreSQL administrada Cloud SQL (nivel db-f1-micro, vCPU compartida, 0.6 GB RAM, 10 GB SSD)</td>
+  <td style="text-align: center;">OPEX</td>
+  <td>$0 MXN</td>
+  <td>$450 MXN* (~$22.50 USD/mes)</td>
+  <td>Almacenamiento transaccional ACID de ventas, inventarios y auditoría con respaldos diarios automáticos en la región us-central1 (Iowa). Tarifa oficial Cloud SQL (Google Cloud, 2026).</td>
+</tr>
+<tr>
+  <td><strong>Red y Dominio</strong></td>
+  <td>Registro y renovación anual de dominio .com.mx y servicios DNS/TLS en Cloudflare</td>
+  <td style="text-align: center;">CAPEX/OPEX</td>
+  <td>$680 MXN* (año 1)</td>
+  <td>$0 MXN</td>
+  <td>Nombre de red y certificados HTTPS (Cloudflare plan gratuito $0 MXN). Renovación anual en Akky / NIC México (~$680 MXN/año; renovaciones de años 2 y 3 incorporadas en el TCO).</td>
+</tr>
+<tr>
+  <td><strong>Mensajería Transaccional</strong></td>
+  <td>Servicio de pasarela SMTP transaccional para notificaciones y alertas</td>
+  <td style="text-align: center;">OPEX</td>
+  <td>$0 MXN</td>
+  <td>$200 MXN* (~$10 USD/mes)</td>
+  <td>Envío de alertas automatizadas del orquestador y comprobantes digitales mediante plan transaccional básico de referencia (como SendGrid Essentials o Amazon SES).</td>
+</tr>
+<tr>
+  <td><strong>Capacitación Operativa</strong></td>
+  <td>Talleres prácticos para personal de barra sobre el POS y contingencias</td>
+  <td style="text-align: center;">CAPEX</td>
+  <td>$3,000 MXN*</td>
+  <td>$0 MXN</td>
+  <td>Instrucción operativa en apertura de caja, captura de comandas y sustitución de rollos térmicos.</td>
+</tr>
+<tr>
+  <td><strong>Soporte y Mantenimiento</strong></td>
+  <td>Soporte técnico Nivel 1/2, parches y mantenimiento preventivo</td>
+  <td style="text-align: center;">OPEX</td>
+  <td>$0 MXN</td>
+  <td>$0 MXN (interno)*</td>
+  <td>El soporte técnico Nivel 1/2 y el mantenimiento preventivo son cubiertos internamente por el desarrollador y equipo sin costo adicional en el esquema propuesto. En un entorno comercial externo, una póliza técnica mensual equivalente se estima como referencia en ~$3,600 MXN/mes*.</td>
+</tr>
+<tr>
+  <td><strong>Fondo de Contingencia</strong></td>
+  <td>Reserva para reemplazo urgente de periféricos o enlace móvil 4G de respaldo</td>
+  <td style="text-align: center;">CAPEX</td>
+  <td>$3,500 MXN*</td>
+  <td>$0 MXN</td>
+  <td>Mitigación ante averías mecánicas o interrupciones locales en el enlace a internet.</td>
+</tr>
+<tr>
+  <td><strong>TOTALES</strong></td>
+  <td><strong>Inversión Inicial y Gasto Operativo Mensual</strong></td>
+  <td style="text-align: center;">—</td>
+  <td><strong>$26,180 MXN</strong></td>
+  <td><strong>$1,250 MXN / mes</strong></td>
+  <td><strong>Presupuesto base estimado a precios de mercado de octubre de 2026.</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>\</em> Valor estimado de referencia; sujeto a verificación mediante cotización formal.*</p>
+<p><em>Resumen de operaciones financieras:</em></p>
+<ul><li><strong>CAPEX total inicial:</strong> $\$11{,}600 	ext{ (tabletas)} + \$7{,}400 	ext{ (periféricos)} + \$680 	ext{ (dominio año 1)} + \$3{,}000 	ext{ (capacitación)} + \$3{,}500 	ext{ (contingencia)} = \mathbf{\$26{,}180 	ext{ MXN}}$.</li></ul>
+<ul><li><strong>OPEX mensual regular:</strong> $\$600 	ext{ (Compute Engine e2-medium)} + \$450 	ext{ (Cloud SQL)} + \$200 	ext{ (SMTP)} + \$0 	ext{ (soporte interno)} = \mathbf{\$1{,}250 	ext{ MXN/mes}}$.</li></ul>
+<h3>Análisis Comparativo de Costo Total de Propiedad (TCO a 3 Años)</h3>
+<p>Para evaluar la viabilidad financiera, se proyecta el Costo Total de Propiedad a un horizonte de 36 meses. El cálculo incluye el CAPEX inicial, 36 mensualidades de OPEX y la renovación anual del dominio para los años 2 y 3 ($680 MXN cada año):</p>
+<p>$$\text{TCO Monchis Café (3 años)} = \text{CAPEX} + (36 \times \text{OPEX mensual}) + (2 \times \text{Renovación dominio})$$</p>
+<p>$$\text{TCO Monchis Café} = \$26{,}180 + (36 \times \$1{,}250) + (\$680 \times 2) = \$26{,}180 + \$45{,}000 + \$1{,}360 = \mathbf{\$72{,}540 \text{ MXN}}$$</p>
+<p><em>Declaración sobre el esfuerzo de desarrollo y soporte externo:</em></p>
+<p>El cálculo anterior excluye deliberadamente el costo del esfuerzo humano de desarrollo de software por tratarse de un proyecto académico formativo no facturado al cliente. Si se cotizara comercialmente el desarrollo inicial (estimado en 680 horas equivalentes a una célula de 2 desarrolladores a medio tiempo durante 16 semanas × $320 MXN/h<em> = $217,600 MXN</em>), el TCO total ascendería a $290,140 MXN. Asimismo, si se contratara una póliza de soporte externo estimada en $3,600 MXN/mes* ($129,600 MXN en 36 meses), el TCO operativo comercial alcanzaría los $202,140 MXN (o $419,740 MXN incluyendo desarrollo inicial).</p>
+<h3>Tabla 6. Comparativa de Costo Total de Propiedad a 3 Años (2 Estaciones, 36 Meses)</h3>
+<p><em>(Cifras en pesos mexicanos MXN; precios vigentes en 2026 consultados en fuentes oficiales; tipo de cambio: $20.00 MXN/USD)</em></p>
+<table>
+<thead>
+<tr>
+  <th>Concepto de Costo</th>
+  <th>Soft Restaurant 12 Pro (National Soft, 2026)</th>
+  <th>Loyverse POS (Loyverse, 2026)</th>
+  <th>Monchis Café (Desarrollo Propio)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Hardware inicial (2 estaciones)</strong></td>
+  <td>$23,000 MXN* (1 terminal/PC Windows para caja + 1 tableta comandera Android + 2 impresoras y lectores)</td>
+  <td>$19,000 MXN* (2 tabletas Android + 2 impresoras y 2 lectores 2D)</td>
+  <td>$19,000 MXN* (2 tabletas Android + 2 impresoras y 2 lectores 2D incluidos en CAPEX)</td>
+</tr>
+<tr>
+  <td><strong>Licenciamiento / Suscripción / Cloud</strong></td>
+  <td>$45,900 MXN* ($1,099 + IVA = $1,274.84 MXN/mes redondeado a $1,275 MXN/mes por sucursal × 36 meses)</td>
+  <td>$32,400 MXN (Inventario Avanzado $25 USD + Gestión de 4 Empleados $20 USD = $45 USD/mes = $900 MXN/mes × 36 meses)</td>
+  <td>$0 MXN de licencia privativa ($45,000 MXN de servicios cloud en 36 meses a $1,250 MXN/mes)</td>
+</tr>
+<tr>
+  <td><strong>Soporte y Capacitación</strong></td>
+  <td>Soporte de marca incluido en suscripción; capacitación e implementación inicial estimada en ~$6,500 MXN*</td>
+  <td>Soporte básico en línea por chat incluido ($0 MXN) o póliza técnica local externa estimada en $54,000 MXN* ($1,500 MXN/mes* × 36 meses)</td>
+  <td>$0 MXN en soporte (asumido internamente por el desarrollador/equipo) + $3,000 MXN* de capacitación inicial en CAPEX</td>
+</tr>
+<tr>
+  <td><strong>Dominio y Contingencia</strong></td>
+  <td>N/A (plataforma hospedada por el proveedor)</td>
+  <td>N/A (plataforma hospedada por el proveedor)</td>
+  <td>$5,540 MXN ($680 año 1 en CAPEX + $1,360 renovaciones años 2 y 3 + $3,500 de fondo de contingencia en CAPEX)</td>
+</tr>
+<tr>
+  <td><strong>TCO Estimado a 3 Años</strong></td>
+  <td><strong>~$75,400 MXN</strong>*</td>
+  <td><strong>$51,400 a $105,400 MXN</strong>* (según soporte técnico externo)</td>
+  <td><strong>$72,540 MXN</strong> (con soporte interno y desarrollo académico excluido)</td>
+</tr>
+</tbody>
+</table>
+<p><em>\</em> Valor estimado de referencia; sujeto a verificación mediante cotización formal. Las comisiones por adquirencia bancaria se consideran idénticas e independientes del software en las tres opciones.*</p>
+<p><em>Conclusión del análisis financiero:</em></p>
+<p>Con soporte técnico cubierto internamente y sin facturar horas de desarrollo de software, Monchis Café resulta altamente competitivo en términos financieros brutos ($72,540 MXN frente a ~$75,400 MXN de Soft Restaurant 12 Pro y $51,400 a $105,400 MXN de Loyverse POS). Su valor de negocio radica en tres ventajas estratégicas:</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>1.</strong> <strong>Alineación funcional exacta:</strong> Incorporación nativa de trazabilidad de lotes por cooperativa campesina, rotación PEPS estricta y compensación automática de ventas agotadas mediante la Saga.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>2.</strong> <strong>Soberanía y propiedad de datos:</strong> Monchis Café mantiene el control directo sobre sus bases de datos transaccionales y de clientes, eliminando dependencias de plataformas privativas cerradas.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>3.</strong> <strong>Sostenibilidad integrada:</strong> La vinculación con el ODS 12 y los incentivos por consumo responsable se integran directamente en la lógica del sistema.</p>
+<h2>2.7. ¿QUÉ SERVICIOS EXISTEN EN EL MERCADO QUE REPRESENTEN COMPETENCIA DIRECTA?</h2>
+<p>En el mercado mexicano coexisten diversas alternativas de software para el sector de alimentos y bebidas. Para establecer un marco de comparación realista, se seleccionaron dos opciones comerciales de punto de venta comercializadas activamente en México en 2026 frente a la propuesta propia:</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>1.</strong> <strong>Soft Restaurant 12 (National Soft, 2026):</strong> Solución con amplia trayectoria en el mercado mexicano para restaurantes y cafeterías medianas. En 2026 opera bajo suscripción mensual con soporte y actualizaciones continuas: Plan Lite ($799 MXN + IVA/mes), Plan Pro ($1,099 MXN + IVA/mes) y SR Cloud (desde $699 MXN + IVA/mes por estación) (National Soft, 2026). Requiere conexión continua para sincronización de ventas en la nube, aunque cuenta con almacenamiento local en caso de cortes temporales.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>2.</strong> <strong>Loyverse POS (Loyverse, 2026):</strong> Aplicación móvil en la nube utilizada con frecuencia por pequeñas cafeterías en México. Ofrece una aplicación base gratuita ($0 MXN); cobra $25 USD/mes (~$500 MXN) por tienda para el módulo de Inventario Avanzado y $5 USD/mes (~$100 MXN) por colaborador para el módulo de Gestión de Empleados (Loyverse, 2026). Su documentación oficial señala que el modo sin conexión permite registrar ventas e imprimir comandas en local, pero suspende temporalmente los reembolsos, el alta de nuevos clientes y la validación de inventario negativo hasta restablecer la conexión a internet.</p>
+<h3>Tabla 7. Cuadro Comparativo de Soluciones de Punto de Venta en México</h3>
+<table>
+<thead>
+<tr>
+  <th>Parámetro Comparativo</th>
+  <th>Soft Restaurant 12 (National Soft, 2026)</th>
+  <th>Loyverse POS (Loyverse, 2026)</th>
+  <th>Propuesta "Monchis Café" (Estrategia Propia)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Esquema de Precios</strong></td>
+  <td>Suscripción mensual: Lite $799 + IVA; Pro $1,099 + IVA; SR Cloud desde $699 + IVA/mes por sucursal.</td>
+  <td>Base gratuita; Inventario Avanzado $25 USD/mes/tienda; Gestión de Empleados $5 USD/mes/empleado ($20 USD para 4 colaboradores).</td>
+  <td>CAPEX $26,180 MXN + OPEX $1,250 MXN/mes (servidores cloud, base de datos administrada y SMTP; soporte interno).</td>
+</tr>
+<tr>
+  <td><strong>Trazabilidad de Café Orgánico</strong></td>
+  <td>No documenta en su catálogo oficial módulos de altitud, fincas ni perfil de tueste.</td>
+  <td>Maneja inventario general de insumos; no registra datos agrícolas ni rotación PEPS por lote.</td>
+  <td><strong>Propuesta:</strong> Registro nativo de cooperativa, finca, altitud, fecha de tostado, PEPS y código QR al cliente.</td>
+</tr>
+<tr>
+  <td><strong>Modo Sin Conexión</strong></td>
+  <td>Permite operar en disco local; requiere internet para sincronizar SR Cloud y facturación.</td>
+  <td>Registra ventas y turnos offline; suspende reembolsos, nuevos clientes y alertas de stock negativo.</td>
+  <td><strong>Propuesta:</strong> Modo degradado de mostrador con notas de contingencia para captura continua.</td>
+</tr>
+<tr>
+  <td><strong>Resiliencia de Transacciones</strong></td>
+  <td>Arquitectura cliente-servidor tradicional sobre base de datos relacional local o remota.</td>
+  <td>Dependiente de conexión a la nube; sin orquestación de transacciones distribuidas.</td>
+  <td><strong>Propuesta:</strong> Orquestador de la Saga con transacciones compensatorias transportadas por RabbitMQ.</td>
+</tr>
+<tr>
+  <td><strong>Sostenibilidad y Lealtad</strong></td>
+  <td>Módulos de lealtad comercial tradicionales disponibles como complemento de pago.</td>
+  <td>Sistema básico de puntos y descuentos configurable en panel web.</td>
+  <td><strong>Propuesta:</strong> Sellos digitales y bonificación fija por taza o termo reusable (ODS 12).</td>
+</tr>
+<tr>
+  <td><strong>Presencia y Soporte Local</strong></td>
+  <td>Soporte técnico de marca incluido en suscripción y red de distribuidores autorizados.</td>
+  <td>Soporte en línea mediante chat y foros comunitarios en español.</td>
+  <td><strong>Propuesta:</strong> Mesa de ayuda estructurada con acuerdos internos de nivel de servicio (SLA/SLO propuestos).</td>
+</tr>
+</tbody>
+</table>
+<p><em>Nota aclaratoria sobre Monchis Café:</em> Las capacidades señaladas como "Propuesta" corresponden a especificaciones de diseño técnico formuladas en este proyecto que aún no han sido validadas en operación continua en producción.</p>
+<h2>2.8. ¿CÓMO PODEMOS DIFERENCIARNOS DE LA COMPETENCIA?</h2>
+<p>La propuesta de Monchis Café no busca competir en volumen generalista de funcionalidades frente a sistemas masivos, sino concentrarse en resolver las necesidades específicas de una cafetería de especialidad mediante cuatro factores diferenciadores:</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>1.</strong> <strong>Especialización en la cadena de valor del café sustentable (ODS 12):</strong></p>
+<p>Los sistemas convencionales manejan el café como un insumo estandarizado. Monchis Café incorpora en su modelo de datos los atributos del café de especialidad: nombre de la finca, cooperativa campesina proveedora, fecha de cosecha y días de reposo pos-tueste. Al asociar estos datos a un código QR impreso en el recibo o visible en pantalla, el cliente puede corroborar el origen de su bebida. Asimismo, la bonificación por recipiente reutilizable premia directamente conductas de menor impacto ambiental.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>2.</strong> <strong>Consistencia transaccional mediante Patrón Saga:</strong></p>
+<p>En momentos de alta concurrencia en mostrador, es factible que un comensal pague una bebida mientras el último lote del grano seleccionado se agota en otra terminal. En lugar de generar discrepancias contables o fricciones en barra, el orquestador de la Saga ejecuta de inmediato una compensación controlada, informando con precisión al cajero para que reoriente la orden o emita la reversa sin contratiempos.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>3.</strong> <strong>Independencia operativa y soberanía de los datos:</strong></p>
+<p>Al operar sobre una base de datos propia en la nube, el establecimiento no queda sujeto a comisiones transaccionales obligatorias de software privativo ni a incrementos imprevistos en suscripciones mensuales. Monchis Café mantiene un control directo sobre la base de datos de ventas, consumos y perfiles de comensales.</p>
+<p style="margin-left: 20px; text-indent: -20px;"><strong>4.</strong> <strong>Soporte técnico cercano y preventivo:</strong></p>
+<p>La asistencia técnica para el personal de mostrador se estructura con acuerdos internos de nivel de servicio (SLA/SLO propuestos) y protocolos documentados de contingencia física, reduciendo la incertidumbre ante averías mecánicas o problemas de red en horas pico de venta.</p>
+<h1>3. ARTICULACIÓN DE LA ESTRATEGIA EN LAS FASES DEL CICLO DE VIDA DEL SERVICIO TI (ITIL)</h1>
+<p>La gestión de servicios requiere que cada etapa del ciclo de vida esté articulada con las demás. A continuación se describe cómo intervienen las cinco fases establecidas por ITIL 2011 (Cabinet Office, 2011a–e) en el proyecto Monchis Café:</p>
+<h3>3.1. Estrategia del Servicio (*Service Strategy*)</h3>
+<p>Esta fase define los lineamientos para que la tecnología genere valor genuino para el negocio (Cabinet Office, 2011d). En Monchis Café se definen:</p>
+<ul><li><strong>Gestión del Portafolio:</strong> Se clasifica el catálogo de servicios activos (POS, Trazabilidad, Lealtad) frente a los servicios que permanecerán en el flujo de desarrollo futuro (pedidos móviles anticipados).</li></ul>
+<ul><li><strong>Gestión Financiera de TI:</strong> Se proyecta la estructura de costos (CAPEX y OPEX a tres años) y se evalúa el TCO frente a alternativas comerciales para asegurar la viabilidad económica del proyecto.</li></ul>
+<ul><li><strong>Gestión de la Demanda:</strong> Se analiza la demanda para anticipar los picos de mostrador en turnos matutinos (08:30 a 11:00) y vespertinos (17:00 a 19:30).</li></ul>
+<h3>3.2. Diseño del Servicio (*Service Design*)</h3>
+<p>Esta fase traduce los requisitos estratégicos en especificaciones técnicas, arquitecturas y acuerdos formales (Cabinet Office, 2011b):</p>
+<ul><li><strong>Gestión de Niveles de Servicio (SLM):</strong> Se definen los acuerdos internos de nivel de servicio (SLA/SLO propuestos) para fijar una disponibilidad operativa del 99.5 % durante el horario comercial y tiempos de atención técnica según la severidad del incidente.</li></ul>
+<ul><li><strong>Gestión de la Capacidad:</strong> Se dimensionan los requerimientos de cómputo en la máquina virtual e2-medium (4 GB RAM) de Google Cloud y la concurrencia admisible en RabbitMQ para asegurar que la latencia en transacciones de mostrador no exceda ≤ 450 ms (P95) en red local.</li></ul>
+<ul><li><strong>Gestión de Proveedores:</strong> Se establecen criterios de evaluación para proveedores críticos de infraestructura en la nube (GCP) y pasarelas de pago, supervisando sus compromisos de tiempo en línea y comisiones.</li></ul>
+<ul><li><strong>Gestión de Seguridad de la Información:</strong> Se incorporan lineamientos alineados con los controles de ISO/IEC 27001 (ISO/IEC, 2022), incluyendo autenticación stateless mediante JWT en cookies protegidas, validación anti-bot y esquemas RBAC.</li></ul>
+<ul><li><strong>Gestión de la Continuidad del Servicio de TI (ITSCM):</strong> Se establecen los parámetros de continuidad operativa: un Objetivo de Tiempo de Recuperación (RTO) ≤ 45 minutos y un Objetivo de Punto de Recuperación (RPO) ≤ 24 horas, respaldados por copias diarias automatizadas de la base de datos relacional y un plan de acción local con notas manuales de contingencia.</li></ul>
+<h3>3.3. Transición del Servicio (*Service Transition*)</h3>
+<p>Esta fase garantiza que los servicios nuevos o modificados se liberen en el entorno operativo sin causar interrupciones inesperadas (Cabinet Office, 2011e):</p>
+<ul><li><strong>Gestión de Cambios (*Change Enablement*):</strong> Cada actualización del código en el monorepo se somete a revisión técnica mediante pull requests y pruebas de integración antes de incorporarse a la rama principal.</li></ul>
+<ul><li><strong>Gestión de Liberación y Despliegue:</strong> Se emplean flujos automatizados de integración continua (CI) que construyen contenedores estandarizados y ejecutan pruebas de regresión antes de desplegar versiones estables en producción (Bass et al., 2015; Kim et al., 2016).</li></ul>
+<ul><li><strong>Validación y Pruebas del Servicio:</strong> Se aplican pruebas unitarias y de integración sobre los endpoints del POS y sobre la lógica de reversas de la Saga para asegurar su funcionamiento correcto previo a la salida a producción.</li></ul>
+<ul><li><strong>Gestión del Conocimiento y Capacitación:</strong> Se elabora un manual operativo y se imparten talleres prácticos a los cajeros y baristas para familiarizarlos con el manejo del software y la resolución de incidentes menores.</li></ul>
+<h3>3.4. Operación del Servicio (*Service Operation*)</h3>
+<p>Esta fase coordina las actividades cotidianas para mantener la estabilidad de los servicios y atender las solicitudes de los usuarios (Cabinet Office, 2011c):</p>
+<ul><li><strong>Gestión de Incidentes:</strong> Se implementa un protocolo escalonado de atención. El Nivel 0 corresponde al personal de mostrador (verificación de cables, reinicio de aplicación y cambio de papel térmico); el Nivel 1 atiende problemas de enlace o caídas de sesión vía remota; el Nivel 2 involucra al equipo de ingeniería para corregir excepciones no contempladas.</li></ul>
+<ul><li><strong>Gestión de Problemas:</strong> Cuando se detectan fallas recurrentes (por ejemplo, desconexiones intermitentes de la impresora térmica o saturación en colas de mensajes), se realiza un análisis de causa raíz para implementar soluciones definitivas y evitar la repetición del incidente.</li></ul>
+<ul><li><strong>Gestión de Accesos:</strong> Se administran las credenciales de los empleados conforme al esquema RBAC. Se asignan perfiles diferenciados para cajeros, baristas y gerentes, revocando permisos cuando un colaborador concluye su relación de trabajo.</li></ul>
+<ul><li><strong>Gestión de Eventos y Monitoreo:</strong> Se vigila el estado de los servicios a través del endpoint `/api/health` y se canalizan mensajes atascados a la Dead Letter Queue (DLQ), generando alertas técnicas por correo electrónico ante saturación anormal.</li></ul>
+<h3>3.5. Mejora Continua del Servicio (*Continual Service Improvement*)</h3>
+<p>Esta fase mantiene el alineamiento del servicio con las necesidades cambiantes del negocio a lo largo del tiempo (Cabinet Office, 2011a):</p>
+<ul><li><strong>Ciclo Plan-Do-Check-Act (PDCA):</strong> Se evalúan trimestralmente las métricas operativas frente a las metas planteadas en la Tabla 3.</li></ul>
+<ul><li><strong>Medición de Desempeño y Satisfacción:</strong> Se registran tiempos reales de cobro en barra para verificar el cumplimiento de la meta de ≤ 75 segundos por comensal y se recaban opiniones del personal para identificar pantallas confusas o flujos de cobro lentos.</li></ul>
+<ul><li><strong>Optimización de Recursos y Costos:</strong> Se revisa periódicamente el consumo de recursos en la nube con el fin de ajustar las capacidades contratadas y mantener el gasto operativo dentro de los límites presupuestados.</li></ul>
+<h1>4. CONCLUSIONES GENERALES</h1>
+<p>El diseño de esta estrategia de servicios tecnológicos para Monchis Café permitió comprender que la ingeniería informática en un negocio gastronómico trasciende la construcción de interfaces o la configuración de bases de datos. La gestión de servicios bajo el marco de ITIL 2011 aportó una estructura metódica para conectar las decisiones de arquitectura de software —como la orquestación de transacciones con RabbitMQ sobre una máquina virtual e2-medium y la autenticación basada en tokens— con los requerimientos operativos de la barra, la certidumbre de los inventarios y la atención ágil a los comensales.</p>
+<p>No obstante, es indispensable señalar los límites y riesgos inherentes a esta propuesta. Las cifras de tiempo de atención (≤ 75 segundos), disponibilidad (99.5 %, equivalente a un máximo de 94 minutos de indisponibilidad tolerada al mes) y costos de mantenimiento corresponden a estimaciones y metas teóricas formuladas en un contexto académico que aún deben contrastarse en un entorno de venta real con comensales en vivo. Con el soporte técnico asumido internamente por el propio equipo y sin contabilizar el costo de desarrollo por tratarse de un proyecto académico, el Costo Total de Propiedad a 3 años de Monchis Café ($72,540 MXN) resulta competitivo frente a las opciones comerciales analizadas (Loyverse POS entre $51,400 y $105,400 MXN<em>, y Soft Restaurant 12 Pro en ~$75,400 MXN</em>). Sin embargo, es necesario añadir con claridad que, si se incorporara el costo comercial del desarrollo inicial ($217,600 MXN<em> estimados) o una póliza de soporte externo ($3,600 MXN/mes</em>), el desarrollo a la medida superaría el costo de los paquetes comerciales empaquetados. Por consiguiente, su justificación principal radica en la trazabilidad nativa del café de especialidad, la consistencia mediante Patrón Saga y el control directo sobre los datos. El paso inmediato consistirá en validar los supuestos de RTO (≤ 45 min), RPO (≤ 24 h) y latencia (≤ 450 ms P95) mediante pruebas piloto de estrés en la terminal táctil y ejercicios de simulación con baristas antes de autorizar cualquier despliegue definitivo.</p>
+<h1>5. REFERENCIAS BIBLIOGRÁFICAS</h1>
+<div class="referencias">
+<p>AXELOS. (2019). *ITIL foundation: ITIL 4 edition*. The Stationery Office.</p>
+<p>Bass, L., Weber, I., & Zhu, L. (2015). *DevOps: A software architect's perspective*. Addison-Wesley.</p>
+<p>Cabinet Office. (2011a). *ITIL continual service improvement* (2011 ed.). The Stationery Office.</p>
+<p>Cabinet Office. (2011b). *ITIL service design* (2011 ed.). The Stationery Office.</p>
+<p>Cabinet Office. (2011c). *ITIL service operation* (2011 ed.). The Stationery Office.</p>
+<p>Cabinet Office. (2011d). *ITIL service strategy* (2011 ed.). The Stationery Office.</p>
+<p>Cabinet Office. (2011e). *ITIL service transition* (2011 ed.). The Stationery Office.</p>
+<p>Cámara de Diputados del H. Congreso de la Unión. (2025). *Ley Federal de Protección de Datos Personales en Posesión de los Particulares* (publicada el 20 de marzo de 2025; abroga la ley de 2010). Diario Oficial de la Federación. Consultado el 17 de octubre de 2026, de https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf</p>
+<p>Google Cloud. (2026). *Calculadora de precios oficial de Google Cloud: Compute Engine y Cloud SQL*. Alphabet Inc. Consultado el 17 de octubre de 2026, de https://cloud.google.com/products/calculator</p>
+<p>International Organization for Standardization, & International Electrotechnical Commission. (2018). *Information technology — Service management — Part 1: Service management system requirements* (ISO/IEC Standard No. 20000-1:2018). ISO/IEC. https://www.iso.org/standard/70636.html</p>
+<p>International Organization for Standardization, & International Electrotechnical Commission. (2022). *Information security, cybersecurity and privacy protection — Information security management systems — Requirements* (ISO/IEC Standard No. 27001:2022). ISO/IEC. https://www.iso.org/standard/82875.html</p>
+<p>Kim, G., Humble, J., Debois, P., & Willis, J. (2016). *The DevOps handbook: How to create world-class agility, reliability, and security in technology organizations*. IT Revolution Press.</p>
+<p>Loyverse. (2026). *Planes y precios de punto de venta y gestión de inventario para cafeterías*. Loyverse, Inc. Consultado el 17 de octubre de 2026, de https://loyverse.com/es/pricing</p>
+<p>National Soft. (2026). *Soft Restaurant 12: Soluciones integrales para restaurantes y cafeterías*. National Soft de México S.A. de C.V. Consultado el 17 de octubre de 2026, de https://www.nationalsoft.com.mx y https://softrestaurant.com</p>
+<p>Organización de las Naciones Unidas. (2015). *Transformar nuestro mundo: la Agenda 2030 para el Desarrollo Sostenible* (Resolución A/RES/70/1). ONU. https://undocs.org/es/A/RES/70/1</p>
+<p>RabbitMQ. (2026). *Production checklist and hardware guidelines for RabbitMQ*. VMware / Broadcom. Consultado el 17 de octubre de 2026, de https://www.rabbitmq.com/docs/production-checklist</p>
+<p>Reichheld, F. F., & Sasser, W. E. (1990). Zero defections: Quality comes to services. *Harvard Business Review*, 68(5), 105–111.</p>
 </div>
-
-<!-- 3. ARTICULACIÓN EN FASES ITIL -->
-<h1>3. Articulación de la Estrategia en las Fases del Ciclo de Vida del Servicio TI (ITIL)</h1>
-<p>
-  Para consolidar el enfoque de gestión de servicios, articulamos la estrategia a través de las cinco fases de ITIL (AXELOS, 2019; Steinberg, 2011):
-</p>
-<p>
-  <strong>3.1. Estrategia del Servicio (Service Strategy):</strong> Alinea las tecnologías con el modelo de negocio de Monchis Café. Gestiona el portafolio de servicios (clasificando servicios activos frente a futuros módulos en desarrollo), modela los costos financieros y analiza la demanda para dimensionar servidores durante las horas pico matutinas (8:00 a 11:00 hrs).<br><br>
-  <strong>3.2. Diseño del Servicio (Service Design):</strong> Traduce los objetivos estratégicos en soluciones técnicas concretas. Formaliza Acuerdos de Nivel de Servicio (SLA: disponibilidad &ge; 99.9 %, resolución de incidentes en barra &le; 60 min), diseña la seguridad perimetral (JWT stateless, 2FA gerencial y Google reCAPTCHA) y establece planes de continuidad del negocio (ITSCM) con respaldos diarios cifrados.<br><br>
-  <strong>3.3. Transición del Servicio (Service Transition):</strong> Asegura que los servicios se desplieguen sin alterar la operación en barra. Integra pipelines automatizados de DevOps en GitHub Actions, pruebas exhaustivas TDD con Vitest, Supertest y Playwright, control riguroso de cambios mediante pull requests y capacitación práctica al personal de barra antes de la puesta en marcha.<br><br>
-  <strong>3.4. Operación del Servicio (Service Operation):</strong> Garantiza la estabilidad diaria del servicio en mostrador mediante una Mesa de Ayuda (Service Desk) escalonada (Nivel 0 cajero, Nivel 1 soporte remoto, Nivel 2 ingeniería de software), gestión de eventos mediante endpoints de salud (/api/health) y resolución ágil de incidentes con monitoreo constante de colas RabbitMQ.<br><br>
-  <strong>3.5. Mejora Continua del Servicio (Continual Service Improvement - CSI):</strong> Aplica el ciclo Deming (Plan-Do-Check-Act) mediante revisiones trimestrales de KPIs, encuestas de satisfacción a baristas y comensales, y optimización continua de consultas de base de datos para preservar tiempos de respuesta menores a 400 milisegundos.
-</p>
-
-<!-- 4. CONCLUSIONES -->
-<h1>4. Conclusiones Generales</h1>
-<p>
-  El diseño de esta estrategia integral de servicios tecnológicos para <strong>Monchis Café</strong> demuestra con rigor que el valor de la informática no radica en la complejidad técnica aislada, sino en su capacidad para habilitar metas de negocio tangibles y resolver problemas humanos concretos. Articular las cinco fases de ITIL permitió transformar los obstáculos cotidianos de un establecimiento gastronómico —filas lentas en caja, descuadres contables, pérdida de frescura en insumos orgánicos y licencias comerciales asfixiantes— en una oferta de servicios diferenciada, altamente rentable y ecológicamente comprometida.
-</p>
-<p>
-  La inversión inicial de $28,480 MXN y el gasto operativo de $4,850 MXN mensuales se amortizan con creces mediante la reducción del 85 % en mermas de café, la aceleración de cobro en barra y el ahorro de más de $36,000 MXN anuales frente al licenciamiento privativo. Asimismo, la vinculación con los Objetivos de Desarrollo Sostenible (ODS 8 y 12) confiere a Monchis Café una identidad ética y atractiva para las nuevas generaciones de consumidores. Para nuestro equipo de estudiantes de Ingeniería en Computación de la Universidad de Guadalajara, este proyecto consolida un aprendizaje fundamental: el verdadero ingeniero de software trasciende la escritura de código para convertirse en un estratega y arquitecto de servicios capaz de entregar soluciones tecnológicas confiables, viables y transformadoras para su comunidad.
-</p>
-
-<!-- 5. REFERENCIAS -->
-<h1>5. Referencias Bibliográficas</h1>
-<div class="ref-item">AXELOS. (2019). <i>ITIL foundation: ITIL 4 edition</i>. TSO (The Stationery Office).</div>
-<div class="ref-item">Bass, L., Weber, I., & Zhu, L. (2015). <i>DevOps: A software architect's perspective</i>. Addison-Wesley.</div>
-<div class="ref-item">International Organization for Standardization, & International Electrotechnical Commission. (2018). <i>Information technology — Service management — Part 1: Service management system requirements</i> (ISO/IEC Standard No. 20000-1:2018). ISO/IEC. https://www.iso.org/standard/70636.html</div>
-<div class="ref-item">International Organization for Standardization, & International Electrotechnical Commission. (2022). <i>Information security, cybersecurity and privacy protection — Information security management systems — Requirements</i> (ISO/IEC Standard No. 27001:2022). ISO/IEC. https://www.iso.org/standard/82875.html</div>
-<div class="ref-item">Kerzner, H. (2022). <i>Project management: A systems approach to planning, scheduling, and controlling</i> (13th ed.). John Wiley & Sons.</div>
-<div class="ref-item">Kim, G., Humble, J., Debois, P., & Willis, J. (2016). <i>The DevOps handbook: How to create world-class agility, reliability, and security in technology organizations</i>. IT Revolution Press.</div>
-<div class="ref-item">Newman, S. (2021). <i>Building microservices: Designing fine-grained systems</i> (2nd ed.). O'Reilly Media.</div>
-<div class="ref-item">Steinberg, R. (2011). <i>ITIL service strategy</i> (2011 ed.). TSO (The Stationery Office).</div>
-<div class="ref-item">Van Bon, J., de Jong, A., Kolthof, A., Pieper, M., Tjassing, R., van der Veen, A., & Verheijen, T. (2008). <i>IT service management: An introduction based on ITIL V3</i>. Van Haren Publishing.</div>
-
 </body>
 </html>

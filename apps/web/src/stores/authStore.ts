@@ -55,7 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = data.usuario;
       return true;
     } catch (e: any) {
-      error.value = 'Error de red al conectar con el servidor';
+      error.value = 'Error al conectar con el servidor de autenticación';
       return false;
     } finally {
       isLoading.value = false;
@@ -209,7 +209,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = data.usuario;
       return true;
     } catch (e: any) {
-      error.value = 'Error de red al conectar con el servidor';
+      error.value = 'Error al conectar con el servidor de autenticación';
       return false;
     } finally {
       isLoading.value = false;

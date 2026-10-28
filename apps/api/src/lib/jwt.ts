@@ -82,7 +82,7 @@ export async function revokeToken(
   REVOKED_TOKENS_CACHE.add(token);
   if (jti) REVOKED_TOKENS_CACHE.add(jti);
 
-  if (!process.env.DATABASE_URL) {
+  if (!process.env.DATABASE_URL || process.env.NODE_ENV === 'test') {
     return;
   }
 
@@ -113,8 +113,8 @@ export async function isTokenRevoked(token: string, jti?: string): Promise<boole
     return true;
   }
 
-  // Si no hay DATABASE_URL configurada, omitimos la consulta a Prisma
-  if (!process.env.DATABASE_URL) {
+  // Si no hay DATABASE_URL configurada o estamos en pruebas unitarias, confiamos en la lista en memoria
+  if (!process.env.DATABASE_URL || process.env.NODE_ENV === 'test') {
     return false;
   }
 
