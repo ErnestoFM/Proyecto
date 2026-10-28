@@ -1,0 +1,142 @@
+name: Monchis Café CD Pipeline (Google Cloud Run)
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || 'ernesto-513022' }}
+  GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+  SERVICE_NAME: monchis-cafe
+  IMAGE_NAME: monchis-cafe
+
+jobs:
+  test-and-build:
+    name: 1. Quality Gate (Lint, Tests & Build)
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+      JWT_ACCESS_SECRET: "ci_jwt_access_secret_super_seguro_minimo_32_caracteres_12345"
+      JWT_REFRESH_SECRET: "ci_jwt_refresh_secret_super_seguro_minimo_32_caracteres_12345"
+      DATABASE_URL: "postgresql://monchis_admin:ci_password@localhost:5432/monchis_db?schema=public"
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.1.0
+          run_install: false
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Generar cliente Prisma ORM
+        run: pnpm prisma:generate
+
+      - name: Verificación estricta de TypeScript y Lint
+        run: pnpm lint
+
+      - name: Ejecutar pruebas unitarias (Vitest)
+        run: pnpm test
+
+      - name: Compilar frontend y bundles
+        run: pnpm build
+
+      - name: Subir artefactos de frontend compilado
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+          retention-days: 1
+
+  deploy-to-gcp:
+    name: 2. Continuous Deployment a Google Cloud Run
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Descargar artefactos de frontend compilado
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+
+      - name: Preparar contexto ligero de contenedor Nginx
+        run: |
+          mkdir -p deploy-context/html
+          cp -r apps/web/dist/* deploy-context/html/
+          cat << 'EOF' > deploy-context/Dockerfile
+          FROM nginx:alpine
+          COPY html /usr/share/nginx/html
+          RUN printf 'server {\n    listen 8080;\n    location / {\n        root /usr/share/nginx/html;\n        index index.html;\n        try_files $uri $uri/ /index.html;\n    }\n}\n' > /etc/nginx/conf.d/default.conf
+          EXPOSE 8080
+          CMD ["nginx", "-g", "daemon off;"]
+          EOF
+
+      - name: Autenticación en Google Cloud Platform
+        id: gcp-auth
+        if: env.HAS_GCP_SECRET == 'true'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+        env:
+          HAS_GCP_SECRET: ${{ secrets.GCP_SA_KEY != '' }}
+
+      - name: Configurar Google Cloud SDK
+        if: steps.gcp-auth.outcome == 'success'
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Compilar imagen con Google Cloud Build
+        if: steps.gcp-auth.outcome == 'success'
+        run: |
+          IMAGE_TAG="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          LATEST_TAG="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:latest"
+          gcloud builds submit deploy-context --tag "$IMAGE_TAG"
+          gcloud container images add-tag "$IMAGE_TAG" "$LATEST_TAG" --quiet
+
+      - name: Desplegar servicio en Google Cloud Run
+        if: steps.gcp-auth.outcome == 'success'
+        run: |
+          IMAGE_TAG="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image "$IMAGE_TAG" \
+            --platform managed \
+            --region ${{ env.GCP_REGION }} \
+            --allow-unauthenticated \
+            --port 8080
+
+      - name: Validar URL pública activa
+        if: steps.gcp-auth.outcome == 'success'
+        run: |
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --platform managed --region ${{ env.GCP_REGION }} --format 'value(status.url)')
+          echo "=========================================================="
+          echo "🚀 Monchis Café desplegado exitosamente en producción:"
+          echo "🌐 URL: $SERVICE_URL"
+          echo "=========================================================="
+          curl -I "$SERVICE_URL"
+
+      - name: Mensaje informativo si falta Secret de GCP en GitHub
+        if: steps.gcp-auth.outcome == 'skipped'
+        run: |
+          echo "::warning title=GCP_SA_KEY no configurado::Para habilitar el despliegue automático desde GitHub Actions, agrega el secret 'GCP_SA_KEY' en Settings > Secrets and variables > Actions con la clave JSON de una Service Account de GCP con roles 'Cloud Run Admin' y 'Cloud Build Editor'."

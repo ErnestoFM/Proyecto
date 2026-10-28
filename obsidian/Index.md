@@ -17,7 +17,7 @@ Bienvenido al Vault de Obsidian del proyecto **Monchis Café**. Este vault sirve
 
 ---
 
-- [[Bitacora/2026-10-28]] — *Productos Integradores: Práctica Momento 1 (Planificación DevOps) y Momento 2 (Desarrollo e Integración Continua, GitFlow, 77 tests Vitest, MVP funcional y métrica de vulnerabilidades) para el Equipo 2: Gestión Web Segura para Cafetería Orgánica y Comercial (Monchis Café) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
+- [[Bitacora/2026-10-28]] — *Productos Integradores: Práctica Momento 1 (Planificación DevOps), Momento 2 (Desarrollo e Integración Continua, GitFlow, 77 tests Vitest, MVP funcional y 5 bugs) y Momento 3 (Despliegue Multi-Contenedor, Nginx TLS, Monitoreo SRE, logs JSON, alertas ODS 12 y matriz de 5 incidencias) para el Equipo 2 (Monchis Café) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-20]] — *Unidad 4: Actividad 4 Gestión de Finanzas (Plantilla Excel oficial, Cuadro Justificativo y Estrategia Comercial de Venta) en PDF, DOCX y XLSX (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-17]] — *Gestión de Servicios TI: Actividad PARTICIPACIÓN (Alineación /grill-me y entrega oficial de Estrategia de Servicios TI ITIL en PDF/DOCX) (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-13]] — *Gestión de Servicios TI: Actividad Participación (Estrategia de Servicios TI y ciclo ITIL en PDF/DOCX) y Unidad 3: Actividad 3.4 Buenas Prácticas de Calidad (SOLID, ISO 25010 y DevOps) (Dr. Gabriel Navarro Salcedo).*

@@ -26,7 +26,13 @@ export class RabbitMQClient {
   public async connect(): Promise<void> {
     if (this.connection && this.channel) return;
 
-    const url = process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672';
+    let url = process.env.RABBITMQ_URL;
+    if (!url) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('[Seguridad Crítica] La variable de entorno obligatoria RABBITMQ_URL no está configurada en producción.');
+      }
+      url = 'amqp://guest:guest@localhost:5672';
+    }
     try {
       this.connection = await amqplib.connect(url);
       this.channel = await this.connection.createChannel();

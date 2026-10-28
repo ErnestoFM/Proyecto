@@ -11,3 +11,4 @@ Notas de módulos del sistema:
 - [[Modulos/Gestion_Finanzas_Presupuesto]] — *Gestión de finanzas, plantilla presupuestal oficial, cuadro justificativo y estrategia de venta comercial (Unidad 4).*
 - [[Modulos/DevOps_Momento_1_Planificacion]] — *Planificación DevOps Momento 1 (Arquitectura, ODS 12, Roles, Plan 4 semanas, Toolchain y Flujo CI/CD).*
 - [[Modulos/DevOps_Momento_2_Integracion]] — *Desarrollo e Integración Continua Momento 2 (GitFlow, 77 tests Vitest, MVP funcional y métrica de 5 vulnerabilidades corregidas).*
+- [[Modulos/DevOps_Momento_3_Despliegue]] — *Despliegue y Monitoreo Momento 3 (Docker Compose, Nginx SSL/TLS, Winston JSON logs, alertas ODS 12 y matriz post-mortem de 5 incidencias).*

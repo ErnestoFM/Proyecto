@@ -91,3 +91,8 @@ playwright-report/
 test-results/
 blob-report/
 playwright/.cache/
+
+# Despliegues Temporales y Scripts Scratch
+dist-deploy/
+scratch/
+
