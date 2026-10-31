@@ -14,7 +14,7 @@ export class RabbitMQClient {
   private dlqName: string = process.env.RABBITMQ_DLQ_NAME || 'dead_letter_queue';
   private retryDelays: number[] = [10000, 60000, 300000]; // 10s, 1m, 5m
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): RabbitMQClient {
     if (!RabbitMQClient.instance) {
@@ -26,15 +26,15 @@ export class RabbitMQClient {
   public async connect(): Promise<void> {
     if (this.connection && this.channel) return;
 
-    let url = process.env.RABBITMQ_URL;
-    if (!url) {
+    let rabbitmqUrl = process.env.RABBITMQ_URL;
+    if (!rabbitmqUrl) {
       if (process.env.NODE_ENV === 'production') {
         throw new Error('[Seguridad Crítica] La variable de entorno obligatoria RABBITMQ_URL no está configurada en producción.');
       }
-      url = 'amqp://guest:guest@localhost:5672';
+      rabbitmqUrl = 'amqp://guest:guest@localhost:5672';
     }
     try {
-      this.connection = await amqplib.connect(url);
+      this.connection = await amqplib.connect(rabbitmqUrl);
       this.channel = await this.connection.createChannel();
 
       // Declarar Exchanges

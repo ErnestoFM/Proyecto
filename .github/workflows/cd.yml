@@ -140,3 +140,4 @@ jobs:
         if: steps.gcp-auth.outcome == 'skipped'
         run: |
           echo "::warning title=GCP_SA_KEY no configurado::Para habilitar el despliegue automático desde GitHub Actions, agrega el secret 'GCP_SA_KEY' en Settings > Secrets and variables > Actions con la clave JSON de una Service Account de GCP con roles 'Cloud Run Admin' y 'Cloud Build Editor'."
+
