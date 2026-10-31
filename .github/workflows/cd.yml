@@ -10,7 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: us-central1
   SERVICE_NAME_WEB: monchis-cafe-web
   SERVICE_NAME_API: monchis-cafe-api
@@ -70,6 +69,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
 
+    env:
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -100,13 +102,13 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Configurar Google Cloud SDK
-        if: steps.gcp-auth.conclusion == 'success'
+        if: steps.gcp-auth.outcome == 'success'
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ env.GCP_PROJECT_ID || 'monchis-cafe-prod' }}
 
       - name: Compilar y Desplegar Backend API en Google Cloud Run
-        if: steps.gcp-auth.conclusion == 'success'
+        if: steps.gcp-auth.outcome == 'success'
         run: |
           TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
           API_IMAGE="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_API}:${GITHUB_SHA}"
@@ -124,7 +126,7 @@ jobs:
             --set-env-vars="NODE_ENV=production"
 
       - name: Compilar y Desplegar Frontend Web en Google Cloud Run
-        if: steps.gcp-auth.conclusion == 'success'
+        if: steps.gcp-auth.outcome == 'success'
         run: |
           TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
           WEB_IMAGE="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_WEB}:${GITHUB_SHA}"
@@ -141,7 +143,7 @@ jobs:
             --port 8080
 
       - name: Validar URLs públicas activas
-        if: steps.gcp-auth.conclusion == 'success'
+        if: steps.gcp-auth.outcome == 'success'
         run: |
           TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
           WEB_URL=$(gcloud run services describe "$SERVICE_NAME_WEB" --platform managed --region "$GCP_REGION" --project "$TARGET_PROJECT" --format 'value(status.url)')
@@ -155,6 +157,6 @@ jobs:
           curl -I "$API_URL/api/health" || true
 
       - name: Mensaje informativo si falta Secret de GCP en GitHub
-        if: steps.gcp-auth.conclusion != 'success'
+        if: steps.gcp-auth.outcome != 'success'
         run: |
           echo "::warning title=GCP_SA_KEY no configurado::Para habilitar el despliegue automático continuo directo desde los runners de GitHub, agrega el secret 'GCP_SA_KEY' en Settings > Secrets and variables > Actions con el JSON de una Service Account de GCP con roles 'Cloud Run Admin' y 'Cloud Build Editor'."
