@@ -9,12 +9,6 @@ concurrency:
   group: cd-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
-  SERVICE_NAME_WEB: monchis-cafe-web
-  SERVICE_NAME_API: monchis-cafe-api
-
 jobs:
   test-and-build:
     name: 1. Quality Gate (Lint, Tests & Build)
@@ -70,6 +64,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
 
+    env:
+      HAS_GCP_SECRET: ${{ secrets.GCP_SA_KEY != '' }}
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_REGION: us-central1
+      SERVICE_NAME_WEB: monchis-cafe-web
+      SERVICE_NAME_API: monchis-cafe-api
+
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -98,51 +99,54 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
-        env:
-          HAS_GCP_SECRET: ${{ secrets.GCP_SA_KEY != '' }}
 
       - name: Configurar Google Cloud SDK
         if: steps.gcp-auth.outcome == 'success'
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ env.GCP_PROJECT_ID }}
+          project_id: ${{ env.GCP_PROJECT_ID || 'monchis-cafe-prod' }}
 
       - name: Compilar y Desplegar Backend API en Google Cloud Run
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          API_IMAGE="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_API }}:${{ github.sha }}"
-          API_LATEST="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_API }}:latest"
-          gcloud builds submit --tag "$API_IMAGE" -f infra/docker/api/Dockerfile .
-          gcloud container images add-tag "$API_IMAGE" "$API_LATEST" --quiet
+          TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
+          API_IMAGE="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_API}:${GITHUB_SHA}"
+          API_LATEST="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_API}:latest"
+          gcloud builds submit --tag "$API_IMAGE" -f infra/docker/api/Dockerfile . --project "$TARGET_PROJECT"
+          gcloud container images add-tag "$API_IMAGE" "$API_LATEST" --quiet --project "$TARGET_PROJECT"
           
-          gcloud run deploy ${{ env.SERVICE_NAME_API }} \
+          gcloud run deploy "$SERVICE_NAME_API" \
             --image "$API_IMAGE" \
             --platform managed \
-            --region ${{ env.GCP_REGION }} \
+            --region "$GCP_REGION" \
             --allow-unauthenticated \
             --port 8080 \
+            --project "$TARGET_PROJECT" \
             --set-env-vars="NODE_ENV=production"
 
       - name: Compilar y Desplegar Frontend Web en Google Cloud Run
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          WEB_IMAGE="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_WEB }}:${{ github.sha }}"
-          WEB_LATEST="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_WEB }}:latest"
-          gcloud builds submit deploy-context --tag "$WEB_IMAGE"
-          gcloud container images add-tag "$WEB_IMAGE" "$WEB_LATEST" --quiet
+          TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
+          WEB_IMAGE="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_WEB}:${GITHUB_SHA}"
+          WEB_LATEST="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_WEB}:latest"
+          gcloud builds submit deploy-context --tag "$WEB_IMAGE" --project "$TARGET_PROJECT"
+          gcloud container images add-tag "$WEB_IMAGE" "$WEB_LATEST" --quiet --project "$TARGET_PROJECT"
 
-          gcloud run deploy ${{ env.SERVICE_NAME_WEB }} \
+          gcloud run deploy "$SERVICE_NAME_WEB" \
             --image "$WEB_IMAGE" \
             --platform managed \
-            --region ${{ env.GCP_REGION }} \
+            --region "$GCP_REGION" \
+            --project "$TARGET_PROJECT" \
             --allow-unauthenticated \
             --port 8080
 
       - name: Validar URLs públicas activas
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          WEB_URL=$(gcloud run services describe ${{ env.SERVICE_NAME_WEB }} --platform managed --region ${{ env.GCP_REGION }} --format 'value(status.url)')
-          API_URL=$(gcloud run services describe ${{ env.SERVICE_NAME_API }} --platform managed --region ${{ env.GCP_REGION }} --format 'value(status.url)')
+          TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
+          WEB_URL=$(gcloud run services describe "$SERVICE_NAME_WEB" --platform managed --region "$GCP_REGION" --project "$TARGET_PROJECT" --format 'value(status.url)')
+          API_URL=$(gcloud run services describe "$SERVICE_NAME_API" --platform managed --region "$GCP_REGION" --project "$TARGET_PROJECT" --format 'value(status.url)')
           echo "=========================================================="
           echo "🚀 Monchis Café desplegado exitosamente en producción:"
           echo "🌐 Frontend Web: $WEB_URL"
@@ -152,7 +156,6 @@ jobs:
           curl -I "$API_URL/api/health" || true
 
       - name: Mensaje informativo si falta Secret de GCP en GitHub
-        if: steps.gcp-auth.outcome == 'skipped'
+        if: env.HAS_GCP_SECRET != 'true'
         run: |
-          echo "::warning title=GCP_SA_KEY no configurado::Para habilitar el despliegue automático desde GitHub Actions, agrega el secret 'GCP_SA_KEY' en Settings > Secrets and variables > Actions con la clave JSON de una Service Account de GCP con roles 'Cloud Run Admin' y 'Cloud Build Editor'."
-
+          echo "::warning title=GCP_SA_KEY no configurado::Para habilitar el despliegue automático continuo directo desde los runners de GitHub, agrega el secret 'GCP_SA_KEY' en Settings > Secrets and variables > Actions con el JSON de una Service Account de GCP con roles 'Cloud Run Admin' y 'Cloud Build Editor'."
