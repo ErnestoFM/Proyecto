@@ -7,14 +7,25 @@
 #>
 
 param (
-    [string]$ProjectId = "leadforge-499919",
-    [string]$Region = "us-central1",
+    [string]$ProjectId = $env:GCP_PROJECT_ID,
+    [string]$Region = $(if ($env:GCP_REGION) { $env:GCP_REGION } else { "us-central1" }),
     [string]$InstanceName = "monchis-cafe-postgres-prod",
     [string]$DbName = "monchis_db",
     [string]$DbUser = "monchis_admin",
-    [string]$DbPassword = "MonchisSecure2026!DB",
+    [string]$DbPassword = $env:DB_PASSWORD,
     [string]$Tier = "db-f1-micro"
 )
+
+# Validación de parámetros obligatorios (Cero Hardcoding)
+if (-not $ProjectId) {
+    Write-Error "[Seguridad] La variable de entorno GCP_PROJECT_ID o el parámetro -ProjectId es obligatorio. Configúralo antes de ejecutar el script."
+    exit 1
+}
+
+if (-not $DbPassword) {
+    Write-Error "[Seguridad] La variable de entorno DB_PASSWORD o el parámetro -DbPassword es obligatorio. Nunca utilices contraseñas por defecto en código fuente."
+    exit 1
+}
 
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host "  Monchis Café — Aprovisionamiento de Google Cloud SQL    " -ForegroundColor Cyan

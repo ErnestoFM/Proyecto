@@ -57,8 +57,8 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Acceso restringido a administradores' }, { status: 403 });
     }
 
-    let visitas = VISITAS_TRAFICO_FALLBACK;
-    let itemsVendidos = ITEMS_VENDIDOS_FALLBACK;
+    let visitas: Array<{ source: string; convertido: boolean; monto: number }> = [];
+    let itemsVendidos: Array<{ productoId: string; nombre: string; tipo: 'ORGANICO' | 'COMERCIAL'; cantidad: number; precio: number }> = [];
 
     try {
       // 1. Consultar órdenes completadas con sus items, producto y atribución UTM
@@ -128,9 +128,18 @@ export async function GET(req: Request) {
             visitas = visitasDesdeOrdenes;
           }
         }
+      } else if (process.env.NODE_ENV !== 'production') {
+        // En desarrollo local sin seed, proveer datos de ejemplo para visualización
+        visitas = VISITAS_TRAFICO_FALLBACK;
+        itemsVendidos = ITEMS_VENDIDOS_FALLBACK;
       }
-    } catch (dbError) {
-      console.warn('⚠️ [Prisma Analytics] Base de datos no disponible, utilizando contingencia:', dbError);
+    } catch (dbError: any) {
+      console.error('❌ [Prisma Analytics] Error en consulta de base de datos:', dbError);
+      if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json({ error: 'Error interno al consultar métricas analíticas' }, { status: 500 });
+      }
+      visitas = VISITAS_TRAFICO_FALLBACK;
+      itemsVendidos = ITEMS_VENDIDOS_FALLBACK;
     }
 
     const trafico = AnalyticsService.calcularMetricasTrafico(visitas);

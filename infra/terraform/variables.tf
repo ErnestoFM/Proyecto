@@ -1,7 +1,6 @@
 variable "project_id" {
-  description = "Google Cloud Project ID"
+  description = "Google Cloud Project ID (Obligatorio, definir en .tfvars o TF_VAR_project_id)"
   type        = string
-  default     = "gen-lang-client-0573629438"
 }
 
 variable "region" {
@@ -17,31 +16,27 @@ variable "environment" {
 }
 
 variable "db_password" {
-  description = "Contraseña para la instancia de PostgreSQL en Cloud SQL"
+  description = "Contraseña para la instancia de PostgreSQL en Cloud SQL (Obligatorio, sensible)"
   type        = string
   sensitive   = true
-  default     = "MonchisSecure2026!DB"
 }
 
 variable "jwt_access_secret" {
-  description = "Llave secreta para emisión de JWT Access Tokens"
+  description = "Llave secreta para emisión de JWT Access Tokens (mínimo 32 caracteres)"
   type        = string
   sensitive   = true
-  default     = "monchis-cafe-access-secret-32-chars-min"
 }
 
 variable "jwt_refresh_secret" {
-  description = "Llave secreta para emisión de JWT Refresh Tokens"
+  description = "Llave secreta para emisión de JWT Refresh Tokens (mínimo 32 caracteres)"
   type        = string
   sensitive   = true
-  default     = "monchis-cafe-refresh-secret-32-chars-min"
 }
 
 variable "recaptcha_secret_key" {
   description = "Google reCAPTCHA Secret Key"
   type        = string
   sensitive   = true
-  default     = "mock-google-recaptcha-secret-key"
 }
 
 variable "domain_name" {

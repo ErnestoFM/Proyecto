@@ -7,6 +7,8 @@ import { ref, computed } from 'vue';
 import type { ProductDTO, PaymentMethod, OrderItemDTO } from '@monchis/shared-types';
 import { useAuthStore } from './authStore';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export interface CartItem {
   producto: ProductDTO;
   cantidad: number;
@@ -177,7 +179,7 @@ export const usePosStore = defineStore('pos', () => {
     }));
 
     try {
-      const res = await fetch('/api/pos/orders', {
+      const res = await fetch(`${API_URL}/api/pos/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -215,7 +217,7 @@ export const usePosStore = defineStore('pos', () => {
 
   async function cargarProductos() {
     try {
-      const res = await fetch('/api/products');
+      const res = await fetch(`${API_URL}/api/products`);
       if (res.ok) {
         const data = await res.json();
         if (data.productos && data.productos.length > 0) {

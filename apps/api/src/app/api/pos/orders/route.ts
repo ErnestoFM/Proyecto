@@ -42,16 +42,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'La orden debe contener al menos un producto' }, { status: 400 });
     }
 
-    // Catálogo oficial de referencia en servidor (protección contra manipulación de precios)
-    const CATALOGO_PRECIOS: Record<string, { precio: number; tipo: 'ORGANICO' | 'COMERCIAL' }> = {
-      prod_1: { precio: 48.0, tipo: 'ORGANICO' },
-      prod_2: { precio: 65.0, tipo: 'ORGANICO' },
-      prod_3: { precio: 72.0, tipo: 'ORGANICO' },
-      prod_4: { precio: 45.0, tipo: 'COMERCIAL' },
-      prod_5: { precio: 28.0, tipo: 'COMERCIAL' },
-    };
+    // 2. Consultar catálogo oficial en base de datos PostgreSQL (Prisma)
+    const productIds = body.items.map((it) => it.productoId);
+    let productosDB: Array<{ id: string; precio: any; tipo: string; activo: boolean }> = [];
+    try {
+      productosDB = await prisma.product.findMany({
+        where: { id: { in: productIds } },
+        select: { id: true, precio: true, tipo: true, activo: true },
+      });
+    } catch (dbErr) {
+      console.warn('⚠️ [POS API] Base de datos no disponible para consulta de precios:', dbErr);
+    }
 
-    // 2. Calcular subtotales validando precios estrictamente en el backend
+    const mapaProductos = new Map(productosDB.map((p) => [p.id, p]));
+
+    // 3. Calcular subtotales validando precios estrictamente en el backend
     let subtotalTotal = 0;
     let cantidadCafesOrganicos = 0;
     const itemsValidados: Array<{
@@ -66,18 +71,19 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'La cantidad debe ser mayor a 0' }, { status: 400 });
       }
 
-      // Obtener precio oficial del servidor
-      const productoOficial = CATALOGO_PRECIOS[item.productoId];
-      const precioServidor = productoOficial ? productoOficial.precio : item.precioUnitario;
+      // Obtener precio oficial desde la base de datos
+      const productoDB = mapaProductos.get(item.productoId);
+      const precioServidor = productoDB ? Number(productoDB.precio) : (item.precioUnitario > 0 ? item.precioUnitario : 0);
+      const esOrganico = productoDB ? productoDB.tipo === 'ORGANICO' : (item.productoId.includes('org') || item.productoId.includes('prod_1') || item.productoId.includes('prod_2') || item.productoId.includes('prod_3'));
 
-      if (!productoOficial && (!item.precioUnitario || item.precioUnitario <= 0)) {
-        return NextResponse.json({ error: `Producto no identificado: ${item.productoId}` }, { status: 400 });
+      if (!productoDB && (!item.precioUnitario || item.precioUnitario <= 0)) {
+        return NextResponse.json({ error: `Producto no identificado o sin precio válido: ${item.productoId}` }, { status: 400 });
       }
 
       const subtotalItem = Number((item.cantidad * precioServidor).toFixed(2));
       subtotalTotal += subtotalItem;
 
-      if (productoOficial?.tipo === 'ORGANICO') {
+      if (esOrganico) {
         cantidadCafesOrganicos += item.cantidad;
       }
 
@@ -200,9 +206,15 @@ export async function POST(req: Request) {
       if (transaccionResultado) {
         ordenPersistidaId = transaccionResultado.id;
       }
-    } catch (dbError) {
-      // Degrada elegantemente si la base de datos no está conectada en test runner
-      console.warn('⚠️ [Prisma Fallback] Transacción en base de datos no completada, utilizando fallback:', dbError);
+    } catch (dbError: any) {
+      console.error('❌ [Prisma POS Error] Transacción en base de datos no completada:', dbError);
+      if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json(
+          { error: 'Error al registrar la orden en la base de datos. Transacción no persistida.' },
+          { status: 500 }
+        );
+      }
+      console.warn('⚠️ [Prisma Dev/Test] Continuando con ID temporal únicamente en entorno de desarrollo/pruebas.');
     }
 
     // 6. Orquestación del Patrón Saga y Evaluación de Compensaciones

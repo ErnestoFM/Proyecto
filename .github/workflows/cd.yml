@@ -10,10 +10,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || 'ernesto-513022' }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
-  SERVICE_NAME: monchis-cafe
-  IMAGE_NAME: monchis-cafe
+  SERVICE_NAME_WEB: monchis-cafe-web
+  SERVICE_NAME_API: monchis-cafe-api
 
 jobs:
   test-and-build:
@@ -107,34 +107,49 @@ jobs:
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
 
-      - name: Compilar imagen con Google Cloud Build
+      - name: Compilar y Desplegar Backend API en Google Cloud Run
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          IMAGE_TAG="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          LATEST_TAG="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:latest"
-          gcloud builds submit deploy-context --tag "$IMAGE_TAG"
-          gcloud container images add-tag "$IMAGE_TAG" "$LATEST_TAG" --quiet
+          API_IMAGE="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_API }}:${{ github.sha }}"
+          API_LATEST="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_API }}:latest"
+          gcloud builds submit --tag "$API_IMAGE" -f infra/docker/api/Dockerfile .
+          gcloud container images add-tag "$API_IMAGE" "$API_LATEST" --quiet
+          
+          gcloud run deploy ${{ env.SERVICE_NAME_API }} \
+            --image "$API_IMAGE" \
+            --platform managed \
+            --region ${{ env.GCP_REGION }} \
+            --allow-unauthenticated \
+            --port 8080 \
+            --set-env-vars="NODE_ENV=production"
 
-      - name: Desplegar servicio en Google Cloud Run
+      - name: Compilar y Desplegar Frontend Web en Google Cloud Run
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          IMAGE_TAG="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image "$IMAGE_TAG" \
+          WEB_IMAGE="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_WEB }}:${{ github.sha }}"
+          WEB_LATEST="gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_WEB }}:latest"
+          gcloud builds submit deploy-context --tag "$WEB_IMAGE"
+          gcloud container images add-tag "$WEB_IMAGE" "$WEB_LATEST" --quiet
+
+          gcloud run deploy ${{ env.SERVICE_NAME_WEB }} \
+            --image "$WEB_IMAGE" \
             --platform managed \
             --region ${{ env.GCP_REGION }} \
             --allow-unauthenticated \
             --port 8080
 
-      - name: Validar URL pública activa
+      - name: Validar URLs públicas activas
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --platform managed --region ${{ env.GCP_REGION }} --format 'value(status.url)')
+          WEB_URL=$(gcloud run services describe ${{ env.SERVICE_NAME_WEB }} --platform managed --region ${{ env.GCP_REGION }} --format 'value(status.url)')
+          API_URL=$(gcloud run services describe ${{ env.SERVICE_NAME_API }} --platform managed --region ${{ env.GCP_REGION }} --format 'value(status.url)')
           echo "=========================================================="
           echo "🚀 Monchis Café desplegado exitosamente en producción:"
-          echo "🌐 URL: $SERVICE_URL"
+          echo "🌐 Frontend Web: $WEB_URL"
+          echo "🔌 Backend API:  $API_URL"
           echo "=========================================================="
-          curl -I "$SERVICE_URL"
+          curl -I "$WEB_URL" || true
+          curl -I "$API_URL/api/health" || true
 
       - name: Mensaje informativo si falta Secret de GCP en GitHub
         if: steps.gcp-auth.outcome == 'skipped'

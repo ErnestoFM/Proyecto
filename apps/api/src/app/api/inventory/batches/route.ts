@@ -39,25 +39,29 @@ export async function GET() {
       orderBy: { fechaCaducidad: 'asc' },
     });
 
-    if (lotesDB && lotesDB.length > 0) {
-      const lotesFormateados: BatchDTO[] = lotesDB.map((l) => ({
-        id: l.id,
-        productoId: l.productoId,
-        numeroLote: l.numeroLote,
-        proveedorRegional: l.proveedorRegional,
-        fincaOrigen: l.fincaOrigen || undefined,
-        fechaCosechaTostado: l.fechaCosechaTostado.toISOString(),
-        fechaCaducidad: l.fechaCaducidad.toISOString(),
-        cantidadKilos: Number(l.cantidadKilos),
-        alertasSanitarias: l.alertasSanitarias || undefined,
-      }));
-      return NextResponse.json({ lotes: lotesFormateados });
-    }
-  } catch (error) {
-    console.warn('⚠️ [Prisma Batches] Error al consultar base de datos, usando fallback:', error);
-  }
+    const lotesFormateados: BatchDTO[] = (lotesDB || []).map((l) => ({
+      id: l.id,
+      productoId: l.productoId,
+      numeroLote: l.numeroLote,
+      proveedorRegional: l.proveedorRegional,
+      fincaOrigen: l.fincaOrigen || undefined,
+      fechaCosechaTostado: l.fechaCosechaTostado.toISOString(),
+      fechaCaducidad: l.fechaCaducidad.toISOString(),
+      cantidadKilos: Number(l.cantidadKilos),
+      alertasSanitarias: l.alertasSanitarias || undefined,
+    }));
 
-  return NextResponse.json({ lotes: LOTES_FALLBACK });
+    return NextResponse.json({ lotes: lotesFormateados });
+  } catch (error: any) {
+    console.error('❌ [Prisma Batches] Error al consultar lotes en base de datos:', error);
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json(
+        { error: 'Error interno al consultar lotes de inventario en base de datos' },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ lotes: LOTES_FALLBACK });
+  }
 }
 
 export async function POST(req: Request) {

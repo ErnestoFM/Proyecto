@@ -7,6 +7,8 @@ import { ref } from 'vue';
 import type { AttributionTrafficDTO, BatchDTO } from '@monchis/shared-types';
 import { useAuthStore } from './authStore';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export interface AdminResumen {
   totalIngresos: number;
   totalOrdenes: number;
@@ -78,7 +80,7 @@ export const useAdminStore = defineStore('admin', () => {
     error.value = null;
 
     try {
-      const res = await fetch('/api/admin/analytics', {
+      const res = await fetch(`${API_URL}/api/admin/analytics`, {
         headers: {
           'Content-Type': 'application/json',
           ...auth.getAuthHeaders(),
@@ -103,7 +105,7 @@ export const useAdminStore = defineStore('admin', () => {
 
   async function cargarDLQ() {
     try {
-      const res = await fetch('/api/admin/audit/dlq', {
+      const res = await fetch(`${API_URL}/api/admin/audit/dlq`, {
         headers: { ...auth.getAuthHeaders() },
         credentials: 'include',
       });
@@ -118,7 +120,7 @@ export const useAdminStore = defineStore('admin', () => {
 
   async function cargarLotes() {
     try {
-      const res = await fetch('/api/inventory/batches', {
+      const res = await fetch(`${API_URL}/api/inventory/batches`, {
         headers: {
           'Content-Type': 'application/json',
           ...auth.getAuthHeaders(),

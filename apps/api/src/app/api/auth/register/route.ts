@@ -4,10 +4,21 @@ import { verifyGoogleRecaptcha } from '@/lib/recaptcha';
 import { hashPassword } from '@/lib/password';
 import { signAccessToken, signRefreshToken } from '@/lib/jwt';
 import { prisma, Prisma } from '@/lib/prisma';
+import { checkRateLimitAsync } from '@/lib/rateLimit';
 import { UserDTO } from '@monchis/shared-types';
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. Mitigación contra registro masivo y bots (Rate Limiting por IP con Redis o Fallback)
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || '127.0.0.1';
+    const rateLimit = await checkRateLimitAsync(`register:${clientIp}`, { max: 5, windowMs: 10 * 60 * 1000 });
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: `Límite de solicitudes de registro excedido. Intente nuevamente en ${rateLimit.retryAfterSeconds} segundos.` },
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } }
+      );
+    }
+
     const body = await request.json();
     const parseResult = RegisterSchema.safeParse(body);
 

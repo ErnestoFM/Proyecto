@@ -70,22 +70,27 @@ export async function GET() {
       orderBy: { nombre: 'asc' },
     });
 
-    if (productosDB && productosDB.length > 0) {
-      const productosFormateados: ProductDTO[] = productosDB.map((p) => ({
-        id: p.id,
-        nombre: p.nombre,
-        descripcion: p.descripcion || undefined,
-        tipo: p.tipo as 'ORGANICO' | 'COMERCIAL',
-        precio: Number(p.precio),
-        stockActual: p.stockActual,
-        stockMinimo: p.stockMinimo,
-        activo: p.activo,
-      }));
-      return NextResponse.json({ productos: productosFormateados });
-    }
-  } catch (error) {
-    console.warn('⚠️ [Prisma Products] Error al consultar base de datos, usando catálogo maestro:', error);
-  }
+    const productosFormateados: ProductDTO[] = (productosDB || []).map((p) => ({
+      id: p.id,
+      nombre: p.nombre,
+      descripcion: p.descripcion || undefined,
+      tipo: p.tipo as 'ORGANICO' | 'COMERCIAL',
+      precio: Number(p.precio),
+      stockActual: p.stockActual,
+      stockMinimo: p.stockMinimo,
+      activo: p.activo,
+    }));
 
-  return NextResponse.json({ productos: CATALOGO_PRODUCTOS_FALLBACK });
+    return NextResponse.json({ productos: productosFormateados });
+  } catch (error: any) {
+    console.error('❌ [Prisma Products] Error al consultar base de datos:', error);
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json(
+        { error: 'Error interno al consultar catálogo de productos en base de datos' },
+        { status: 500 }
+      );
+    }
+    // En desarrollo/tests locales sin contenedor de PostgreSQL, mantener catálogo de contingencia
+    return NextResponse.json({ productos: CATALOGO_PRODUCTOS_FALLBACK });
+  }
 }

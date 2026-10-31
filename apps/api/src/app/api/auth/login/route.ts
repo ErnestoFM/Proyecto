@@ -5,10 +5,21 @@ import { comparePassword } from '@/lib/password';
 import { signAccessToken, signRefreshToken, signTemp2FAToken } from '@/lib/jwt';
 import { TotpService } from '@/lib/totp';
 import { prisma } from '@/lib/prisma';
+import { checkRateLimitAsync } from '@/lib/rateLimit';
 import { UserDTO } from '@monchis/shared-types';
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. Mitigación de Ataques de Fuerza Bruta (Rate Limiting por IP con Redis o Fallback)
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || '127.0.0.1';
+    const rateLimit = await checkRateLimitAsync(`login:${clientIp}`, { max: 5, windowMs: 60 * 1000 });
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: `Demasiados intentos fallidos. Por seguridad, intente de nuevo en ${rateLimit.retryAfterSeconds} segundos.` },
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } }
+      );
+    }
+
     const body = await request.json();
     const parseResult = LoginSchema.safeParse(body);
 
