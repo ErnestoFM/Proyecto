@@ -6,6 +6,7 @@ FROM base AS builder
 WORKDIR /app
 COPY . .
 RUN pnpm install --frozen-lockfile=false
+RUN pnpm --filter @monchis/shared-types build
 RUN pnpm --filter web build
 
 FROM nginx:alpine AS runner
