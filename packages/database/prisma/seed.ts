@@ -30,7 +30,7 @@ async function main() {
       passwordHash: passwordHashAdmin,
       nombre: 'Administrador Monchis',
       rol: Role.ADMIN,
-      dosFactoresActivo: true,
+      dosFactoresActivo: false,
       puntosFidelidad: 0,
       sellosAcumulados: 0,
     },
