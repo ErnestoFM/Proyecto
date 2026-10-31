@@ -290,7 +290,7 @@ def build_html(links):
   <div class="portada-team">
     <h5>AUTOR Y EQUIPO</h5>
     <ul>
-      <li><span><strong>Autor:</strong> Ernesto Hatuey Fierro Medina</span> <span class="codigo">Código: 215487963</span></li>
+      <li><span><strong>Autor:</strong> Ernesto Hatuey Fierro Meléndez</span> <span class="codigo">Código: 223977036</span></li>
       <li><span><strong>Equipo:</strong> Equipo 2</span> <span class="codigo">Monchis Café</span></li>
     </ul>
   </div>
