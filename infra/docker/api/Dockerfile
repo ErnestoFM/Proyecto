@@ -1,5 +1,6 @@
 # Multi-stage Dockerfile para Next.js API (Monchis Café Backend)
 FROM node:20-alpine AS base
+RUN apk add --no-cache openssl libc6-compat
 RUN npm install -g pnpm turbo
 
 FROM base AS builder

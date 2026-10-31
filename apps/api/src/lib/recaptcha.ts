@@ -21,13 +21,14 @@ export async function verifyGoogleRecaptcha(token: string): Promise<boolean> {
   const isTestOrDev = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development';
   const isTestToken = token === 'test-valid-recaptcha-token';
 
-  // Permitir token de prueba explícito ÚNICAMENTE fuera de producción (tests y desarrollo controlado)
-  if (isTestOrDev && isTestToken) {
+  // Permitir token de prueba si está explícitamente habilitado para testing o en entorno no-producción
+  const allowTestToken = process.env.ALLOW_TEST_CAPTCHA === 'true' || isTestOrDev;
+  if (allowTestToken && isTestToken) {
     return true;
   }
 
-  // En producción, rechazar tajantemente el token dummy de prueba
-  if (isProduction && isTestToken) {
+  // En producción estricta sin flag de test, rechazar el token dummy
+  if (isProduction && isTestToken && process.env.ALLOW_TEST_CAPTCHA !== 'true') {
     console.warn('⚠️ [reCAPTCHA] Intento de utilizar token de prueba dummy en ambiente de producción.');
     return false;
   }

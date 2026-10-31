@@ -4,13 +4,10 @@ steps:
       - 'build'
       - '-t'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/monchis-repo/monchis-api:latest'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/monchis-repo/monchis-api:$SHORT_SHA'
       - '-f'
       - 'infra/docker/api/Dockerfile'
       - '.'
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/monchis-repo/monchis-api:latest'
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/monchis-repo/monchis-api:$SHORT_SHA'
 options:
   logging: CLOUD_LOGGING_ONLY

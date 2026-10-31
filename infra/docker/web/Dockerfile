@@ -5,6 +5,7 @@ RUN npm install -g pnpm turbo
 FROM base AS builder
 WORKDIR /app
 COPY . .
+ENV VITE_API_URL=https://monchis-cafe-api-84991608726.us-central1.run.app
 RUN pnpm install --frozen-lockfile=false
 RUN pnpm --filter @monchis/shared-types build
 RUN pnpm --filter web build
@@ -13,5 +14,5 @@ FROM nginx:alpine AS runner
 COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 COPY infra/docker/web/nginx-web.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

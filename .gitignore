@@ -47,6 +47,7 @@ htmlcov/
 
 # Archivos de Configuración Sensibles / Entorno
 .env
+.env.production
 .env.local
 .env.development.local
 .env.test.local
