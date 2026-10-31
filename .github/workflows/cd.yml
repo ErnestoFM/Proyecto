@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || vars.GCP_PROJECT_ID || 'monchis-cafe-prod' }}
   GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
   SERVICE_NAME_WEB: monchis-cafe-web
   SERVICE_NAME_API: monchis-cafe-api
@@ -94,12 +94,10 @@ jobs:
 
       - name: Autenticación en Google Cloud Platform
         id: gcp-auth
-        if: env.HAS_GCP_SECRET == 'true'
+        if: ${{ secrets.GCP_SA_KEY != '' }}
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
-        env:
-          HAS_GCP_SECRET: ${{ secrets.GCP_SA_KEY != '' }}
 
       - name: Configurar Google Cloud SDK
         if: steps.gcp-auth.outcome == 'success'
