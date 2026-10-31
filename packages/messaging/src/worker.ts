@@ -40,3 +40,4 @@ if (require.main === module || process.env.RUN_WORKER === 'true') {
 }
 
 export { bootstrapWorker };
+
