@@ -9,11 +9,6 @@ concurrency:
   group: cd-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  GCP_REGION: us-central1
-  SERVICE_NAME_WEB: monchis-cafe-web
-  SERVICE_NAME_API: monchis-cafe-api
-
 jobs:
   test-and-build:
     name: 1. Quality Gate (Lint, Tests & Build)
@@ -69,9 +64,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
 
-    env:
-      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -96,7 +88,7 @@ jobs:
 
       - name: Autenticación en Google Cloud Platform
         id: gcp-auth
-        if: ${{ secrets.GCP_SA_KEY != '' }}
+        if: secrets.GCP_SA_KEY != ''
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
@@ -105,49 +97,46 @@ jobs:
         if: steps.gcp-auth.outcome == 'success'
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ env.GCP_PROJECT_ID || 'monchis-cafe-prod' }}
+          project_id: monchis-cafe-prod
 
       - name: Compilar y Desplegar Backend API en Google Cloud Run
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
-          API_IMAGE="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_API}:${GITHUB_SHA}"
-          API_LATEST="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_API}:latest"
-          gcloud builds submit --tag "$API_IMAGE" -f infra/docker/api/Dockerfile . --project "$TARGET_PROJECT"
-          gcloud container images add-tag "$API_IMAGE" "$API_LATEST" --quiet --project "$TARGET_PROJECT"
+          API_IMAGE="gcr.io/monchis-cafe-prod/monchis-cafe-api:${{ github.sha }}"
+          API_LATEST="gcr.io/monchis-cafe-prod/monchis-cafe-api:latest"
+          gcloud builds submit --tag "$API_IMAGE" -f infra/docker/api/Dockerfile . --project monchis-cafe-prod
+          gcloud container images add-tag "$API_IMAGE" "$API_LATEST" --quiet --project monchis-cafe-prod
           
-          gcloud run deploy "$SERVICE_NAME_API" \
+          gcloud run deploy monchis-cafe-api \
             --image "$API_IMAGE" \
             --platform managed \
-            --region "$GCP_REGION" \
+            --region us-central1 \
             --allow-unauthenticated \
             --port 8080 \
-            --project "$TARGET_PROJECT" \
+            --project monchis-cafe-prod \
             --set-env-vars="NODE_ENV=production"
 
       - name: Compilar y Desplegar Frontend Web en Google Cloud Run
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
-          WEB_IMAGE="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_WEB}:${GITHUB_SHA}"
-          WEB_LATEST="gcr.io/${TARGET_PROJECT}/${SERVICE_NAME_WEB}:latest"
-          gcloud builds submit deploy-context --tag "$WEB_IMAGE" --project "$TARGET_PROJECT"
-          gcloud container images add-tag "$WEB_IMAGE" "$WEB_LATEST" --quiet --project "$TARGET_PROJECT"
+          WEB_IMAGE="gcr.io/monchis-cafe-prod/monchis-cafe-web:${{ github.sha }}"
+          WEB_LATEST="gcr.io/monchis-cafe-prod/monchis-cafe-web:latest"
+          gcloud builds submit deploy-context --tag "$WEB_IMAGE" --project monchis-cafe-prod
+          gcloud container images add-tag "$WEB_IMAGE" "$WEB_LATEST" --quiet --project monchis-cafe-prod
 
-          gcloud run deploy "$SERVICE_NAME_WEB" \
+          gcloud run deploy monchis-cafe-web \
             --image "$WEB_IMAGE" \
             --platform managed \
-            --region "$GCP_REGION" \
-            --project "$TARGET_PROJECT" \
+            --region us-central1 \
+            --project monchis-cafe-prod \
             --allow-unauthenticated \
             --port 8080
 
       - name: Validar URLs públicas activas
         if: steps.gcp-auth.outcome == 'success'
         run: |
-          TARGET_PROJECT="${GCP_PROJECT_ID:-monchis-cafe-prod}"
-          WEB_URL=$(gcloud run services describe "$SERVICE_NAME_WEB" --platform managed --region "$GCP_REGION" --project "$TARGET_PROJECT" --format 'value(status.url)')
-          API_URL=$(gcloud run services describe "$SERVICE_NAME_API" --platform managed --region "$GCP_REGION" --project "$TARGET_PROJECT" --format 'value(status.url)')
+          WEB_URL=$(gcloud run services describe monchis-cafe-web --platform managed --region us-central1 --project monchis-cafe-prod --format 'value(status.url)')
+          API_URL=$(gcloud run services describe monchis-cafe-api --platform managed --region us-central1 --project monchis-cafe-prod --format 'value(status.url)')
           echo "=========================================================="
           echo "🚀 Monchis Café desplegado exitosamente en producción:"
           echo "🌐 Frontend Web: $WEB_URL"
