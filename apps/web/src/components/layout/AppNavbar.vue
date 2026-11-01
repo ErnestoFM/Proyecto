@@ -36,6 +36,7 @@ function closeMenu() {
       <!-- Acciones (Login / Perfil) y Botón Hamburguesa -->
       <div class="navbar__actions">
         <template v-if="auth.isAuthenticated">
+          <RouterLink to="/dashboard" class="btn btn--ghost btn--sm desktop-only">Mis Pedidos</RouterLink>
           <RouterLink v-if="auth.user?.rol === 'ADMIN'" to="/admin" class="btn btn--secondary btn--sm desktop-only">Admin</RouterLink>
           <RouterLink v-if="auth.user?.rol === 'CAJERO' || auth.user?.rol === 'ADMIN'" to="/pos" class="btn btn--primary btn--sm desktop-only">POS</RouterLink>
           <RouterLink to="/perfil" class="navbar__user desktop-only">
@@ -97,6 +98,7 @@ function closeMenu() {
 
         <div class="drawer-footer">
           <template v-if="auth.isAuthenticated">
+            <RouterLink to="/dashboard" class="btn btn--primary btn--full" @click="closeMenu">📜 Mis Pedidos & Facturas</RouterLink>
             <RouterLink to="/perfil" class="btn btn--outline btn--full" @click="closeMenu">👤 Mi Perfil</RouterLink>
             <RouterLink v-if="auth.user?.rol === 'ADMIN'" to="/admin" class="btn btn--secondary btn--full" @click="closeMenu">Panel Admin</RouterLink>
             <RouterLink v-if="auth.user?.rol === 'CAJERO' || auth.user?.rol === 'ADMIN'" to="/pos" class="btn btn--primary btn--full" @click="closeMenu">Punto de Venta (POS)</RouterLink>

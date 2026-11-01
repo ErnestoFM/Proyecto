@@ -10,6 +10,17 @@ const mensaje = ref('');
 const aceptaPrivacidad = ref(false);
 const enviando = ref(false);
 const enviadoExitoso = ref(false);
+const direccionCopiada = ref(false);
+
+function copiarDireccion() {
+  if (typeof navigator !== 'undefined' && navigator.clipboard) {
+    navigator.clipboard.writeText('Av. Corredor Verde Principal #1450, Col. Corredor Verde, Tonalá, Jalisco, México');
+    direccionCopiada.value = true;
+    setTimeout(() => {
+      direccionCopiada.value = false;
+    }, 2500);
+  }
+}
 
 const motivosContacto = [
   { valor: 'menu', etiqueta: '☕ Preguntas sobre el Menú o Café Orgánico' },
@@ -440,6 +451,60 @@ const redesSociales = [
               >
                 🚗 Abrir en Waze
               </a>
+              <button
+                type="button"
+                class="btn btn--outline btn--sm copy-btn"
+                @click="copiarDireccion"
+              >
+                {{ direccionCopiada ? '✅ ¡Copiada!' : '📋 Copiar Dirección' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Tarjeta de Cómo Llegar & Transporte -->
+          <div class="card transport-card">
+            <h4>🚴 ¿Cómo Llegar a Monchis Café?</h4>
+            <div class="transport-list">
+              <div class="transport-item">
+                <span class="transport-icon">🚲</span>
+                <div>
+                  <strong>En Bicicleta</strong>
+                  <p>Ciclovía directa sobre Av. Corredor Verde con estacionamiento seguro y cámaras en el acceso.</p>
+                </div>
+              </div>
+              <div class="transport-item">
+                <span class="transport-icon">🚗</span>
+                <div>
+                  <strong>En Automóvil</strong>
+                  <p>Estacionamiento frontal gratuito exclusivo para clientes frente al parque arbolado.</p>
+                </div>
+              </div>
+              <div class="transport-item">
+                <span class="transport-icon">🚌</span>
+                <div>
+                  <strong>Transporte Público</strong>
+                  <p>Parada de autobús a 80 metros (Rutas C-01, T-15 y Mi Transporte alimentadoras).</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarjeta de Métodos de Pago y Facturación -->
+          <div class="card payment-info-card">
+            <h4>💳 Métodos de Pago & Facturación</h4>
+            <p class="payment-badges">
+              <span class="p-badge">💵 Efectivo</span>
+              <span class="p-badge">💳 Tarjeta Crédito / Débito</span>
+              <span class="p-badge">⚡ SPEI Transferencia</span>
+              <span class="p-badge">📲 Contactless / Apple Pay</span>
+              <span class="p-badge">🎁 Monchis Rewards Puntos</span>
+            </p>
+            <div class="billing-note">
+              <strong>🧾 ¿Requieres Factura Fiscal (CFDI)?</strong>
+              <p>
+                Solicítala al pagar en caja o envíanos tu ticket y Constancia de Situación Fiscal por este
+                formulario seleccionando <em>"Facturación Electrónica"</em>.
+              </p>
             </div>
           </div>
         </div>
@@ -538,6 +603,19 @@ const redesSociales = [
         </div>
       </div>
     </section>
+
+    <!-- Botón Flotante de WhatsApp para Atención Inmediata -->
+    <a
+      href="https://wa.me/5213300000000?text=%C2%A1Hola%20Monchis%20Caf%C3%A9!%20Me%20gustar%C3%ADa%20hacer%20una%20consulta."
+      target="_blank"
+      rel="noopener noreferrer"
+      class="floating-whatsapp"
+      title="Chatea con nosotros en WhatsApp"
+      aria-label="Chatea con nosotros en WhatsApp"
+    >
+      <span class="floating-whatsapp__icon">💬</span>
+      <span class="floating-whatsapp__text">¿Dudas? Chatea con nosotros</span>
+    </a>
   </div>
 </template>
 
@@ -1071,5 +1149,145 @@ const redesSociales = [
   background: #1ebc59;
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+}
+
+/* --- Transporte y Cómo Llegar --- */
+.transport-card,
+.payment-info-card {
+  padding: 1.5rem;
+}
+
+.transport-card h4,
+.payment-info-card h4 {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+}
+
+.transport-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.transport-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.transport-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.transport-item strong {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--color-text-main);
+  margin-bottom: 0.2rem;
+}
+
+.transport-item p {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* --- Métodos de Pago y Facturación --- */
+.payment-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.p-badge {
+  background: var(--color-bg-base);
+  border: 1px solid var(--color-border);
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.billing-note {
+  background: rgba(243, 201, 201, 0.15);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+}
+
+.billing-note strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-primary-dark);
+  margin-bottom: 0.3rem;
+}
+
+.billing-note p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.copy-btn {
+  cursor: pointer;
+}
+
+/* --- Botón Flotante de WhatsApp --- */
+.floating-whatsapp {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  background: #25d366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.4);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  animation: pulse-subtle 3s infinite;
+}
+
+.floating-whatsapp:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.55);
+}
+
+.floating-whatsapp__icon {
+  font-size: 1.4rem;
+}
+
+@keyframes pulse-subtle {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+@media (max-width: 600px) {
+  .floating-whatsapp {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    padding: 0.75rem;
+    border-radius: 50%;
+  }
+  .floating-whatsapp__text {
+    display: none;
+  }
 }
 </style>

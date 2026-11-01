@@ -1,0 +1,29 @@
+{
+  "name": "Monchis Café — Café Orgánico de Especialidad",
+  "short_name": "Monchis Café",
+  "description": "Café orgánico de especialidad con alma de rancho y comercio justo regional.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF3ED",
+  "theme_color": "#F3C9C9",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/monchis_logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/monchis_logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+

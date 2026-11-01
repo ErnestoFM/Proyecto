@@ -1,17 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#F3C9C9" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <title>Monchis Café — Café Orgánico de Especialidad</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/monchis_logo.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#F3C9C9" />
+
+  <!-- SEO Meta Tags Principales -->
+  <title>Monchis Café — Café Orgánico de Especialidad & Comercio Justo</title>
+  <meta name="description"
+    content="Café orgánico de especialidad con alma de rancho. Granos trazables de Chiapas y Oaxaca (1,450 msnm), repostería artesanal, programa de fidelización Monchis Rewards y comercio justo." />
+  <meta name="keywords"
+    content="café orgánico, café de especialidad, monchis café, chiapas, oaxaca, barista, cold brew, monchis rewards, comercio justo, cafetería pet friendly guadalajara" />
+  <meta name="author" content="Monchis Café" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://monchis-cafe-web-84991608726.us-central1.run.app/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://monchis-cafe-web-84991608726.us-central1.run.app/" />
+  <meta property="og:site_name" content="Monchis Café" />
+  <meta property="og:title" content="Monchis Café — Café Orgánico de Especialidad & Comercio Justo" />
+  <meta property="og:description"
+    content="Cada taza cuenta una historia. Granos trazables cosechados a mano bajo sombra natural. Disfruta de nuestro rincón cálido con café de altura y repostería artesanal." />
+  <meta property="og:image" content="https://monchis-cafe-web-84991608726.us-central1.run.app/og-image.jpg" />
+  <meta property="og:locale" content="es_MX" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@monchiscafe" />
+  <meta name="twitter:title" content="Monchis Café — Café Orgánico de Especialidad" />
+  <meta name="twitter:description"
+    content="Café orgánico trazable de proveedores regionales servido con cariño en un rincón cálido y acogedor." />
+  <meta name="twitter:image" content="https://monchis-cafe-web-84991608726.us-central1.run.app/og-image.jpg" />
+
+  <!-- Preconexión de Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Schema.org JSON-LD (CafeOrCoffeeShop) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CafeOrCoffeeShop",
+      "name": "Monchis Café",
+      "image": "https://monchis-cafe-web-84991608726.us-central1.run.app/monchis_logo.png",
+      "url": "https://monchis-cafe-web-84991608726.us-central1.run.app/",
+      "telephone": "+52-33-1234-5678",
+      "priceRange": "$$",
+      "servesCuisine": "Café Orgánico de Especialidad, Repostería Artesanal",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Corredor Verde Principal #1450",
+        "addressLocality": "Tonalá",
+        "addressRegion": "Jalisco",
+        "postalCode": "45400",
+        "addressCountry": "MX"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 20.6737777,
+        "longitude": -103.3918239
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "07:30",
+          "closes": "20:30"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "08:00",
+          "closes": "21:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Sunday",
+          "opens": "08:30",
+          "closes": "18:00"
+        }
+      ],
+      "acceptsReservations": "True",
+      "hasMenu": "https://monchis-cafe-web-84991608726.us-central1.run.app/menu",
+      "sameAs": [
+        "https://instagram.com/monchiscafe",
+        "https://facebook.com/monchiscafe",
+        "https://tiktok.com/@monchiscafe"
+      ]
+    }
+    </script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>

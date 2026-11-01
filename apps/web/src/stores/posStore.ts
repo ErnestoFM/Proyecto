@@ -72,10 +72,36 @@ export const usePosStore = defineStore('pos', () => {
 
   const cart = ref<CartItem[]>([]);
   const clienteId = ref<string | null>(null);
+  const clienteNombre = ref<string | null>(null);
+  const clienteEmail = ref<string | null>(null);
   const clientePuntos = ref<number>(0);
   const clienteSellos = ref<number>(0);
   const puntosARedimir = ref<number>(0);
   const traeTermo = ref<boolean>(false);
+
+  function seleccionarCliente(c: {
+    id: string;
+    nombre: string;
+    email: string;
+    puntosFidelidad: number;
+    sellosAcumulados: number;
+  }) {
+    clienteId.value = c.id;
+    clienteNombre.value = c.nombre;
+    clienteEmail.value = c.email;
+    clientePuntos.value = c.puntosFidelidad;
+    clienteSellos.value = c.sellosAcumulados;
+    puntosARedimir.value = 0;
+  }
+
+  function desvincularCliente() {
+    clienteId.value = null;
+    clienteNombre.value = null;
+    clienteEmail.value = null;
+    clientePuntos.value = 0;
+    clienteSellos.value = 0;
+    puntosARedimir.value = 0;
+  }
 
   // Configuración del método de pago
   const metodoPago = ref<PaymentMethod>('EFECTIVO');
@@ -233,8 +259,12 @@ export const usePosStore = defineStore('pos', () => {
     productos,
     cart,
     clienteId,
+    clienteNombre,
+    clienteEmail,
     clientePuntos,
     clienteSellos,
+    seleccionarCliente,
+    desvincularCliente,
     puntosARedimir,
     traeTermo,
     metodoPago,

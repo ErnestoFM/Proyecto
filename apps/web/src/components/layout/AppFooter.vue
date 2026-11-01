@@ -13,29 +13,38 @@
       <nav class="footer__links">
         <h4>Navegación</h4>
         <RouterLink to="/">Inicio</RouterLink>
-        <RouterLink to="/menu">Menú</RouterLink>
-        <RouterLink to="/nosotros">Nosotros</RouterLink>
-        <RouterLink to="/contacto">Contacto</RouterLink>
+        <RouterLink to="/menu">Menú de Especialidad</RouterLink>
+        <RouterLink to="/rewards">Monchis Rewards</RouterLink>
+        <RouterLink to="/nosotros">Nuestra Historia</RouterLink>
+        <RouterLink to="/contacto">Contacto & Ubicación</RouterLink>
       </nav>
 
       <nav class="footer__links">
-        <h4>Legal & Privacidad</h4>
+        <h4>Legal & Comunidad</h4>
         <RouterLink to="/legal?tab=terminos">Términos y Condiciones</RouterLink>
         <RouterLink to="/legal?tab=privacidad">Aviso de Privacidad</RouterLink>
         <RouterLink to="/legal?tab=cookies">Ajustes de Cookies</RouterLink>
+        <a href="https://instagram.com/monchiscafe" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://facebook.com/monchiscafe" target="_blank" rel="noopener noreferrer">Facebook</a>
       </nav>
 
       <div class="footer__contact">
-        <h4>Encuéntranos</h4>
-        <p>📍 Zona rural/suburbana, México</p>
-        <p>📧 hola@monchiscafe.com</p>
-        <p>📱 +52 (XXX) XXX-XXXX</p>
+        <h4>Visítanos</h4>
+        <p>📍 Av. Corredor Verde 1450, Tonalá / ZMG, Jalisco</p>
+        <p>📧 <a href="mailto:hola@monchiscafe.com" style="color: inherit; text-decoration: underline;">hola@monchiscafe.com</a></p>
+        <p>📱 <a href="tel:+523312345678" style="color: inherit; text-decoration: underline;">+52 (33) 1234-5678</a></p>
+        <p>💬 <a href="https://wa.me/5213300000000" target="_blank" rel="noopener noreferrer" style="color: #25D366; font-weight: 700;">WhatsApp Directo →</a></p>
       </div>
     </div>
 
     <div class="footer__bottom">
-      <div class="container">
-        <p>&copy; {{ new Date().getFullYear() }} Monchis Café — Hecho con ❤️ y café orgánico.</p>
+      <div class="container footer__bottom-inner">
+        <p>&copy; {{ new Date().getFullYear() }} Monchis Café — Café de Especialidad y Comercio Justo.</p>
+        <div class="footer__bottom-links">
+          <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer">Sitemap XML</a>
+          <span>·</span>
+          <a href="/robots.txt" target="_blank" rel="noopener noreferrer">Robots.txt</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -51,8 +60,22 @@
 
 .footer__inner {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 3rem;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 2.5rem;
+}
+
+@media (max-width: 900px) {
+  .footer__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 550px) {
+  .footer__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 }
 
 .footer__brand { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -113,16 +136,45 @@
   margin-top: 2.5rem;
 }
 
+.footer__bottom-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .footer__bottom p {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.4);
-  text-align: center;
+  margin: 0;
+}
+
+.footer__bottom-links {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.footer__bottom-links a {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer__bottom-links a:hover {
+  color: var(--color-primary);
+}
+
+.footer__bottom-links span {
+  color: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 768px) {
-  .footer__inner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  .footer__bottom-inner {
+    flex-direction: column;
+    text-align: center;
   }
 }
 </style>

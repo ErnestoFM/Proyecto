@@ -1,9 +1,42 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { usePosStore } from '@/stores/posStore';
+import { useAuthStore } from '@/stores/authStore';
 import type { ProductType, PaymentMethod } from '@monchis/shared-types';
 
 const pos = usePosStore();
+const auth = useAuthStore();
+const API_URL = import.meta.env.VITE_API_URL || '';
+
+const busquedaCliente = ref('');
+const clientesEncontrados = ref<any[]>([]);
+
+async function buscarClientesAsync() {
+  const q = busquedaCliente.value.trim();
+  if (q.length < 2) {
+    clientesEncontrados.value = [];
+    return;
+  }
+  try {
+    const res = await fetch(`${API_URL}/api/pos/customers?q=${encodeURIComponent(q)}`, {
+      headers: {
+        ...auth.getAuthHeaders(),
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      clientesEncontrados.value = data.clientes || [];
+    }
+  } catch (e) {
+    console.warn('Error al buscar clientes:', e);
+  }
+}
+
+function seleccionarClienteDesdeDropdown(c: any) {
+  pos.seleccionarCliente(c);
+  busquedaCliente.value = '';
+  clientesEncontrados.value = [];
+}
 
 const categoriaSeleccionada = ref<'TODOS' | ProductType>('TODOS');
 const filtroBusqueda = ref('');
@@ -224,10 +257,66 @@ function cerrarModal() {
         </div>
       </div>
 
-      <!-- Beneficios Monchis Rewards -->
-      <div class="pos-rewards card">
-        <h4>🎁 Monchis Rewards</h4>
-        <label class="eco-checkbox">
+      <!-- Cliente y Monchis Rewards -->
+      <div class="pos-customer-box card">
+        <div class="customer-box__header">
+          <h4>👤 Cliente / Rewards</h4>
+          <button v-if="pos.clienteId" class="btn-unlink" @click="pos.desvincularCliente" title="Desvincular cliente">✕</button>
+        </div>
+
+        <div v-if="!pos.clienteId" class="customer-search-wrapper">
+          <input
+            v-model="busquedaCliente"
+            type="text"
+            placeholder="Buscar por nombre o correo..."
+            class="customer-search-input"
+            @input="buscarClientesAsync"
+            @focus="buscarClientesAsync"
+          />
+          <div v-if="clientesEncontrados.length > 0" class="customer-dropdown">
+            <div
+              v-for="c in clientesEncontrados"
+              :key="c.id"
+              class="customer-dropdown-item"
+              @click="seleccionarClienteDesdeDropdown(c)"
+            >
+              <div class="customer-item-info">
+                <strong>{{ c.nombre }}</strong>
+                <small>{{ c.email }}</small>
+              </div>
+              <div class="customer-item-stats">
+                <span class="badge-points">🪙 {{ c.puntosFidelidad }} pts</span>
+                <span class="badge-stamps">☕ {{ c.sellosAcumulados }} sellos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="customer-selected-card">
+          <div class="customer-selected-info">
+            <strong>{{ pos.clienteNombre }}</strong>
+            <small>{{ pos.clienteEmail }}</small>
+          </div>
+          <div class="customer-selected-badges">
+            <span class="badge-points">🪙 {{ pos.clientePuntos }} pts disp.</span>
+            <span class="badge-stamps">☕ {{ pos.clienteSellos }}/10 sellos</span>
+          </div>
+          <div v-if="pos.clientePuntos > 0" class="redeem-points-box">
+            <label class="redeem-label">
+              <span>Canjear puntos ($1 = 1 pt):</span>
+              <input
+                v-model.number="pos.puntosARedimir"
+                type="number"
+                min="0"
+                :max="Math.min(pos.clientePuntos, pos.subtotal)"
+                class="redeem-input"
+              />
+            </label>
+          </div>
+        </div>
+
+        <!-- Beneficios Monchis Rewards -->
+        <label class="eco-checkbox" style="margin-top: 0.75rem;">
           <input v-model="pos.traeTermo" type="checkbox" />
           <span>🌿 Trae termo reusable (+1 sello ecológico)</span>
         </label>
@@ -574,10 +663,177 @@ function cerrarModal() {
   text-align: right;
 }
 
-.pos-rewards {
+.pos-rewards,
+.pos-customer-box {
   padding: 1rem;
   margin-bottom: 1rem;
-  background: rgba(243, 201, 201, 0.1);
+  background: rgba(243, 201, 201, 0.12);
+  border: 1px dashed var(--color-border);
+  position: relative;
+}
+
+.customer-box__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.customer-box__header h4 {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.btn-unlink {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-unlink:hover {
+  color: #c94a4a;
+  background: rgba(201, 74, 74, 0.1);
+}
+
+.customer-search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.customer-search-input {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-base);
+  outline: none;
+}
+
+.customer-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(227, 154, 154, 0.25);
+}
+
+.customer-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 100;
+  margin-top: 0.3rem;
+}
+
+.customer-dropdown-item {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background var(--transition-fast);
+}
+
+.customer-dropdown-item:hover {
+  background: rgba(243, 201, 201, 0.2);
+}
+
+.customer-item-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.customer-item-info strong {
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+}
+
+.customer-item-info small {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.customer-item-stats,
+.customer-selected-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.badge-points {
+  background: #fff4e5;
+  color: #b76e00;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.badge-stamps {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.customer-selected-card {
+  background: var(--color-bg-base);
+  padding: 0.7rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.customer-selected-info {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.4rem;
+}
+
+.customer-selected-info strong {
+  font-size: 0.9rem;
+}
+
+.customer-selected-info small {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.redeem-points-box {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--color-border);
+}
+
+.redeem-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  color: var(--color-text-main);
+  gap: 0.3rem;
+}
+
+.redeem-input {
+  width: 100%;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
 }
 
 .eco-checkbox {
