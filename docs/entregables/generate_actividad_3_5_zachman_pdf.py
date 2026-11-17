@@ -1,13 +1,13 @@
 import os
 import subprocess
-import shutil
 
 BASE_DIR = r"d:\ernestofm\Proyecto\docs\entregables\actividad_3_5_zachman"
 HTML_OUT_PATH = os.path.join(r"d:\ernestofm\Proyecto\docs\entregables", "Actividad_3_5_Matriz_Zachman_Equipo2.html")
 PDF_OUT_PATH = os.path.join(r"d:\ernestofm\Proyecto\docs\entregables", "Actividad_3_5_Matriz_Zachman_Equipo2.pdf")
 DOWNLOADS_PDF_PATH = r"C:\Users\erfierro\Downloads\Actividad_3_5_Matriz_Zachman_Equipo2.pdf"
 
-# Dictionary of Google Drive / Docs links verified HTTP 200
+# Dictionary of Google Drive / Docs links.
+# Can be updated with the actual links from the user.
 DOCS_LINKS = {
     # Fila 1: INTENCIÓN
     "c01": "https://drive.google.com/file/d/1JN_dtu5lZ1W7tbtIF0IKflDZPmsfYhf3/view?usp=sharing", # 01_caracteristicas.docx
@@ -42,50 +42,6 @@ DOCS_LINKS = {
     "c24": "https://drive.google.com/file/d/1u_WlrnJiJo7AeiG091-n-Gpevaq5MJ9y/view?usp=sharing", # 24_reglas_modelo_analisis.docx
 }
 
-CELL_DETAILS = {
-    # Fila 1: INTENCIÓN
-    "c01": ("Características:", "Catálogo segmentado, POS multipago, Rewards ODS 12, trazabilidad y seguridad stateless."),
-    "c02": ("Listado de Procesos de Negocio:", "PN-01 a PN-06: Abastecimiento, venta mostrador, sellos Rewards, mermas PEPS y corte de caja."),
-    "c03": ("Diagramas de Contexto:", "DFD Nivel 0 con entidades externas: Cliente, Cajero, Admin, Cooperativas, Banco SPEI y Google."),
-    "c04": ("Workflow (roles y act):", "Flujo de trabajo operativo entre los 4 roles humanos y Matriz RACI para 10 tareas clave."),
-    "c05": ("Listado de Eventos:", "10 eventos de negocio (EVT-01 a EVT-10): Apertura caja, termo reusable, cobro, alertas y corte Z."),
-    "c06": ("Visión y Objetivos:", "Misión, visión, 4 objetivos SMART y alineación estratégica con ODS 12 (Metas 12.2, 12.3 y 12.5)."),
-
-    # Fila 2: ALCANCE
-    "c07": ("Listado de Requerimientos:", "Catálogo de 15 Requerimientos Funcionales (RF-01 a RF-15) con actores y criterios de éxito."),
-    "c08": ("Diagramas de Actividad:", "DA-01 Venta en Mostrador con Bono Ecológico y DA-02 Abastecimiento de Café con Alerta PEPS."),
-    "c09": ("Ambiente Operativo y RNF:", "GCP Cloud Run, Docker Compose local y 7 RNF bajo la norma internacional ISO/IEC 25010."),
-    "c10": ("Rol de Negocio:", "Fichas de caracterización de Administrador, Cajero de Turno, Cliente y Proveedor Campesino."),
-    "c11": ("Cronograma de Negocio:", "4 fases de adopción en 16 semanas, hitos de negocio y ciclo diario de horarios en cafetería."),
-    "c12": ("Prioridades de Negocio:", "Jerarquización formal MoSCoW (Must, Should, Could, Won't Have) y matriz de valor vs esfuerzo."),
-
-    # Fila 3: ALTO NIVEL
-    "c13": ("Listado de Casos de Uso:", "Catálogo consolidado de 12 Casos de Uso (CU-01 a CU-12) cruzados con los requerimientos."),
-    "c14": ("Especificación de Casos de Uso:", "Plantillas formales Cockburn para CU-01 (Login reCAPTCHA), CU-03/04 (POS) y CU-12 (Reversa Saga)."),
-    "c15": ("Subsistemas y Módulos:", "Arquitectura Monorepo desacoplada: apps/web, apps/api, packages/database y packages/messaging."),
-    "c16": ("Actores Descripción:", "Caracterización de 8 actores (humanos y sistemas/servicios) y matriz de interacción cruzada."),
-    "c17": ("Precedencia de Casos de Uso:", "Reglas de precedencia obligatoria, inclusión <<include>>, extensión <<extend>> y grafo dirigido."),
-    "c18": ("Prioridades y Reglas del Negocio:", "8 reglas de negocio (RN-01 a RN-08) y jerarquización por nivel de prioridad crítica (P1, P2, P3)."),
-
-    # Fila 4: DETALLE
-    "c19": ("Diagramas CU, UI y Dominio:", "Diagrama UML global, wireframes reales de POS y Login, y MER relacional de base de datos."),
-    "c20": ("Especificación y Navegación:", "Grafo de navegación en Vue Router 4, guardianes de ruta (beforeEach) y atajos de teclado (F2, Esc)."),
-    "c21": ("Diagrama de Paquetes:", "Diagrama de paquetes UML @monchis/* bajo el Principio de Dependencias Acíclicas (ADP)."),
-    "c22": ("Actores, Permisos y RBAC:", "Matriz CRUD de permisos RBAC por endpoint de API y rutas web, con principio de menor privilegio."),
-    "c23": ("Diagrama de Estados:", "Autómatas finitos del ciclo de vida de una Orden de Venta (Order) y de un Lote de Café (Batch)."),
-    "c24": ("Reglas en Modelo de Análisis:", "Trazabilidad de las 8 reglas a código TypeScript, restricciones Prisma y pruebas Vitest.")
-}
-
-def render_cell(key, links):
-    title, desc = CELL_DETAILS[key]
-    url = links[key]
-    return f"""<td>
-          <a class="cell-title-link" href="{url}" target="_blank">{title} 🔗</a>
-          <a class="cell-badge-btn" href="{url}" target="_blank">📄 Ver en Drive</a>
-          <a class="cell-link" href="{url}" target="_blank">{url}</a>
-          <span class="cell-desc">{desc}</span>
-        </td>"""
-
 def build_html(links):
     html_content = f"""<!DOCTYPE html>
 <html lang="es">
@@ -95,7 +51,7 @@ def build_html(links):
 <style>
   @page {{
     size: letter landscape;
-    margin: 0.7cm;
+    margin: 0.8cm;
   }}
   @page portadapg {{
     size: letter portrait;
@@ -219,26 +175,20 @@ def build_html(links):
   }}
   .matrix-title {{
     text-align: center;
-    font-size: 15pt;
+    font-size: 16pt;
     font-weight: 800;
     color: #C05621;
-    margin: 0 0 4px 0;
-  }}
-  .matrix-subtitle {{
-    text-align: center;
-    font-size: 8pt;
-    color: #4A5568;
-    margin: 0 0 6px 0;
+    margin: 0 0 8px 0;
   }}
   .matrix-table {{
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    font-size: 7.2pt;
+    font-size: 7.5pt;
   }}
   .matrix-table th, .matrix-table td {{
     border: 1.5px solid #C05621;
-    padding: 4px 5px;
+    padding: 6px 5px;
     vertical-align: top;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -248,63 +198,38 @@ def build_html(links):
     color: #FFFFFF;
     text-align: center;
     font-weight: 800;
-    font-size: 7.8pt;
+    font-size: 8pt;
     text-transform: uppercase;
   }}
   .row-hdr {{
     background-color: #ED8936;
     color: #FFFFFF;
     font-weight: 800;
-    font-size: 7.8pt;
+    font-size: 8pt;
     text-align: center;
     vertical-align: middle !important;
     width: 7.5%;
   }}
-  .cell-title-link {{
+  .cell-title {{
     font-weight: 800;
     color: #1A365D;
-    text-decoration: none;
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     line-height: 1.15;
-    font-size: 7.2pt;
-  }}
-  .cell-title-link:hover {{
-    color: #2B6CB0;
-    text-decoration: underline;
-  }}
-  .cell-badge-btn {{
-    display: inline-block;
-    background-color: #EBF8FF;
-    color: #2B6CB0;
-    border: 1px solid #BEE3F8;
-    border-radius: 3px;
-    padding: 1px 4px;
-    font-size: 6.2pt;
-    font-weight: 700;
-    text-decoration: none;
-    margin-bottom: 2px;
-    line-height: 1.2;
-  }}
-  .cell-badge-btn:hover {{
-    background-color: #BEE3F8;
-    color: #1A365D;
   }}
   .cell-link {{
-    font-size: 5.8pt;
+    font-size: 6.8pt;
     color: #2B6CB0;
     text-decoration: underline;
     display: block;
-    line-height: 1.1;
+    line-height: 1.15;
     word-break: break-all;
-    margin-bottom: 2px;
   }}
   .cell-desc {{
-    font-size: 6.5pt;
+    font-size: 6.8pt;
     color: #4A5568;
-    margin-top: 1px;
+    margin-top: 2px;
     line-height: 1.15;
-    display: block;
   }}
 
   /* Justificación Metodológica Page */
@@ -325,20 +250,19 @@ def build_html(links):
   .justificacion-page h3 {{
     font-size: 10pt;
     font-weight: 700;
-    color: #2B6CB0;
-    margin-top: 12px;
-    margin-bottom: 4px;
+    color: #C05621;
+    margin: 8px 0 3px 0;
   }}
   .justificacion-page p {{
-    margin: 4px 0 8px 0;
+    margin: 0 0 6px 0;
     text-align: justify;
   }}
   .justificacion-page ol {{
-    margin: 4px 0;
-    padding-left: 20px;
+    margin: 0 0 8px 0;
+    padding-left: 18px;
   }}
   .justificacion-page li {{
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }}
 </style>
 </head>
@@ -372,102 +296,187 @@ def build_html(links):
   </div>
 
   <div class="portada-footer">
-    <p><strong>Docente:</strong> Dr. Gabriel Navarro Salcedo &nbsp;|&nbsp; <strong>Fecha:</strong> Octubre / Noviembre 2026 &nbsp;|&nbsp; Tonalá, Jalisco, México</p>
+    <p><strong>Docente:</strong> Dr. Gabriel Navarro Salcedo &nbsp;|&nbsp; <strong>Fecha:</strong> Octubre 2026 &nbsp;|&nbsp; Tonalá, Jalisco, México</p>
   </div>
 </div>
 
 <!-- PÁGINA 2: MATRIZ DE ZACHMAN APLICADA A REQUERIMIENTOS -->
 <div class="matrix-page">
-  <h2 class="matrix-title">Actividad 3.5. Matriz de Zachman aplicada al trabajo con requerimientos</h2>
-  <div class="matrix-subtitle">Haz clic en el título o en el botón <strong>[📄 Ver en Drive]</strong> de cada celda para acceder directamente al documento entregable oficial.</div>
+  <h2 class="matrix-title">Actividad. Matriz de Zachman aplicada al trabajo con requerimientos</h2>
   
   <table class="matrix-table">
     <thead>
       <tr>
         <th style="width: 7.5%;">NIVEL</th>
-        <th style="width: 14.5%;">¿QUÉ?<br><span style="font-size: 6.5pt; text-transform: none; font-weight: normal;">(Datos / Entidades)</span></th>
-        <th style="width: 15.5%;">¿CÓMO?<br><span style="font-size: 6.5pt; text-transform: none; font-weight: normal;">(Procesos / Funciones)</span></th>
-        <th style="width: 15.5%;">¿DÓNDE?<br><span style="font-size: 6.5pt; text-transform: none; font-weight: normal;">(Red / Ubicación)</span></th>
-        <th style="width: 15.5%;">¿QUIÉN?<br><span style="font-size: 6.5pt; text-transform: none; font-weight: normal;">(Personas / Roles)</span></th>
-        <th style="width: 15.5%;">¿CUÁNDO?<br><span style="font-size: 6.5pt; text-transform: none; font-weight: normal;">(Tiempo / Eventos)</span></th>
-        <th style="width: 16%;">¿POR QUÉ?<br><span style="font-size: 6.5pt; text-transform: none; font-weight: normal;">(Motivación / Estrategia)</span></th>
+        <th style="width: 14.5%;">QUE</th>
+        <th style="width: 15.5%;">COMO</th>
+        <th style="width: 15.5%;">DONDE</th>
+        <th style="width: 15.5%;">QUIEN</th>
+        <th style="width: 15.5%;">CUANDO</th>
+        <th style="width: 16%;">POR QUÉ</th>
       </tr>
     </thead>
     <tbody>
       <!-- FILA 1: INTENCIÓN -->
       <tr>
-        <td class="row-hdr">INTENCIÓN<br><span style="font-size: 6pt; font-weight: normal;">(Contextual)</span></td>
-        {render_cell("c01", links)}
-        {render_cell("c02", links)}
-        {render_cell("c03", links)}
-        {render_cell("c04", links)}
-        {render_cell("c05", links)}
-        {render_cell("c06", links)}
+        <td class="row-hdr">INTENCIÓN</td>
+        <td>
+          <span class="cell-title">Características:</span>
+          <a class="cell-link" href="{links['c01']}">{links['c01']}</a>
+          <span class="cell-desc">Catálogo segmentado, POS multipago, Rewards ODS 12, trazabilidad y seguridad stateless.</span>
+        </td>
+        <td>
+          <span class="cell-title">Listado de Proceso de Negocio:</span>
+          <a class="cell-link" href="{links['c02']}">{links['c02']}</a>
+          <span class="cell-desc">PN-01 a PN-06: Abastecimiento, venta mostrador, sellos Rewards, mermas PEPS y corte de caja.</span>
+        </td>
+        <td>
+          <span class="cell-title">Diagramas de Contexto:</span>
+          <a class="cell-link" href="{links['c03']}">{links['c03']}</a>
+          <span class="cell-desc">DFD Nivel 0 con entidades externas: Cliente, Cajero, Admin, Cooperativas, Banco SPEI y Google.</span>
+        </td>
+        <td>
+          <span class="cell-title">Workflow (roles y act):</span>
+          <a class="cell-link" href="{links['c04']}">{links['c04']}</a>
+          <span class="cell-desc">Flujo de trabajo operativo entre los 4 roles humanos y Matriz RACI para 10 tareas clave.</span>
+        </td>
+        <td>
+          <span class="cell-title">Listado de Eventos:</span>
+          <a class="cell-link" href="{links['c05']}">{links['c05']}</a>
+          <span class="cell-desc">10 eventos de negocio (EVT-01 a EVT-10): Apertura caja, termo reusable, cobro, alertas y corte Z.</span>
+        </td>
+        <td>
+          <span class="cell-title">Visión. Objetivos:</span>
+          <a class="cell-link" href="{links['c06']}">{links['c06']}</a>
+          <span class="cell-desc">Misión, visión, 4 objetivos SMART y alineación estratégica con ODS 12 (Metas 12.2, 12.3 y 12.5).</span>
+        </td>
       </tr>
 
       <!-- FILA 2: ALCANCE -->
       <tr>
-        <td class="row-hdr">ALCANCE<br><span style="font-size: 6pt; font-weight: normal;">(Conceptual)</span></td>
-        {render_cell("c07", links)}
-        {render_cell("c08", links)}
-        {render_cell("c09", links)}
-        {render_cell("c10", links)}
-        {render_cell("c11", links)}
-        {render_cell("c12", links)}
+        <td class="row-hdr">ALCANCE</td>
+        <td>
+          <span class="cell-title">Listado de requerimientos:</span>
+          <a class="cell-link" href="{links['c07']}">{links['c07']}</a>
+          <span class="cell-desc">Catálogo de 15 Requerimientos Funcionales (RF-01 a RF-15) con actores y criterios de éxito.</span>
+        </td>
+        <td>
+          <span class="cell-title">Diagramas de Actividad:</span>
+          <a class="cell-link" href="{links['c08']}">{links['c08']}</a>
+          <span class="cell-desc">DA-01 Venta en Mostrador con Bono Ecológico y DA-02 Abastecimiento de Café con Alerta PEPS.</span>
+        </td>
+        <td>
+          <span class="cell-title">Ambiente Operativo. Requerimientos No funcionales:</span>
+          <a class="cell-link" href="{links['c09']}">{links['c09']}</a>
+          <span class="cell-desc">GCP Cloud Run, Docker Compose local y 7 RNF bajo la norma internacional ISO/IEC 25010.</span>
+        </td>
+        <td>
+          <span class="cell-title">Rol de Negocio:</span>
+          <a class="cell-link" href="{links['c10']}">{links['c10']}</a>
+          <span class="cell-desc">Fichas de caracterización de Administrador, Cajero de Turno, Cliente y Proveedor Campesino.</span>
+        </td>
+        <td>
+          <span class="cell-title">Cronograma de Negocio:</span>
+          <a class="cell-link" href="{links['c11']}">{links['c11']}</a>
+          <span class="cell-desc">4 fases de adopción en 16 semanas, hitos de negocio y ciclo diario de horarios en cafetería.</span>
+        </td>
+        <td>
+          <span class="cell-title">Prioridades de Negocio:</span>
+          <a class="cell-link" href="{links['c12']}">{links['c12']}</a>
+          <span class="cell-desc">Jerarquización formal MoSCoW (Must, Should, Could, Won't Have) y matriz de valor vs esfuerzo.</span>
+        </td>
       </tr>
 
       <!-- FILA 3: ALTO NIVEL -->
       <tr>
-        <td class="row-hdr">ALTO NIVEL<br><span style="font-size: 6pt; font-weight: normal;">(Lógico)</span></td>
-        {render_cell("c13", links)}
-        {render_cell("c14", links)}
-        {render_cell("c15", links)}
-        {render_cell("c16", links)}
-        {render_cell("c17", links)}
-        {render_cell("c18", links)}
+        <td class="row-hdr">ALTO NIVEL</td>
+        <td>
+          <span class="cell-title">Listado de casos de uso:</span>
+          <a class="cell-link" href="{links['c13']}">{links['c13']}</a>
+          <span class="cell-desc">Catálogo consolidado de 12 Casos de Uso (CU-01 a CU-12) cruzados con los requerimientos.</span>
+        </td>
+        <td>
+          <span class="cell-title">Especificación de Casos de Uso principales:</span>
+          <a class="cell-link" href="{links['c14']}">{links['c14']}</a>
+          <span class="cell-desc">Plantillas formales Cockburn para CU-01 (Login reCAPTCHA), CU-03/04 (POS) y CU-12 (Reversa Saga).</span>
+        </td>
+        <td>
+          <span class="cell-title">Subsistema, Módulo:</span>
+          <a class="cell-link" href="{links['c15']}">{links['c15']}</a>
+          <span class="cell-desc">Arquitectura Monorepo desacoplada: apps/web, apps/api, packages/database y packages/messaging.</span>
+        </td>
+        <td>
+          <span class="cell-title">Actores Descripción:</span>
+          <a class="cell-link" href="{links['c16']}">{links['c16']}</a>
+          <span class="cell-desc">Caracterización de 8 actores (humanos y sistemas/servicios) y matriz de interacción cruzada.</span>
+        </td>
+        <td>
+          <span class="cell-title">Precedencia de Casos de uso:</span>
+          <a class="cell-link" href="{links['c17']}">{links['c17']}</a>
+          <span class="cell-desc">Reglas de precedencia obligatoria, inclusión &lt;&lt;include&gt;&gt;, extensión &lt;&lt;extend&gt;&gt; y grafo dirigido.</span>
+        </td>
+        <td>
+          <span class="cell-title">Prioridades del Proyecto. Reglas del Negocio:</span>
+          <a class="cell-link" href="{links['c18']}">{links['c18']}</a>
+          <span class="cell-desc">8 reglas de negocio (RN-01 a RN-08) y jerarquización por nivel de prioridad crítica (P1, P2, P3).</span>
+        </td>
       </tr>
 
       <!-- FILA 4: DETALLE -->
       <tr>
-        <td class="row-hdr">DETALLE<br><span style="font-size: 6pt; font-weight: normal;">(Tecnológico)</span></td>
-        {render_cell("c19", links)}
-        {render_cell("c20", links)}
-        {render_cell("c21", links)}
-        {render_cell("c22", links)}
-        {render_cell("c23", links)}
-        {render_cell("c24", links)}
+        <td class="row-hdr">DETALLE</td>
+        <td>
+          <span class="cell-title">Diagrama Casos de Uso, Prototipo de Interfaces, Modelo de Dominio:</span>
+          <a class="cell-link" href="{links['c19']}">{links['c19']}</a>
+          <span class="cell-desc">Diagrama UML global, wireframes reales de POS y Login, y MER relacional de base de datos.</span>
+        </td>
+        <td>
+          <span class="cell-title">Especificación de Casos de Uso, Prototipo de Navegación:</span>
+          <a class="cell-link" href="{links['c20']}">{links['c20']}</a>
+          <span class="cell-desc">Grafo de navegación en Vue Router 4, guardianes de ruta (beforeEach) y atajos de teclado (F2, Esc).</span>
+        </td>
+        <td>
+          <span class="cell-title">Paquete:</span>
+          <a class="cell-link" href="{links['c21']}">{links['c21']}</a>
+          <span class="cell-desc">Diagrama de paquetes UML @monchis/* bajo el Principio de Dependencias Acíclicas (ADP).</span>
+        </td>
+        <td>
+          <span class="cell-title">Actores. Permisos. Responsabilidades:</span>
+          <a class="cell-link" href="{links['c22']}">{links['c22']}</a>
+          <span class="cell-desc">Matriz CRUD de permisos RBAC por endpoint de API y rutas web, con principio de menor privilegio.</span>
+        </td>
+        <td>
+          <span class="cell-title">Diagrama de Estados:</span>
+          <a class="cell-link" href="{links['c23']}">{links['c23']}</a>
+          <span class="cell-desc">Autómatas finitos del ciclo de vida de una Orden de Venta (Order) y de un Lote de Café (Batch).</span>
+        </td>
+        <td>
+          <span class="cell-title">Reglas de Negocio asignadas en el Modelo de Análisis:</span>
+          <a class="cell-link" href="{links['c24']}">{links['c24']}</a>
+          <span class="cell-desc">Trazabilidad de las 8 reglas a código TypeScript, restricciones Prisma y pruebas Vitest.</span>
+        </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<!-- PÁGINA 3: JUSTIFICACIÓN METODOLÓGICA Y REFERENCIAS APA 7 -->
+<!-- PÁGINA 3: JUSTIFICACIÓN METODOLÓGICA Y FUENTES VERÍDICAS -->
 <div class="justificacion-page">
-  <h2>Justificación Metodológica de la Matriz de Zachman</h2>
-  <p>
-    El marco de arquitectura empresarial de <strong>Zachman (1987)</strong> constituye una ontología taxonómica exhaustiva diseñada para organizar, documentar y gobernar los artefactos generados a lo largo de las distintas perspectivas del ciclo de vida del software. En el marco del proyecto integrador <strong>Monchis Café (Equipo 2)</strong>, este framework permite asegurar que ninguna dimensión de ingeniería quede desatendida, estableciendo una trazabilidad rigurosa y bidimensional:
-  </p>
+  <h2>Justificación Conceptual y Metodológica de la Matriz de Zachman</h2>
+  <p>La Matriz de Zachman aplicada a la ingeniería de requerimientos organiza la arquitectura de <strong>Monchis Café</strong> mediante una estructura bidimensional ortogonal que garantiza completitud, coherencia vertical (trazabilidad entre niveles de abstracción) y coherencia horizontal (respuestas complementarias a las 6 preguntas clásicas de comunicación humana) (Zachman, 1987).</p>
   
-  <h3>1. Dimensiones Interrogativas (Columnas)</h3>
-  <p>
-    Cada columna da respuesta a una interrogante fundamental de la ingeniería de software: <strong>¿Qué?</strong> (datos y modelos de información, desde las características hasta el MER relacional en PostgreSQL); <strong>¿Cómo?</strong> (procesos funcionales, diagramas de actividad y especificaciones formales de Casos de Uso según Cockburn, 2000); <strong>¿Dónde?</strong> (topología de red, nube híbrida en Google Cloud Platform Cloud Run y límites de paquetes desacoplados); <strong>¿Quién?</strong> (actores humanos y agentes externos bajo un esquema estricto de control de acceso RBAC); <strong>¿Cuándo?</strong> (dinámica temporal, eventos de negocio, cronograma de sprints y diagramas de transición de estados UML); y <strong>¿Por qué?</strong> (motivación, metas estratégicas alineadas al ODS 12 de la Agenda 2030 de la ONU y reglas de negocio ejecutables).
-  </p>
+  <h3>1. Coherencia entre Capas (Trazabilidad Vertical):</h3>
+  <ol>
+    <li><strong>Nivel 1 (Intención - Visión del Planificador):</strong> Establece el contexto macro del negocio de cafetería familiar y el modelo de comercio justo con cooperativas campesinas, delimitando qué existe, cómo opera a grandes rasgos y por qué es rentable y sostenible bajo el ODS 12 (Sapag Chain, 2011).</li>
+    <li><strong>Nivel 2 (Alcance - Visión del Dueño del Negocio):</strong> Traduce las intenciones en especificaciones comerciales concretas: los 15 Requerimientos Funcionales, diagramas de actividad de mostrador, el ambiente operativo bajo ISO/IEC 25010 y la priorización MoSCoW para construir primero lo innegociable (Wiegers & Beatty, 2013).</li>
+    <li><strong>Nivel 3 (Alto Nivel - Visión del Diseñador del Sistema):</strong> Modela la solución lógica orientada a objetos: el catálogo de 12 Casos de Uso, la arquitectura modular de Monorepo, los actores primarios y secundarios, la precedencia de eventos y las 8 reglas de negocio (Ross, 2003; Larman, 2004).</li>
+    <li><strong>Nivel 4 (Detalle - Visión del Constructor de Software):</strong> Aterriza las abstracciones en artefactos de implementación directa: esquemas relacionales de base de datos en PostgreSQL 15, wireframes ergonómicos de mostrador, paquetes acíclicos (@monchis/*), matriz de permisos RBAC y diagramas de estados (Martin, 2002; Ferraiolo et al., 2001).</li>
+  </ol>
 
-  <h3>2. Niveles de Abstracción y Perspectivas (Filas)</h3>
-  <p>
-    Las cuatro filas seleccionadas delimitan progresivamente la abstracción arquitectónica:
-    <strong>Intención (Contextual)</strong> fija el alcance y visión desde la perspectiva del patrocinador y dueño del negocio;
-    <strong>Alcance (Conceptual)</strong> formaliza los requerimientos funcionales y restricciones del analista;
-    <strong>Alto Nivel (Lógico)</strong> diseña la arquitectura, módulos desacoplados y contratos entre subsistemas del diseñador; y
-    <strong>Detalle (Físico / Tecnológico)</strong> desciende a la especificación precisa de esquemas de bases de datos, código TypeScript, pruebas automatizadas Vitest y despliegue en contenedores Docker de los constructores.
-  </p>
+  <h3>2. Coherencia entre Perspectivas (Alineación Horizontal):</h3>
+  <p>Cada una de las seis columnas mantiene un hilo conductor inquebrantable a lo largo de los cuatro niveles: la columna <strong>QUÉ</strong> evoluciona desde las características de negocio hasta el esquema de datos y entidades; la columna <strong>CÓMO</strong> transita desde los procesos macro hasta la especificación de navegación y transiciones de pantalla; la columna <strong>DÓNDE</strong> va desde el diagrama de contexto exterior hasta la arquitectura física de paquetes; la columna <strong>QUIÉN</strong> pasa de la definición de roles humanos a la matriz de permisos RBAC en código; la columna <strong>CUÁNDO</strong> evoluciona de los eventos comerciales a las máquinas de estado finitas; y la columna <strong>POR QUÉ</strong> asegura que la visión estratégica de sostenibilidad ODS 12 se convierta en restricciones de validación que se ejecutan automáticamente en el servidor (Pressman & Maxim, 2021).</p>
 
-  <h3>3. Cumplimiento de Estándares Internacionales y ODS 12</h3>
-  <p>
-    Los requerimientos no funcionales integrados en la matriz se alinean explícitamente a las métricas de calidad de software estipuladas por la norma <strong>ISO/IEC 25010</strong> (eficiencia de desempeño con tiempos de respuesta &lt; 200 ms, confiabilidad con reintentos exponenciales y usabilidad táctil). Asimismo, las reglas de negocio vinculadas garantizan el fomento al consumo responsable mediante recompensas ecológicas por uso de termos reutilizables y trazabilidad de origen campesino directo.
-  </p>
-
-  <h3>4. Referencias Bibliográficas (Norma APA 7.ª Edición)</h3>
+  <h3>3. Referencias Bibliográficas Verídicas (Norma APA 7.ª Edición):</h3>
   <ol>
     <li><strong>Bass, L., Clements, P., & Kazman, R. (2012).</strong> <em>Software Architecture in Practice</em> (3.ª ed.). Addison-Wesley.</li>
     <li><strong>Cockburn, A. (2000).</strong> <em>Writing Effective Use Cases</em>. Addison-Wesley Professional.</li>
@@ -502,7 +511,7 @@ def compile_pdf(html_path, pdf_path):
     print(f"PDF generado exitosamente en: {pdf_path}")
 
 def main():
-    print("Generando HTML maestro de la Matriz de Zachman con enlaces enriquecidos...")
+    print("Generando HTML maestro de la Matriz de Zachman...")
     html_code = build_html(DOCS_LINKS)
     with open(HTML_OUT_PATH, "w", encoding="utf-8") as f:
         f.write(html_code)
@@ -511,8 +520,10 @@ def main():
     compile_pdf(HTML_OUT_PATH, PDF_OUT_PATH)
 
     # Copy to downloads
+    import shutil
     shutil.copy2(PDF_OUT_PATH, DOWNLOADS_PDF_PATH)
     print(f"Copia depositada en Descargas: {DOWNLOADS_PDF_PATH}")
 
 if __name__ == "__main__":
     main()
+
