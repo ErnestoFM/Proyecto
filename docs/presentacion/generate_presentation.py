@@ -1,7 +1,7 @@
 import sys
 from pptx import Presentation
 from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN
+from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.dml.color import RGBColor
 
 def create_deck(output_path):
@@ -16,6 +16,8 @@ def create_deck(output_path):
     DARK = RGBColor(33, 37, 41)      # #212529 Texto principal
     MUTED = RGBColor(108, 117, 125)  # #6C757D Secundario
     LIGHT_BG = RGBColor(245, 247, 250)
+    LINK_BLUE = RGBColor(29, 78, 216) # Azul interactivo para hipervínculos
+    ORANGE_HEADER = RGBColor(237, 137, 54)
 
     def add_header(slide, title_text, category_text="PRODUCTO INTEGRADOR — ADMINISTRACIÓN DE PROYECTOS"):
         # Categoría superior
@@ -959,10 +961,136 @@ def create_deck(output_path):
     )
 
     # -------------------------------------------------------------
+    # SLIDE 14B: ARQUITECTURA DE REQUERIMIENTOS - MATRIZ DE ZACHMAN (4x6)
+    # -------------------------------------------------------------
+    s_zachman = prs.slides.add_slide(blank_layout)
+    add_header(s_zachman, "14. Arquitectura de Requerimientos: Matriz de Zachman (4×6)")
+
+    ZACHMAN_DATA = {
+        "c01": ("Características", "https://drive.google.com/file/d/1JN_dtu5lZ1W7tbtIF0IKflDZPmsfYhf3/view?usp=sharing", "Catálogo, POS multipago y Rewards ODS 12."),
+        "c02": ("Procesos de Negocio", "https://drive.google.com/file/d/1vcsIoEWRk4YHCevhiRMAXfcy3Bx66GEu/view?usp=sharing", "PN-01..06: Venta, abasto, mermas PEPS y corte."),
+        "c03": ("Diagramas Contexto", "https://drive.google.com/file/d/1LzBN-nL0tG-zNTOaP2HoctF0gQJVmdd1/view?usp=sharing", "DFD Nivel 0: Cliente, Cajero, Cooperativas, SPEI."),
+        "c04": ("Workflow y Roles", "https://drive.google.com/file/d/1Wzye6_ptLYnj-maWlK4KD0UG6N26zPra/view?usp=sharing", "Flujo operativo de roles y Matriz RACI."),
+        "c05": ("Listado Eventos", "https://drive.google.com/file/d/1TfmMaKqq7NDDG6rJWS3F_GMakRlu5WEJ/view?usp=sharing", "10 eventos (EVT-01..10): Apertura, bono eco, corte Z."),
+        "c06": ("Visión y Objetivos", "https://drive.google.com/file/d/1Ip5KtpyCUPkLIxO7MxxnFKhMVXtaz9CH/view?usp=sharing", "Misión, 4 metas SMART y alineación ODS 12."),
+
+        "c07": ("Requerimientos RF", "https://drive.google.com/file/d/16W6lQikUgddAJ_KBMcXtxEKs69DheEdR/view?usp=sharing", "15 Requerimientos Funcionales (RF-01 a RF-15)."),
+        "c08": ("Diagramas Actividad", "https://drive.google.com/file/d/1Peu-KbIO6gYiDaw4GL4FjdYuPUxfrs_t/view?usp=sharing", "DA-01 Venta Mostrador y DA-02 Abasto PEPS."),
+        "c09": ("Ambiente y RNF", "https://drive.google.com/file/d/1tDRRXX3a6l6XLnXlf6dz8XU0syW5gYpv/view?usp=sharing", "GCP Cloud Run y 7 RNF bajo ISO/IEC 25010."),
+        "c10": ("Rol de Negocio", "https://drive.google.com/file/d/1laKg-ZQjPQ6wK8LZf7HKQ8F1w1OdXUZ_/view?usp=sharing", "Admin, Cajero de Turno, Cliente y Productor."),
+        "c11": ("Cronograma Negocio", "https://drive.google.com/file/d/182RflhJkU9rRvR4cFmB2hGIaat-XJhpo/view?usp=sharing", "4 fases en 16 semanas y turnos en cafetería."),
+        "c12": ("Prioridades Negocio", "https://drive.google.com/file/d/1j68qAoV3ERWpcu55pOt0arTVubQW8Oz9/view?usp=sharing", "Priorización MoSCoW y matriz valor vs esfuerzo."),
+
+        "c13": ("Listado Casos Uso", "https://drive.google.com/file/d/1YreuU-wXv48jbjeqUQ8p9L3GmDx7d9d1/view?usp=sharing", "12 Casos de Uso (CU-01..12) vinculados a RF."),
+        "c14": ("Especificación CU", "https://drive.google.com/file/d/1_cDRjedF6fy1GsQmVd-IndjlCYP70CCp/view?usp=sharing", "Plantillas Cockburn para Auth, POS y Reversa Saga."),
+        "c15": ("Subsistemas y Módulo", "https://drive.google.com/file/d/1WRVpfAYHLaH3OTnbtSHMcCC6eMhOT7Kr/view?usp=sharing", "Monorepo: apps/web, apps/api, packages/*."),
+        "c16": ("Actores Descripción", "https://drive.google.com/file/d/14TNzrFVrvmTok-ft1q7ZJsq6ybI2MD6l/view?usp=sharing", "8 actores del sistema y matriz de interacción."),
+        "c17": ("Precedencia de CU", "https://drive.google.com/file/d/1oc3S5ZsxEnefU3D5VnziqO1WboquZ0bU/view?usp=sharing", "Dependencias <<include>>, extensiones y grafo."),
+        "c18": ("Reglas de Negocio", "https://drive.google.com/file/d/1lQZliiNeIBKsRtnwZq_AQzI9-VYM0f3v/view?usp=sharing", "8 reglas de negocio (RN-01..08) por criticidad."),
+
+        "c19": ("Diagramas CU, UI y MER", "https://drive.google.com/file/d/16cuwd5f5ozDXF5XtztKYo6OVAfNaArkI/view?usp=sharing", "Diagrama UML global, wireframes y MER relacional."),
+        "c20": ("Navegación y Rutas", "https://drive.google.com/file/d/1s87hXYzVU8eJpM2mPCoOuFC8T_gYCnNE/view?usp=sharing", "Grafo Vue Router 4, guardianes de ruta y atajos."),
+        "c21": ("Diagrama Paquetes", "https://drive.google.com/file/d/1-eevSj942qa2g61nRMKnW1KZKvfrB1xj/view?usp=sharing", "Paquetes @monchis/* bajo principio ADP."),
+        "c22": ("Permisos RBAC", "https://drive.google.com/file/d/1rBP2enmghjbUN1aGE1FfZixubyQ2EwVC/view?usp=sharing", "Matriz CRUD por endpoint con Menor Privilegio."),
+        "c23": ("Diagrama de Estados", "https://drive.google.com/file/d/1WoA5Sw573CwePZ04SNnRf51O8x21sjmx/view?usp=sharing", "Autómatas de Orden de Venta y Lote de Café."),
+        "c24": ("Reglas en Análisis", "https://drive.google.com/file/d/1u_WlrnJiJo7AeiG091-n-Gpevaq5MJ9y/view?usp=sharing", "Trazabilidad a código TypeScript, Prisma y Vitest.")
+    }
+
+    tbl_shape_z = s_zachman.shapes.add_table(5, 7, Inches(0.6), Inches(1.5), Inches(12.133), Inches(5.5))
+    tbl_z = tbl_shape_z.table
+
+    tbl_z.columns[0].width = Inches(1.2)
+    tbl_z.columns[1].width = Inches(1.82)
+    tbl_z.columns[2].width = Inches(1.82)
+    tbl_z.columns[3].width = Inches(1.82)
+    tbl_z.columns[4].width = Inches(1.82)
+    tbl_z.columns[5].width = Inches(1.82)
+    tbl_z.columns[6].width = Inches(1.833)
+
+    z_headers = ["NIVEL", "¿QUÉ?\n(Datos)", "¿CÓMO?\n(Funciones)", "¿DÓNDE?\n(Ubicación)", "¿QUIÉN?\n(Roles)", "¿CUÁNDO?\n(Eventos)", "¿POR QUÉ?\n(Motivación)"]
+    for c_i, h_t in enumerate(z_headers):
+        c = tbl_z.cell(0, c_i)
+        c.fill.solid()
+        c.fill.fore_color.rgb = ORANGE_HEADER
+        c.vertical_anchor = MSO_ANCHOR.MIDDLE
+        p = c.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        p.text = h_t
+        p.font.name = "Calibri"
+        p.font.size = Pt(8.5)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+
+    z_rows = [
+        ("INTENCIÓN\n(Contextual)", ["c01", "c02", "c03", "c04", "c05", "c06"]),
+        ("ALCANCE\n(Conceptual)", ["c07", "c08", "c09", "c10", "c11", "c12"]),
+        ("ALTO NIVEL\n(Lógico)", ["c13", "c14", "c15", "c16", "c17", "c18"]),
+        ("DETALLE\n(Tecnológico)", ["c19", "c20", "c21", "c22", "c23", "c24"]),
+    ]
+
+    for r_i, (lvl_label, c_keys) in enumerate(z_rows, start=1):
+        lvl_c = tbl_z.cell(r_i, 0)
+        lvl_c.fill.solid()
+        lvl_c.fill.fore_color.rgb = NAVY
+        lvl_c.vertical_anchor = MSO_ANCHOR.MIDDLE
+        p = lvl_c.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        p.text = lvl_label
+        p.font.name = "Calibri"
+        p.font.size = Pt(8)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+
+        for c_i, k in enumerate(c_keys, start=1):
+            t_name, u_url, d_summary = ZACHMAN_DATA[k]
+            cell_c = tbl_z.cell(r_i, c_i)
+            cell_c.fill.solid()
+            cell_c.fill.fore_color.rgb = RGBColor(255, 255, 255) if r_i % 2 == 1 else LIGHT_BG
+            cell_c.vertical_anchor = MSO_ANCHOR.TOP
+            tf = cell_c.text_frame
+            tf.word_wrap = True
+            tf.margin_top = Inches(0.04)
+            tf.margin_bottom = Inches(0.04)
+            tf.margin_left = Inches(0.05)
+            tf.margin_right = Inches(0.05)
+
+            p0 = tf.paragraphs[0]
+            p0.text = t_name
+            p0.font.name = "Calibri"
+            p0.font.size = Pt(7.5)
+            p0.font.bold = True
+            p0.font.color.rgb = NAVY
+
+            p1 = tf.add_paragraph()
+            p1.space_before = Pt(1)
+            p1.space_after = Pt(2)
+            run = p1.add_run()
+            run.text = "🔗 Abrir en Drive"
+            run.font.name = "Calibri"
+            run.font.size = Pt(7)
+            run.font.bold = True
+            run.font.underline = True
+            run.font.color.rgb = LINK_BLUE
+            run.hyperlink.address = u_url
+
+            p2 = tf.add_paragraph()
+            p2.text = d_summary
+            p2.font.name = "Calibri"
+            p2.font.size = Pt(6.5)
+            p2.font.color.rgb = DARK
+
+    set_speaker_notes(s_zachman,
+        "DEFENSA ORAL (Minuto 9:00 - 9:30):\n"
+        "La Matriz de Zachman nos permitió garantizar la completitud de los requerimientos mediante una ontología de 4 niveles "
+        "y 6 interrogantes fundamentales. Cada una de las 24 celdas contiene un entregable formal verificado y respaldado en Google Drive "
+        "con enlace directo, asegurando total coherencia desde los objetivos estratégicos hasta el código ejecutable y las pruebas."
+    )
+
+    # -------------------------------------------------------------
     # SLIDE 15: MODELADO Y DISEÑO - DIAGRAMAS UML (CASOS DE USO Y CLASES)
     # -------------------------------------------------------------
     s14 = prs.slides.add_slide(blank_layout)
-    add_header(s14, "14. Modelado y Diseño: Diagramas UML (Casos de Uso y Clases)")
+    add_header(s14, "15. Modelado y Diseño: Diagramas UML (Casos de Uso y Clases)")
 
     box14_l = s14.shapes.add_textbox(Inches(0.8), Inches(1.6), Inches(5.6), Inches(5.2))
     tf14_l = box14_l.text_frame
@@ -1036,7 +1164,7 @@ def create_deck(output_path):
     # SLIDE 16: MODELADO Y DISEÑO - DIAGRAMA DE SECUENCIA (SAGA PATTERN)
     # -------------------------------------------------------------
     s15 = prs.slides.add_slide(blank_layout)
-    add_header(s15, "15. Modelado y Diseño: Diagrama de Secuencia (Patrón Saga y Reversas)")
+    add_header(s15, "16. Modelado y Diseño: Diagrama de Secuencia (Patrón Saga y Reversas)")
 
     box15 = s15.shapes.add_textbox(Inches(0.8), Inches(1.6), Inches(11.7), Inches(5.2))
     tf15 = box15.text_frame
@@ -1085,7 +1213,7 @@ def create_deck(output_path):
     # SLIDE 17: MODELADO Y DISEÑO - WIREFRAMES Y BOCETOS DE UI
     # -------------------------------------------------------------
     s16 = prs.slides.add_slide(blank_layout)
-    add_header(s16, "16. Modelado y Diseño: Wireframes y Arquitectura de Pantallas")
+    add_header(s16, "17. Modelado y Diseño: Wireframes y Arquitectura de Pantallas")
 
     box16_l = s16.shapes.add_textbox(Inches(0.8), Inches(1.6), Inches(5.6), Inches(5.2))
     tf16_l = box16_l.text_frame
@@ -1159,7 +1287,7 @@ def create_deck(output_path):
     # SLIDE 18: CONCLUSIÓN Y RESULTADOS ESPERADOS
     # -------------------------------------------------------------
     s17 = prs.slides.add_slide(blank_layout)
-    add_header(s17, "17. Conclusiones y Defensa del Proyecto")
+    add_header(s17, "18. Conclusiones y Defensa del Proyecto")
 
     box17 = s17.shapes.add_textbox(Inches(0.8), Inches(1.6), Inches(11.7), Inches(5.2))
     tf17 = box17.text_frame
@@ -1199,4 +1327,13 @@ def create_deck(output_path):
     print(f"Presentación PPTX generada con éxito en: {output_path}")
 
 if __name__ == "__main__":
-    create_deck(r"d:\ernestofm\Proyecto\docs\presentacion\Presentacion_Producto_Integrador_Monchis_Cafe.pptx")
+    import shutil
+    out_pres = r"d:\ernestofm\Proyecto\docs\presentacion\Presentacion_Producto_Integrador_Monchis_Cafe.pptx"
+    out_entr = r"d:\ernestofm\Proyecto\docs\entregables\Monchis_Cafe.pptx"
+    out_down = r"C:\Users\erfierro\Downloads\Presentacion_Producto_Integrador_Monchis_Cafe.pptx"
+
+    create_deck(out_pres)
+    shutil.copy2(out_pres, out_entr)
+    print(f"Copia sincronizada en entregables: {out_entr}")
+    shutil.copy2(out_pres, out_down)
+    print(f"Copia sincronizada en descargas: {out_down}")
