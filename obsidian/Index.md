@@ -17,6 +17,7 @@ Bienvenido al Vault de Obsidian del proyecto **Monchis Café**. Este vault sirve
 
 ---
 
+- [[Bitacora/2026-11-18]] — *Proyecto Final EXPODIT 2026: Presentación Ejecutiva 16:9 (PDF/PPTX) con diseño pastel, diagramas gráficos reales y Guion Oficial para Video Pitch sincronizado segundo a segundo (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-11-17]] — *Integración de la Matriz de Zachman con 24 hipervínculos activos en la presentación del proyecto.*
 - [[Bitacora/2026-11-01]] — *Rediseño de Contacto (WhatsApp, Google Maps, FAQ, Estatus en Vivo), Enlace de Clientes en POS, Historial de Compras y Facturación Digital Simplificada (/dashboard), Catálogo de 16 Productos y Optimización SEO en Cloud Run.*
 - [[Bitacora/2026-10-31]] — *Proyecto Integrador: Actividad 3.5 Matriz de Zachman Aplicada a Requerimientos (24 entregables completos en Markdown y Word .docx, portada institucional y fuentes verídicas APA 7) para el Equipo 2 (Monchis Café) (Dr. Gabriel Navarro Salcedo).*
