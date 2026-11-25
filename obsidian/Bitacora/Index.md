@@ -4,8 +4,10 @@
 
 Historial cronológico de cambios realizados por el Agente de IA:
 
+- [[Bitacora/2026-11-24]] — *Expo DIT 2026: Creación de Tablero Ágil en Notion (8 Sprints completados y actividad de defensa Viernes 27 Nov), CRN 196727, ODS 13 y regeneración de presentación oficial en HTML, PDF y PPTX.*
 - [[Bitacora/2026-11-18]] — *Proyecto Final EXPODIT 2026: Presentación Ejecutiva 16:9 (PDF/PPTX) con diseño pastel, diagramas gráficos reales y Guion Oficial para Video Pitch sincronizado segundo a segundo (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-11-17]] — *Unidad 3: Matriz de Zachman y correcciones arquitectónicas (Dr. Gabriel Navarro Salcedo).*
+- [[Bitacora/2026-11-09]] — *Presentación Ejecutiva Oficial PPTX (Integración de Matriz de Zachman de 24 celdas, Metodología DevSecOps con diagrama de 7 fases y evidencias de despliegue en Google Cloud Run y GitHub Actions CI/CD).*
 - [[Bitacora/2026-11-01]] — *Mejoras de escáner QR, optimización SEO y catálogo de productos Monchis Café.*
 
 - [[Bitacora/2026-10-28]] — *Productos Integradores: Práctica Momento 1. Aplicar la Metodología DevOps en un Proyecto de Desarrollo de Software (Momento 1 – Planificación: Arquitectura, ODS 12, Roles, Plan 4 semanas, Toolchain y Flujo CI/CD) para el Equipo 2 (Monchis Café) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*

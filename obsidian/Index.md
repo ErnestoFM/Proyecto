@@ -17,8 +17,10 @@ Bienvenido al Vault de Obsidian del proyecto **Monchis Café**. Este vault sirve
 
 ---
 
+- [[Bitacora/2026-11-24]] — *Expo DIT 2026: Creación de Tablero Ágil en Notion (8 Sprints completados y actividad de defensa Viernes 27 Nov), CRN 196727, ODS 13 y regeneración de presentación oficial en HTML, PDF y PPTX.*
 - [[Bitacora/2026-11-18]] — *Proyecto Final EXPODIT 2026: Presentación Ejecutiva 16:9 (PDF/PPTX) con diseño pastel, diagramas gráficos reales y Guion Oficial para Video Pitch sincronizado segundo a segundo (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-11-17]] — *Integración de la Matriz de Zachman con 24 hipervínculos activos en la presentación del proyecto.*
+- [[Bitacora/2026-11-09]] — *Presentación Ejecutiva Oficial PPTX (Integración de Matriz de Zachman de 24 celdas, Metodología DevSecOps con diagrama de 7 fases y evidencias de despliegue en Google Cloud Run y GitHub Actions CI/CD).*
 - [[Bitacora/2026-11-01]] — *Rediseño de Contacto (WhatsApp, Google Maps, FAQ, Estatus en Vivo), Enlace de Clientes en POS, Historial de Compras y Facturación Digital Simplificada (/dashboard), Catálogo de 16 Productos y Optimización SEO en Cloud Run.*
 - [[Bitacora/2026-10-31]] — *Proyecto Integrador: Actividad 3.5 Matriz de Zachman Aplicada a Requerimientos (24 entregables completos en Markdown y Word .docx, portada institucional y fuentes verídicas APA 7) para el Equipo 2 (Monchis Café) (Dr. Gabriel Navarro Salcedo).*
 - [[Bitacora/2026-10-28]] — *Productos Integradores: Práctica Momento 1 (Planificación DevOps), Momento 2 (Desarrollo e Integración Continua, GitFlow, 77 tests Vitest, MVP funcional y 5 bugs) y Momento 3 (Despliegue Multi-Contenedor, Nginx TLS, Monitoreo SRE, logs JSON, alertas ODS 12 y matriz de 5 incidencias) para el Equipo 2 (Monchis Café) en PDF y DOCX (Dr. Gabriel Navarro Salcedo).*
